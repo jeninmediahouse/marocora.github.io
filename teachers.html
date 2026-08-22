@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Online Teachers & Tutors | JMH Professional Network</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f4f6f8;
+    color: #111827;
+}
+
+header {
+    background: #111827;
+    color: white;
+    padding: 18px 24px;
+}
+
+.header-inner {
+    max-width: 1200px;
+    margin: auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo a {
+    color: white;
+    text-decoration: none;
+    font-size: 20px;
+    font-weight: 700;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    margin-left: 22px;
+    font-size: 14px;
+}
+
+.hero {
+    background: white;
+    text-align: center;
+    padding: 60px 24px 45px;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.hero h1 {
+    font-size: 38px;
+    margin: 0 0 15px;
+}
+
+.hero p {
+    max-width: 760px;
+    margin: auto;
+    font-size: 17px;
+    color: #4b5563;
+    line-height: 1.6;
+}
+
+.back-link {
+    display: inline-block;
+    margin-top: 25px;
+    color: #198754;
+    text-decoration: none;
+    font-weight: 700;
+}
+
+.filters {
+    max-width: 1100px;
+    margin: 35px auto 15px;
+    padding: 0 24px;
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 15px;
+}
+
+.filters input,
+.filters select {
+    width: 100%;
+    padding: 14px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    background: white;
+    font-size: 15px;
+}
+
+.directory {
+    max-width: 1100px;
+    margin: auto;
+    padding: 30px 24px 60px;
+}
+
+.directory-title {
+    margin-bottom: 25px;
+}
+
+.teacher-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 22px;
+}
+
+.teacher-card {
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 5px 16px rgba(0,0,0,0.05);
+}
+
+.teacher-top {
+    padding: 25px;
+    text-align: center;
+    background: #fafafa;
+}
+
+.avatar {
+    width: 85px;
+    height: 85px;
+    border-radius: 50%;
+    background: #111827;
+    color: white;
+    margin: 0 auto 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 30px;
+    font-weight: bold;
+}
+
+.teacher-card h3 {
+    margin: 0 0 7px;
+}
+
+.specialty {
+    color: #198754;
+    font-weight: 700;
+    font-size: 14px;
+}
+
+.teacher-info {
+    padding: 22px;
+}
+
+.teacher-info p {
+    color: #4b5563;
+    line-height: 1.5;
+    font-size: 14px;
+}
+
+.tags {
+    margin: 15px 0;
+}
+
+.tag {
+    display: inline-block;
+    background: #f3f4f6;
+    padding: 6px 9px;
+    margin: 3px;
+    border-radius: 20px;
+    font-size: 12px;
+}
+
+.profile-button {
+    display: block;
+    text-align: center;
+    background: #c91f25;
+    color: white;
+    text-decoration: none;
+    font-weight: 700;
+    padding: 12px;
+    border-radius: 6px;
+    margin-top: 15px;
+}
+
+.notice {
+    background: #fff;
+    border: 1px dashed #9ca3af;
+    border-radius: 9px;
+    padding: 35px;
+    text-align: center;
+    margin-top: 30px;
+}
+
+.notice p {
+    color: #6b7280;
+    line-height: 1.6;
+}
+
+.apply-button {
+    display: inline-block;
+    margin-top: 10px;
+    background: #c91f25;
+    color: white;
+    padding: 13px 22px;
+    text-decoration: none;
+    border-radius: 6px;
+    font-weight: 700;
+}
+
+footer {
+    background: #111827;
+    color: #d1d5db;
+    padding: 28px;
+    text-align: center;
+    font-size: 14px;
+}
+
+@media (max-width: 850px) {
+    .teacher-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .filters {
+        grid-template-columns: 1fr;
+    }
+
+    nav {
+        display: none;
+    }
+
+    .hero h1 {
+        font-size: 31px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="header-inner">
+
+        <div class="logo">
+            <a href="index.html">Jenin Media House</a>
+        </div>
+
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="professionals.html">Professional Network</a>
+            <a href="join.html">Join the Network</a>
+        </nav>
+
+    </div>
+</header>
+
+<section class="hero">
+
+    <h1>Online Teachers & Tutors</h1>
+
+    <p>
+        Find Moroccan teachers and independent tutors offering online
+        and in-person lessons in Darija, Arabic, English, French and
+        other subjects.
+    </p>
+
+    <a class="back-link" href="professionals.html">
+        ← Back to Professional Network
+    </a>
+
+</section>
+
+<section class="filters">
+
+    <input
+        type="text"
+        placeholder="Search teacher, language, subject or city..."
+    >
+
+    <select>
+        <option>All Languages</option>
+        <option>Darija</option>
+        <option>Arabic</option>
+        <option>English</option>
+        <option>French</option>
+    </select>
+
+    <select>
+        <option>Online or In Person</option>
+        <option>Online</option>
+        <option>In Person</option>
+        <option>Both</option>
+    </select>
+
+</section>
+
+<main class="directory">
+
+    <div class="directory-title">
+        <h2>Teachers in the JMH Network</h2>
+    </div>
+
+    <div class="teacher-grid">
+
+        <div class="teacher-card">
+
+            <div class="teacher-top">
+              <div class="avatar">AT</div>
+               <h3>Sample Teacher Profile</h3>
+               <div class="specialty">Darija • Arabic • English</div>
+            </div>
+
+            <div class="teacher-info">
+
+                <p>
+    Example profile showing how approved JMH teachers will appear,
+    including teaching experience, languages, lesson format,
+    availability and pricing.
+</p>
+
+                <div class="tags">
+    <span class="tag">Darija</span>
+    <span class="tag">Arabic</span>
+    <span class="tag">English</span>
+    <span class="tag">Online & In Person</span>
+    <span class="tag">Casablanca</span>
+</div>
+<p><strong>Experience:</strong> 6 years</p>
+                <p><strong>Typical Rate:</strong> 180 MAD/hour</p>
+
+<p><strong>Status:</strong> ✓ JMH Verified Sample</p>
+
+<a class="profile-button" href="teacher-sample.html">
+    View Sample Profile
+</a>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="notice">
+
+        <h2>Are You a Teacher or Tutor?</h2>
+
+        <p>
+            JMH is building a network of Moroccan teachers and tutors
+            who want to connect with students in Morocco and abroad.
+        </p>
+
+        <a href="join.html" class="apply-button">
+            Apply to Join the JMH Network
+        </a>
+
+    </div>
+
+</main>
+
+<footer>
+    © 2026 Jenin Media House · Casablanca–Nouaceur, Morocco
+</footer>
+
+</body>
+</html>

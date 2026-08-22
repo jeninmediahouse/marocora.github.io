@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Translation & Language Services | Jenin Media House</title>
+
+<style>
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f4f6f8;
+    color: #111827;
+}
+
+header {
+    background: white;
+    padding: 40px 20px;
+    text-align: center;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+header h1 {
+    margin: 0 0 12px;
+    font-size: 32px;
+}
+
+header p {
+    max-width: 720px;
+    margin: 0 auto 18px;
+    color: #4b5563;
+    line-height: 1.6;
+}
+
+.back-link {
+    color: #08783e;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.search-section {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 30px 20px 10px;
+}
+
+.filters {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 12px;
+}
+
+.filters input,
+.filters select {
+    width: 100%;
+    padding: 13px;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    background: white;
+}
+
+.directory {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 25px 20px 50px;
+}
+
+.directory h2 {
+    margin-bottom: 22px;
+}
+
+.translator-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+.translator-card {
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+}
+
+.translator-top {
+    padding: 25px;
+    text-align: center;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.avatar {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    background: #111827;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 14px;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.translator-top h3 {
+    margin: 0 0 6px;
+}
+
+.specialty {
+    color: #08783e;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.translator-info {
+    padding: 22px;
+    color: #374151;
+    line-height: 1.6;
+    font-size: 14px;
+}
+
+.tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+    margin: 15px 0;
+}
+
+.tag {
+    background: #f1f3f5;
+    padding: 5px 9px;
+    border-radius: 14px;
+    font-size: 12px;
+}
+
+.profile-button {
+    display: block;
+    margin-top: 18px;
+    padding: 11px;
+    text-align: center;
+    background: #cf2027;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+.notice {
+    margin-top: 35px;
+    padding: 35px;
+    text-align: center;
+    background: white;
+    border: 1px dashed #94a3b8;
+    border-radius: 8px;
+}
+
+.notice p {
+    color: #4b5563;
+}
+
+.apply-button {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 12px 22px;
+    background: #cf2027;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+footer {
+    text-align: center;
+    padding: 30px 20px;
+    color: #6b7280;
+    font-size: 13px;
+}
+
+@media (max-width: 800px) {
+
+    .translator-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .filters {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+
+<h1>Translation & Language Services</h1>
+
+<p>
+Find translators, interpreters and language professionals serving
+individuals, businesses and international clients through the
+JMH Professional Network.
+</p>
+
+<a class="back-link" href="professionals.html">
+← Back to Professional Network
+</a>
+
+</header>
+
+<section class="search-section">
+
+<div class="filters">
+
+<input
+type="text"
+placeholder="Search translator, language, specialty or city..."
+>
+
+<select>
+<option>All Languages</option>
+<option>Arabic</option>
+<option>English</option>
+<option>French</option>
+<option>Darija</option>
+<option>Spanish</option>
+<option>Other</option>
+</select>
+
+<select>
+<option>All Services</option>
+<option>Document Translation</option>
+<option>Certified / Sworn Translation</option>
+<option>Interpretation</option>
+<option>Business Translation</option>
+<option>Website & Digital Translation</option>
+<option>Other Language Services</option>
+</select>
+
+</div>
+
+</section>
+
+<main class="directory">
+
+<h2>Language Professionals in the JMH Network</h2>
+
+<div class="translator-grid">
+
+<div class="translator-card">
+
+<div class="translator-top">
+
+<div class="avatar">JT</div>
+
+<h3>Sample Translator Profile</h3>
+
+<div class="specialty">
+Arabic • English • French
+</div>
+
+</div>
+
+<div class="translator-info">
+
+<p>
+Example profile showing how approved JMH translators and
+language professionals will appear, including languages,
+specialties, credentials, location and service options.
+</p>
+
+<div class="tags">
+
+<span class="tag">Arabic</span>
+<span class="tag">English</span>
+<span class="tag">French</span>
+<span class="tag">Document Translation</span>
+<span class="tag">Casablanca</span>
+
+</div>
+
+<p><strong>Experience:</strong> 8 years</p>
+
+<p><strong>Services:</strong> Translation & Interpretation</p>
+
+<p><strong>Status:</strong> ✓ JMH Verified Sample</p>
+
+<a class="profile-button" href="translator-sample.html">
+View Sample Profile
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="notice">
+
+<h2>Are You a Translator or Language Professional?</h2>
+
+<p>
+JMH is building a professional network of translators,
+interpreters and language specialists serving clients
+in Morocco and internationally.
+</p>
+
+<a href="translator-apply.html" class="apply-button">
+Apply to Join the JMH Network
+</a>
+
+</div>
+
+</main>
+
+<footer>
+© 2026 Jenin Media House · JMH Professional Network
+</footer>
+
+</body>
+</html>

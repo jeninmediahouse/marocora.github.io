@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Contact Jenin Media House</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f4f6f8;
+    color: #111827;
+}
+
+header {
+    background: #111827;
+    color: white;
+    padding: 18px 24px;
+}
+
+.header-inner {
+    max-width: 850px;
+    margin: auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    color: white;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 18px;
+}
+
+.back-link {
+    color: white;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.page {
+    max-width: 760px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+.intro {
+    text-align: center;
+    margin-bottom: 28px;
+}
+
+.intro h1 {
+    margin-bottom: 10px;
+}
+
+.intro p {
+    color: #4b5563;
+    line-height: 1.6;
+}
+
+.form-card {
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 30px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.05);
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    margin-bottom: 7px;
+    font-weight: 700;
+}
+
+input,
+select,
+textarea {
+    width: 100%;
+    padding: 13px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    font-size: 15px;
+}
+
+textarea {
+    min-height: 140px;
+    resize: vertical;
+}
+
+.submit-button {
+    width: 100%;
+    border: 0;
+    background: #c91f25;
+    color: white;
+    padding: 14px;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.contact-info {
+    margin-top: 25px;
+    padding-top: 20px;
+    border-top: 1px solid #e5e7eb;
+    color: #4b5563;
+    line-height: 1.7;
+    font-size: 14px;
+}
+
+footer {
+    text-align: center;
+    padding: 30px 20px;
+    color: #6b7280;
+    font-size: 13px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="header-inner">
+        <a href="index.html" class="logo">Jenin Media House</a>
+        <a href="index.html" class="back-link">← Back to Home</a>
+    </div>
+</header>
+
+<main class="page">
+
+    <div class="intro">
+        <h1>Contact Jenin Media House</h1>
+
+        <p>
+            Have a question about JMH services, the Professional Network,
+            translation, consulting, or working with one of our providers?
+            Send us a message below.
+        </p>
+    </div>
+
+    <div class="form-card">
+
+      <form action="https://formspree.io/f/mwlezeye" method="POST">
+
+            <input type="hidden" name="_subject" value="New JMH Contact Message">
+
+            <div class="form-group">
+                <label for="name">Your Name</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Your Email Address</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+
+            <div class="form-group">
+                <label for="phone">Phone / WhatsApp Number</label>
+                <input type="tel" id="phone" name="phone">
+            </div>
+
+            <div class="form-group">
+                <label for="topic">What Can We Help You With?</label>
+
+                <select id="topic" name="topic" required>
+                    <option value="">Select a topic</option>
+                    <option>General Question</option>
+                    <option>Translation & Language Services</option>
+                    <option>Professional Network</option>
+                    <option>Consulting</option>
+                    <option>Business Services</option>
+                    <option>Website / Technical Issue</option>
+                    <option>Other</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="message">Your Message</label>
+
+                <textarea
+                    id="message"
+                    name="message"
+                    placeholder="Tell us how we can help."
+                    required
+                ></textarea>
+            </div>
+
+            <button type="submit" class="submit-button">
+                Send Message
+            </button>
+
+        </form>
+
+        <div class="contact-info">
+            <strong>Jenin Media House</strong><br>
+            Casablanca – Nouaceur, Morocco<br>
+            Email: join@jeninmediahouse.com
+        </div>
+
+    </div>
+
+</main>
+
+<footer>
+    © 2026 Jenin Media House
+</footer>
+
+</body>
+</html>

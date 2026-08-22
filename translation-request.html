@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Request Translation Service | JMH Professional Network</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f4f6f8;
+            color: #111827;
+        }
+
+        header {
+            background: #111827;
+            color: white;
+            padding: 18px 24px;
+        }
+
+        .header-inner {
+            max-width: 850px;
+            margin: auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            color: white;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 18px;
+        }
+
+        .back-link {
+            color: white;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .page {
+            max-width: 760px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .intro {
+            text-align: center;
+            margin-bottom: 28px;
+        }
+
+        .intro h1 {
+            margin-bottom: 10px;
+        }
+
+        .intro p {
+            color: #4b5563;
+            line-height: 1.6;
+        }
+
+        .form-card {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.05);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 7px;
+            font-weight: 700;
+        }
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+            padding: 13px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 15px;
+        }
+
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .submit-button {
+            width: 100%;
+            border: 0;
+            background: #c91f25;
+            color: white;
+            padding: 14px;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .notice {
+            margin-top: 20px;
+            font-size: 13px;
+            line-height: 1.5;
+            color: #6b7280;
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px 20px;
+            color: #6b7280;
+            font-size: 13px;
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <div class="header-inner">
+        <a href="index.html" class="logo">Jenin Media House</a>
+        <a href="translator-sample.html" class="back-link">← Back to Translator Profile</a>
+    </div>
+</header>
+
+<main class="page">
+
+    <div class="intro">
+
+        <h1>Request Translation Service</h1>
+
+        <p>
+            Send a translation, interpretation or language-service request
+            through the JMH Professional Network.
+        </p>
+
+    </div>
+
+    <div class="form-card">
+
+        <form action="https://formspree.io/f/xeajnner" method="POST">
+
+            <input type="hidden" name="_subject" value="New JMH Translation Service Request">
+
+            <input type="hidden" name="request-type" value="Translation Service Request">
+
+            <input type="hidden" name="provider" value="Sample Translator Profile">
+
+            <div class="form-group">
+
+                <label for="client-name">Your Name</label>
+
+                <input
+                    type="text"
+                    id="client-name"
+                    name="client-name"
+                    required
+                >
+
+            </div>
+
+            <div class="form-group">
+
+                <label for="email">Your Email Address</label>
+
+                <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    required
+                >
+
+            </div>
+
+            <div class="form-group">
+
+                <label for="phone">Phone / WhatsApp Number</label>
+
+                <input
+                    type="tel"
+                    id="phone"
+                    name="phone"
+                >
+
+            </div>
+
+            <div class="form-group">
+
+                <label for="service">Service Needed</label>
+
+                <select id="service" name="service" required>
+
+                    <option value="">Select a service</option>
+
+                    <option>Document Translation</option>
+
+                    <option>Certified / Sworn Translation</option>
+
+                    <option>Interpretation</option>
+
+                    <option>Business Translation</option>
+
+                    <option>Website & Digital Translation</option>
+
+                    <option>Other Language Service</option>
+
+                </select>
+
+            </div>
+
+            <div class="form-group">
+
+                <label for="source-language">From Language</label>
+
+                <select id="source-language" name="source-language" required>
+
+                    <option value="">Select language</option>
+
+                    <option>Arabic</option>
+
+                    <option>English</option>
+
+                    <option>French</option>
+
+                    <option>Darija</option>
+
+                    <option>Spanish</option>
+
+                    <option>Other</option>
+
+                </select>
+
+            </div>
+
+            <div class="form-group">
+
+                <label for="target-language">To Language</label>
+
+                <select id="target-language" name="target-language" required>
+
+                    <option value="">Select language</option>
+
+                    <option>Arabic</option>
+
+                    <option>English</option>
+
+                    <option>French</option>
+
+                    <option>Darija</option>
+
+                    <option>Spanish</option>
+
+                    <option>Other</option>
+
+                </select>
+
+            </div>
+
+            <div class="form-group">
+
+                <label for="deadline">Preferred Deadline</label>
+
+                <input
+                    type="date"
+                    id="deadline"
+                    name="deadline"
+                >
+
+            </div>
+
+            <div class="form-group">
+
+                <label for="document-pages">Approximate Number of Pages</label>
+
+                <input
+                    type="number"
+                    id="document-pages"
+                    name="document-pages"
+                    min="1"
+                    placeholder="Example: 5"
+                >
+
+            </div>
+
+            <div class="form-group">
+
+                <label for="message">Tell Us About Your Request</label>
+
+                <textarea
+                    id="message"
+                    name="message"
+                    placeholder="Describe the document, interpretation assignment, subject matter, deadline, or any special requirements."
+                ></textarea>
+
+            </div>
+
+            <button type="submit" class="submit-button">
+                Send Translation Request
+            </button>
+
+            <p class="notice">
+                Submitting this request does not confirm a service booking
+                or final price. Availability, scope, turnaround time and fees
+                must be confirmed before work begins.
+            </p>
+
+        </form>
+
+    </div>
+
+</main>
+
+<footer>
+    © 2026 Jenin Media House · JMH Professional Network
+</footer>
+
+</body>
+</html>

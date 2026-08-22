@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Request a Lesson | JMH Professional Network</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f4f6f8;
+    color: #111827;
+}
+
+header {
+    background: #111827;
+    color: white;
+    padding: 18px 24px;
+}
+
+.header-inner {
+    max-width: 900px;
+    margin: auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    color: white;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 18px;
+}
+
+.back-link {
+    color: white;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.page {
+    max-width: 760px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+.intro {
+    text-align: center;
+    margin-bottom: 28px;
+}
+
+.intro h1 {
+    margin-bottom: 10px;
+}
+
+.intro p {
+    color: #4b5563;
+    line-height: 1.6;
+}
+
+.form-card {
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 30px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.05);
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    margin-bottom: 7px;
+    font-weight: 700;
+}
+
+input,
+select,
+textarea {
+    width: 100%;
+    padding: 13px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    font-size: 15px;
+}
+
+textarea {
+    min-height: 120px;
+    resize: vertical;
+}
+
+.submit-button {
+    width: 100%;
+    border: 0;
+    background: #c91f25;
+    color: white;
+    padding: 14px;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.notice {
+    margin-top: 20px;
+    font-size: 13px;
+    line-height: 1.5;
+    color: #6b7280;
+}
+
+footer {
+    text-align: center;
+    padding: 30px 20px;
+    color: #6b7280;
+    font-size: 13px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="header-inner">
+        <a href="index.html" class="logo">Jenin Media House</a>
+        <a href="teacher-sample.html" class="back-link">← Back to Teacher Profile</a>
+    </div>
+</header>
+
+<main class="page">
+
+    <div class="intro">
+        <h1>Request a Lesson</h1>
+
+        <p>
+            Send a lesson request through the JMH Professional Network.
+            The teacher or JMH team can follow up with you regarding
+            availability and scheduling.
+        </p>
+    </div>
+
+    <div class="form-card">
+
+        <form action="https://formspree.io/f/mqpznwjy" method="POST">
+
+            <input type="hidden" name="_subject" value="New JMH Lesson Request">
+
+            <input type="hidden" name="request-type" value="Lesson Request">
+
+            <input type="hidden" name="teacher" value="Sample Teacher Profile">
+
+            <div class="form-group">
+                <label for="student-name">Your Name</label>
+                <input type="text" id="student-name" name="student-name" required>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Your Email Address</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+
+            <div class="form-group">
+                <label for="phone">Phone / WhatsApp Number</label>
+                <input type="tel" id="phone" name="phone">
+            </div>
+
+            <div class="form-group">
+                <label for="language">Language or Subject</label>
+
+                <select id="language" name="language" required>
+                    <option value="">Select an option</option>
+                    <option>Darija</option>
+                    <option>Arabic</option>
+                    <option>English</option>
+                    <option>Other</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="lesson-method">Lesson Method</label>
+
+                <select id="lesson-method" name="lesson-method" required>
+                    <option value="">Select an option</option>
+                    <option>Online</option>
+                    <option>In Person</option>
+                    <option>Either</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="preferred-date">Preferred Date</label>
+                <input type="date" id="preferred-date" name="preferred-date">
+            </div>
+
+            <div class="form-group">
+                <label for="preferred-time">Preferred Time</label>
+                <input type="time" id="preferred-time" name="preferred-time">
+            </div>
+
+            <div class="form-group">
+                <label for="message">Anything Else We Should Know?</label>
+                <textarea id="message" name="message" placeholder="Tell us about your goals, level, schedule, or any questions."></textarea>
+            </div>
+
+            <button type="submit" class="submit-button">
+                Send Lesson Request
+            </button>
+
+            <p class="notice">
+                Submitting this request does not confirm a booking.
+                Availability, pricing and lesson details must be confirmed
+                before a lesson is scheduled.
+            </p>
+
+        </form>
+
+    </div>
+
+</main>
+
+<footer>
+    © 2026 Jenin Media House · JMH Professional Network
+</footer>
+
+</body>
+</html>

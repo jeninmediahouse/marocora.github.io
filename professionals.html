@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>JMH Professional Network | Jenin Media House</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f4f6f8;
+    color: #111827;
+}
+
+/* HEADER */
+
+header {
+    background: #111827;
+    color: white;
+    padding: 18px 24px;
+}
+
+.header-inner {
+    max-width: 1200px;
+    margin: auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.logo a {
+    color: white;
+    text-decoration: none;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    margin-left: 22px;
+    font-size: 14px;
+}
+
+nav a:hover {
+    text-decoration: underline;
+}
+
+/* HERO */
+
+.hero {
+    background: white;
+    padding: 65px 24px;
+    text-align: center;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.hero h1 {
+    font-size: 42px;
+    margin: 0 0 15px;
+}
+
+.hero p {
+    max-width: 750px;
+    margin: auto;
+    color: #4b5563;
+    font-size: 18px;
+    line-height: 1.6;
+}
+
+.hero-buttons {
+    margin-top: 30px;
+}
+
+.button {
+    display: inline-block;
+    padding: 13px 22px;
+    margin: 5px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.primary-button {
+    background: #c91f25;
+    color: white;
+}
+
+.secondary-button {
+    border: 1px solid #111827;
+    color: #111827;
+    background: white;
+}
+
+/* MARKETPLACE */
+
+.marketplace {
+    max-width: 1200px;
+    margin: auto;
+    padding: 55px 24px;
+}
+
+.marketplace h2 {
+    text-align: center;
+    font-size: 30px;
+    margin-bottom: 10px;
+}
+
+.section-intro {
+    text-align: center;
+    color: #6b7280;
+    margin-bottom: 35px;
+}
+
+/* SEARCH */
+
+.search-box {
+    max-width: 700px;
+    margin: 0 auto 40px;
+}
+
+.search-box input {
+    width: 100%;
+    padding: 15px 18px;
+    font-size: 16px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+}
+
+/* CATEGORIES */
+
+.categories {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+.category {
+    background: white;
+    padding: 25px;
+    border-radius: 8px;
+    border: 1px solid #e5e7eb;
+    transition: 0.2s;
+    text-decoration: none;
+color: inherit;
+display: block;
+}
+
+.category:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+}
+
+.category h3 {
+    margin-top: 0;
+    margin-bottom: 10px;
+}
+
+.category p {
+    color: #6b7280;
+    line-height: 1.5;
+    margin-bottom: 0;
+}
+
+/* PROVIDERS */
+
+.providers {
+    background: white;
+    padding: 55px 24px;
+}
+
+.providers-inner {
+    max-width: 1200px;
+    margin: auto;
+}
+
+.providers h2 {
+    text-align: center;
+}
+
+.empty-network {
+    max-width: 700px;
+    margin: 30px auto 0;
+    text-align: center;
+    padding: 35px;
+    background: #f9fafb;
+    border: 1px dashed #9ca3af;
+    border-radius: 8px;
+}
+
+.empty-network p {
+    color: #6b7280;
+    line-height: 1.6;
+}
+
+/* FOOTER */
+
+footer {
+    background: #111827;
+    color: #d1d5db;
+    text-align: center;
+    padding: 30px 20px;
+    font-size: 14px;
+}
+
+/* MOBILE */
+
+@media (max-width: 800px) {
+    .categories {
+        grid-template-columns: 1fr;
+    }
+
+    .hero h1 {
+        font-size: 32px;
+    }
+
+    nav {
+        display: none;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="header-inner">
+
+        <div class="logo">
+            <a href="index.html">Jenin Media House</a>
+        </div>
+
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="professionals.html">Professional Network</a>
+            <a href="join.html">Join the Network</a>
+        </nav>
+
+    </div>
+</header>
+
+<section class="hero">
+
+    <h1>JMH Professional Network</h1>
+
+    <p>
+        Discover independent professionals, specialists, teachers,
+        creatives and service providers serving residents, businesses
+        and international clients throughout Morocco.
+    </p>
+
+    <div class="hero-buttons">
+
+        <a href="#categories" class="button primary-button">
+            Browse Professionals
+        </a>
+
+        <a href="join.html" class="button secondary-button">
+            Join the Network
+        </a>
+
+    </div>
+
+</section>
+
+<main class="marketplace" id="categories">
+
+    <h2>Find the Right Professional</h2>
+
+    <p class="section-intro">
+        Browse the JMH Professional Network by service category.
+    </p>
+
+    <div class="search-box">
+        <input
+            type="text"
+            placeholder="Search professionals, services, languages or locations..."
+        >
+    </div>
+
+    <div class="categories">
+
+     <a class="category" href="teachers.html">
+            <h3>Online Teachers & Tutors</h3>
+            <p>
+                Darija, Arabic, English, French and other language
+                teachers offering online and in-person instruction.
+            </p>
+        </a>
+
+        <a class="category" href="translators.html">
+            <h3>Translation & Language Services</h3>
+            <p>
+                Translators, interpreters and language professionals
+                serving individuals and businesses.
+            </p>
+        </a>
+
+        <div class="category">
+            <h3>Legal & Business Professionals</h3>
+            <p>
+                Lawyers, accountants, consultants and other
+                professional business services.
+            </p>
+        </div>
+
+        <div class="category">
+            <h3>Health & Medical Services</h3>
+            <p>
+                Doctors, dentists, veterinarians, eye-care professionals
+                and other qualified providers.
+            </p>
+        </div>
+
+        <div class="category">
+            <h3>Transportation & Local Services</h3>
+            <p>
+                Drivers, airport meet-and-greet services and other
+                trusted local service providers.
+            </p>
+        </div>
+
+        <div class="category">
+            <h3>Creative & Digital Services</h3>
+            <p>
+                Graphic designers, web designers, artists and other
+                independent creative professionals.
+            </p>
+        </div>
+
+        <div class="category">
+            <h3>Real Estate & Relocation</h3>
+            <p>
+                Real-estate professionals and relocation services
+                assisting residents and international clients.
+            </p>
+        </div>
+
+        <div class="category">
+            <h3>Home & Business Services</h3>
+            <p>
+                Independent professionals providing practical services
+                for homes and businesses throughout Morocco.
+            </p>
+        </div>
+
+        <div class="category">
+            <h3>Other Professional Services</h3>
+            <p>
+                Additional specialists and independent service providers
+                approved for the JMH Professional Network.
+            </p>
+        </div>
+
+    </div>
+
+</main>
+
+<section class="providers">
+
+    <div class="providers-inner">
+
+        <h2>Featured Professionals</h2>
+
+        <div class="empty-network">
+
+            <h3>Our Professional Network Is Growing</h3>
+
+            <p>
+                Professional profiles will appear here as providers
+                complete the JMH application and review process.
+            </p>
+
+            <a href="join.html" class="button primary-button">
+                Apply to Join
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
+
+<footer>
+    © 2026 Jenin Media House · Casablanca–Nouaceur, Morocco
+</footer>
+
+</body>
+</html>
