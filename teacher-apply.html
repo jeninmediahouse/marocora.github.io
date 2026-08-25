@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Teach With Marocora | Teacher Application</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f4f6f8;
+            color: #111827;
+        }
+
+        header {
+            background: #111827;
+            color: white;
+            padding: 18px 24px;
+        }
+
+        .header-inner {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            color: white;
+            text-decoration: none;
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .back-link {
+            color: white;
+            text-decoration: none;
+            font-size: 14px;
+        }
+      </style>
+</head>
+
+<body>
+
+<header>
+    <div class="header-inner">
+        <a href="index.html" class="logo">Marocora</a>
+        <a href="teachers.html" class="back-link">← Back to Teachers</a>
+    </div>
+</header>
+  <main>
+    <section class="teacher-apply">
+        <h1>Teach With Marocora</h1>
+
+        <p>
+            Apply to join the Marocora teaching network and connect with students
+            looking for language lessons, tutoring, and personalized instruction.
+        </p>
+      <form class="teacher-application">
+
+    <div class="form-group">
+        <label for="full-name">Full Name</label>
+        <input type="text" id="full-name" name="full-name" required>
+    </div>
+
+    <div class="form-group">
+        <label for="email">Email Address</label>
+        <input type="email" id="email" name="email" required>
+    </div>
+
+    <div class="form-group">
+        <label for="phone">Phone / WhatsApp Number</label>
+        <input type="tel" id="phone" name="phone" required>
+    </div>
+<div class="form-group">
+    <label for="city">City / Location</label>
+    <input type="text" id="city" name="city" required>
+</div>
+
+<div class="form-group">
+    <label for="languages">Languages You Teach</label>
+    <select id="languages" name="languages" required>
+        <option value="">Select primary language</option>
+        <option>Darija</option>
+        <option>Arabic</option>
+        <option>English</option>
+        <option>French</option>
+        <option>Spanish</option>
+        <option>Other</option>
+    </select>
+</div>
+
+<div class="form-group">
+    <label for="subjects">Subjects / Teaching Areas</label>
+    <input type="text" id="subjects" name="subjects" placeholder="Example: Conversation, grammar, exam preparation, tutoring">
+</div>
+<div class="form-group">
+    <label for="experience">Teaching Experience</label>
+    <select id="experience" name="experience" required>
+        <option value="">Select experience level</option>
+        <option>New teacher / tutor</option>
+        <option>Less than 1 year</option>
+        <option>1–3 years</option>
+        <option>4–6 years</option>
+        <option>7–10 years</option>
+        <option>More than 10 years</option>
+    </select>
+</div>
+
+<div class="form-group">
+    <label for="qualifications">Qualifications / Certifications</label>
+    <textarea id="qualifications" name="qualifications" rows="4"
+        placeholder="Tell us about your education, teaching qualifications, certifications, or relevant experience."></textarea>
+</div>
+
+<div class="form-group">
+    <label for="lesson-method">Teaching Method</label>
+    <select id="lesson-method" name="lesson-method" required>
+        <option value="">Select an option</option>
+        <option>Online only</option>
+        <option>In person only</option>
+        <option>Online &amp; in person</option>
+    </select>
+</div>
+
+<div class="form-group">
+    <label for="availability">General Availability</label>
+    <textarea id="availability" name="availability" rows="3"
+        placeholder="Example: Weekday evenings, Saturday mornings, flexible schedule"></textarea>
+</div>
+<div class="form-group">
+    <label for="languages">Languages You Can Teach</label>
+    <div class="checkbox-group">
+        <label><input type="checkbox" name="languages" value="Darija"> Darija</label>
+        <label><input type="checkbox" name="languages" value="Arabic"> Arabic</label>
+        <label><input type="checkbox" name="languages" value="English"> English</label>
+        <label><input type="checkbox" name="languages" value="French"> French</label>
+        <label><input type="checkbox" name="languages" value="Spanish"> Spanish</label>
+        <label><input type="checkbox" name="languages" value="Other"> Other</label>
+    </div>
+</div>
+<div class="form-group">
+    <label for="location">City / Location</label>
+    <input type="text" id="location" name="location" placeholder="Example: Casablanca, Rabat, Marrakech">
+</div>
+<div class="form-group">
+    <label for="online-platforms">Online Teaching Platforms You Use</label>
+    <input type="text" id="online-platforms" name="online-platforms" placeholder="Example: Zoom, Google Meet, Microsoft Teams">
+</div>
+ <div class="form-group">
+    <label for="rate">Your Preferred Hourly Rate (MAD)</label>
+    <input type="number" id="rate" name="rate" min="0" placeholder="Example: 150">
+    <small>Your rate will not automatically be published. Marocora may contact you regarding pricing before your profile goes live.</small>
+</div>
+        <div class="form-group">
+    <label for="bio">About You</label>
+    <textarea id="bio" name="bio" rows="5" placeholder="Tell prospective students about yourself, your teaching style, experience, and the type of students you enjoy working with."></textarea>
+</div>
+<div class="form-group">
+    <label>Students You Prefer to Teach</label>
+    <div class="checkbox-group">
+        <label><input type="checkbox" name="student-types" value="Children"> Children</label>
+        <label><input type="checkbox" name="student-types" value="Teenagers"> Teenagers</label>
+        <label><input type="checkbox" name="student-types" value="Adults"> Adults</label>
+        <label><input type="checkbox" name="student-types" value="Business Professionals"> Business Professionals</label>
+        <label><input type="checkbox" name="student-types" value="Expats"> Expats</label>
+        <label><input type="checkbox" name="student-types" value="All Ages"> All Ages</label>
+    </div>
+</div>
+        <div class="form-group">
+    <label>Levels You Teach</label>
+    <div class="checkbox-group">
+        <label><input type="checkbox" name="levels" value="Beginner"> Beginner</label>
+        <label><input type="checkbox" name="levels" value="Intermediate"> Intermediate</label>
+        <label><input type="checkbox" name="levels" value="Advanced"> Advanced</label>
+        <label><input type="checkbox" name="levels" value="All Levels"> All Levels</label>
+    </div>
+</div>
+        <div class="form-group">
+    <label for="trial-lesson">Do You Offer a Trial or Introductory Lesson?</label>
+    <select id="trial-lesson" name="trial-lesson">
+        <option value="">Select an option</option>
+        <option value="Yes">Yes</option>
+        <option value="No">No</option>
+        <option value="Depends">Depends on the student</option>
+    </select>
+</div>
+        <div class="form-group">
+    <label for="cancellation-policy">Cancellation / Rescheduling Policy</label>
+    <textarea id="cancellation-policy" name="cancellation-policy" rows="3"
+        placeholder="Example: Students may reschedule up to 24 hours before the lesson."></textarea>
+</div>
+        <div class="form-group">
+    <label for="additional-info">Anything Else You Would Like Us to Know?</label>
+    <textarea id="additional-info" name="additional-info" rows="4"
+        placeholder="Tell the Marocora team anything else that may help us review your application."></textarea>
+</div>
+<div class="form-group">
+    <label for="profile-photo">Profile Photo</label>
+    <input type="file" id="profile-photo" name="profile-photo" accept="image/*">
+    <small>Please upload a clear, professional photo suitable for your public teacher profile.</small>
+</div>
+        <div class="form-group">
+    <label for="documents">Qualifications / Verification Documents</label>
+    <input type="file" id="documents" name="documents" multiple>
+    <small>You may provide diplomas, teaching certificates, professional credentials, or other supporting documents.</small>
+</div>
+        <div class="form-group">
+    <label for="website">Website or Professional Profile</label>
+    <input type="url" id="website" name="website" placeholder="https://">
+</div>
+        <div class="form-group">
+    <label for="video-introduction">Video Introduction Link</label>
+    <input type="url" id="video-introduction" name="video-introduction" placeholder="YouTube, Vimeo, Google Drive, or another video link">
+    <small>Optional. A short introduction can help students learn more about you before requesting a lesson.</small>
+</div>
+        <div class="form-group">
+    <label>
+        <input type="checkbox" name="profile-consent" value="Yes" required>
+        I understand that information approved by Marocora may be used to create my public teacher profile.
+    </label>
+</div>
+<div class="form-group">
+    <label for="phone">Phone / WhatsApp Number</label>
+    <input type="tel" id="phone" name="phone" placeholder="+212..." required>
+</div>
+        <div class="form-group">
+    <label for="preferred-contact">Preferred Contact Method</label>
+    <select id="preferred-contact" name="preferred-contact" required>
+        <option value="">Select an option</option>
+        <option value="Email">Email</option>
+        <option value="WhatsApp">WhatsApp</option>
+        <option value="Phone">Phone</option>
+    </select>
+</div>
+        <div class="form-group">
+    <label for="native-language">Native / Primary Language</label>
+    <input type="text" id="native-language" name="native-language" placeholder="Example: Arabic">
+</div>
+        <div class="form-group">
+    <label for="other-languages">Other Languages You Speak</label>
+    <input type="text" id="other-languages" name="other-languages" placeholder="Example: French, English, Spanish">
+</div>
+        <div class="form-group">
+    <label for="timezone">Time Zone</label>
+    <select id="timezone" name="timezone">
+        <option value="">Select an option</option>
+        <option value="Morocco">Morocco</option>
+        <option value="Europe">Europe</option>
+        <option value="North America">North America</option>
+        <option value="Middle East">Middle East</option>
+        <option value="Other">Other</option>
+    </select>
+</div>
+<div class="form-group">
+    <label>Lesson Types You Offer</label>
+    <div class="checkbox-group">
+        <label><input type="checkbox" name="lesson-types" value="Private One-on-One"> Private One-on-One Lessons</label>
+        <label><input type="checkbox" name="lesson-types" value="Small Group"> Small Group Lessons</label>
+        <label><input type="checkbox" name="lesson-types" value="Conversation Practice"> Conversation Practice</label>
+        <label><input type="checkbox" name="lesson-types" value="Business Language"> Business Language</label>
+        <label><input type="checkbox" name="lesson-types" value="Exam Preparation"> Exam Preparation</label>
+        <label><input type="checkbox" name="lesson-types" value="Children Lessons"> Lessons for Children</label>
+    </div>
+</div>
+        <div class="form-group">
+    <label for="lesson-duration">Typical Lesson Duration</label>
+    <select id="lesson-duration" name="lesson-duration">
+        <option value="">Select an option</option>
+        <option value="30 minutes">30 minutes</option>
+        <option value="45 minutes">45 minutes</option>
+        <option value="60 minutes">60 minutes</option>
+        <option value="90 minutes">90 minutes</option>
+        <option value="Flexible">Flexible</option>
+    </select>
+</div>
+        <div class="form-group">
+    <label for="max-students">Maximum Students Per Lesson</label>
+    <input type="number" id="max-students" name="max-students" min="1" placeholder="Example: 1 for private lessons, 6 for small groups">
+</div>
+        <div class="form-group">
+    <label for="international-students">Are You Available to Teach Students Outside Morocco?</label>
+    <select id="international-students" name="international-students">
+        <option value="">Select an option</option>
+        <option value="Yes">Yes</option>
+        <option value="No">No</option>
+        <option value="Sometimes">Depending on schedule</option>
+    </select>
+</div>
+        <div class="form-group">
+    <label for="in-person-area">If You Offer In-Person Lessons, What Areas Can You Serve?</label>
+    <input type="text" id="in-person-area" name="in-person-area" placeholder="Example: Casablanca, Nouaceur, Dar Bouazza">
+    <small>Leave blank if you offer online lessons only.</small>
+</div>
+<div class="form-group">
+    <label>
+        <input type="checkbox" name="accuracy-confirmation" value="Yes" required>
+        I confirm that the information provided in this application is accurate and complete.
+    </label>
+</div>
+        <div class="form-group">
+    <label>
+        <input type="checkbox" name="verification-consent" value="Yes" required>
+        I understand that Marocora may request additional information or documents to verify my qualifications and identity before publishing my profile.
+    </label>
+</div>
+        <button type="submit" class="submit-button">
+    Submit Teacher Application
+</button>
+  </form>
+
+    </section>
+</main>
+
+</body>
+</html>      
+        
+        
+        
+        
