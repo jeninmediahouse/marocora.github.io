@@ -45,7 +45,114 @@
             text-decoration: none;
             font-size: 14px;
         }
-      </style>
+     .teacher-apply {
+    max-width: 900px;
+    margin: 50px auto;
+    background: white;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08);
+}
+
+.teacher-apply h1 {
+    margin-top: 0;
+    margin-bottom: 12px;
+    font-size: 36px;
+}
+
+.teacher-apply > p {
+    color: #4b5563;
+    margin-bottom: 35px;
+    font-size: 17px;
+    line-height: 1.6;
+}
+
+.teacher-application {
+    display: grid;
+    gap: 22px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.form-group > label {
+    font-weight: 700;
+    font-size: 15px;
+}
+
+.form-group input[type="text"],
+.form-group input[type="email"],
+.form-group input[type="tel"],
+.form-group input[type="url"],
+.form-group input[type="number"],
+.form-group input[type="file"],
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid #cbd5e1;
+    border-radius: 7px;
+    font-family: inherit;
+    font-size: 15px;
+    background: white;
+}
+
+.form-group textarea {
+    resize: vertical;
+}
+
+.form-group small {
+    color: #6b7280;
+    line-height: 1.4;
+}
+
+.checkbox-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 18px;
+    padding: 12px 0;
+}
+
+.checkbox-group label {
+    font-weight: 400;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.submit-button {
+    background: #d11d2a;
+    color: white;
+    border: none;
+    border-radius: 7px;
+    padding: 15px 24px;
+    font-size: 17px;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.submit-button:hover {
+    opacity: 0.9;
+}
+
+@media (max-width: 700px) {
+    .teacher-apply {
+        margin: 20px 12px;
+        padding: 24px 18px;
+    }
+
+    .teacher-apply h1 {
+        font-size: 30px;
+    }
+
+    .header-inner {
+        gap: 20px;
+    }
+} </style>
 </head>
 
 <body>
