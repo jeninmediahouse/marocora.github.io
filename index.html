@@ -221,7 +221,69 @@ nav a {
     color: #4b5563;
 }
 
-.network-categories {
+.teaching-pathways {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 24px;
+    max-width: 1000px;
+    margin: 0 auto 42px;
+}
+
+.teaching-pathways .network-category {
+    padding: 34px;
+    min-height: 220px;
+}
+
+.teaching-pathways .network-category:first-child {
+    border-top-color: #168a55;
+}
+
+.teaching-pathways .network-category:nth-child(2) {
+    border-top-color: #c1272d;
+}
+
+.teaching-pathways .network-category h3 {
+    font-size: 24px;
+    margin-bottom: 14px;
+}
+
+.teaching-pathways .network-category p {
+    font-size: 16px;
+    line-height: 1.6;
+}
+
+.teaching-pathways .network-category a {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 12px 18px;
+    border-radius: 7px;
+    color: white;
+    text-decoration: none;
+    font-weight: 700;
+}
+
+.teaching-pathways .network-category:first-child a {
+    background: #168a55;
+}
+
+.teaching-pathways .network-category:nth-child(2) a {
+    background: #c1272d;
+}
+
+.network-section-title {
+    max-width: 1200px;
+    margin: 0 auto 22px;
+    text-align: center;
+    font-size: 18px;
+    color: #111827;
+}
+
+@media (max-width: 800px) {
+    .teaching-pathways {
+        grid-template-columns: 1fr;
+    }
+}
+        .network-categories {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 24px;
@@ -598,14 +660,14 @@ nav a {
     Discover trusted professionals and independent service providers across Morocco. Marocora brings local expertise together in one place for expatriates, residents, businesses, and international clients.
 </p>
 
-    <div class="network-categories">
+    <div class="teaching-pathways">
         <div class="network-category">
     <h3>Find an Online Teacher</h3>
     <p>
         Find qualified online teachers for Darija, Arabic, English,
         French, Spanish, and other subjects.
     </p>
-    <a href="teachers.html">Find an Online Teacher →</a>
+    <a href="teachers.html">Find My Teacher →</a>
 </div>
 
 <div class="network-category">
@@ -616,6 +678,11 @@ nav a {
     </p>
     <a href="teacher-apply.html">Apply to Teach →</a>
 </div>
+        </div>
+
+<h3 class="network-section-title">Other Professional Categories</h3>
+
+<div class="network-categories">
           <div class="network-category">
             <h3>Translation & Language Services</h3>
             <p>
