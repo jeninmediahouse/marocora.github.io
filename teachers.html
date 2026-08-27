@@ -102,7 +102,86 @@ nav a {
 .directory-title {
     margin-bottom: 25px;
 }
+.teacher-marketplace {
+    max-width: 1100px;
+    margin: 0 auto;
+}
 
+.teacher-marketplace .directory-title {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.teacher-marketplace .directory-title h2 {
+    font-size: 30px;
+    margin-bottom: 10px;
+}
+
+.teacher-marketplace .directory-title p {
+    color: #4b5563;
+    font-size: 16px;
+}
+
+.language-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-bottom: 45px;
+}
+
+.language-card {
+    display: block;
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-top: 4px solid #168a55;
+    border-radius: 10px;
+    padding: 24px;
+    text-decoration: none;
+    color: #111827;
+    box-shadow: 0 5px 16px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.language-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.09);
+}
+
+.language-card h3 {
+    margin: 0 0 8px;
+    font-size: 21px;
+}
+
+.language-card p {
+    margin: 0;
+    color: #4b5563;
+    line-height: 1.5;
+}
+
+.available-teachers {
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    padding: 30px;
+    text-align: center;
+}
+
+.available-teachers h2 {
+    margin-top: 0;
+    margin-bottom: 10px;
+}
+
+.available-teachers p {
+    margin: 0;
+    color: #4b5563;
+    line-height: 1.6;
+}
+
+@media (max-width: 800px) {
+    .language-grid {
+        grid-template-columns: 1fr;
+    }
+}
 .teacher-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -277,28 +356,58 @@ in Darija, Arabic, English, French, Spanish, and other subjects.
 
    
 
-    <div class="teacher-grid">
-        <div class="teacher-empty-state">
-    <h3>Find the Right Online Teacher for You</h3>
+    <div class="teacher-marketplace">
 
-    <p>
-    Marocora is building a network of qualified online teachers for
-    Darija, Arabic, English, French, Spanish, and other subjects.
-</p>
+    <div class="directory-title">
+        <h2>Choose What You Want to Learn</h2>
+        <p>
+            Select a language or subject to browse available online teachers.
+        </p>
+    </div>
 
-    <p>
-    Tell us what you want to learn, your current level, and your preferred
-    schedule. Marocora will help match you with the right online teacher.
-</p>
+    <div class="language-grid">
 
-    <a class="profile-button" href="lesson-request.html">
-        Find My Teacher
-    </a>
-</div>
+        <a class="language-card" href="#darija">
+            <h3>Darija</h3>
+            <p>Moroccan Arabic</p>
+        </a>
 
-        
+        <a class="language-card" href="#arabic">
+            <h3>Arabic</h3>
+            <p>Modern Standard Arabic and more</p>
+        </a>
+
+        <a class="language-card" href="#english">
+            <h3>English</h3>
+            <p>General, conversational and professional English</p>
+        </a>
+
+        <a class="language-card" href="#french">
+            <h3>French</h3>
+            <p>General, conversational and professional French</p>
+        </a>
+
+        <a class="language-card" href="#spanish">
+            <h3>Spanish</h3>
+            <p>General and conversational Spanish</p>
+        </a>
+
+        <a class="language-card" href="#other">
+            <h3>Other Subjects</h3>
+            <p>Browse additional languages and subjects</p>
+        </a>
 
     </div>
+
+    <div class="available-teachers">
+        <h2>Available Teachers</h2>
+        <p>
+            Teacher profiles will appear here as qualified instructors
+            are approved and added to the Marocora network.
+        </p>
+    </div>
+
+</div>
 
     
 
