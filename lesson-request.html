@@ -130,7 +130,7 @@ footer {
 <header>
     <div class="header-inner">
         <a href="index.html" class="logo">Jenin Media House</a>
-        <a href="teacher-sample.html" class="back-link">← Back to Teacher Profile</a>
+       <a href="teachers.html" class="back-link">← Back to Find a Teacher</a>
     </div>
 </header>
 
@@ -140,21 +140,20 @@ footer {
         <h1>Request a Lesson</h1>
 
         <p>
-            Send a lesson request through the Marocora Professional Network.
-The teacher or Marocora team can follow up with you regarding
-availability and scheduling.
-        </p>
+    Tell us what you want to learn, your current level, and your preferred
+    schedule. Marocora will help match you with the right online teacher.
+</p>
     </div>
 
     <div class="form-card">
 
         <form action="https://formspree.io/f/mqpznwjy" method="POST">
 
-            <input type="hidden" name="_subject" value="New Marocora Lesson Request">
+           <input type="hidden" name="_subject" value="New Marocora Teacher Matching Request">
 
-            <input type="hidden" name="request-type" value="Lesson Request">
+           <input type="hidden" name="_request-type" value="Online Teacher Matching Request">
 
-            <input type="hidden" name="teacher" value="Moroccan Language Teacher">
+            
             <div class="form-group">
                 <label for="student-name">Your Name</label>
                 <input type="text" id="student-name" name="student-name" required>
@@ -171,52 +170,85 @@ availability and scheduling.
             </div>
 
             <div class="form-group">
-                <label for="language">Language or Subject</label>
+    <label for="language">What Would You Like to Learn?</label>
 
-                <select id="language" name="language" required>
-                    <option value="">Select an option</option>
-                    <option>Darija</option>
-                    <option>Arabic</option>
-                    <option>English</option>
-                    <option>Other</option>
-                </select>
+    <select id="language" name="language" required>
+        <option value="">Select a language or subject</option>
+        <option>Darija</option>
+        <option>Arabic</option>
+        <option>English</option>
+        <option>French</option>
+        <option>Spanish</option>
+        <option>Other Subject</option>
+    </select>
+
+               
             </div>
+<div class="form-group">
+    <label for="level">Your Current Level</label>
+
+    <select id="level" name="level" required>
+        <option value="">Select your current level</option>
+        <option>Complete Beginner</option>
+        <option>Beginner</option>
+        <option>Intermediate</option>
+        <option>Advanced</option>
+        <option>Not Sure</option>
+    </select>
+</div>
+
+<div class="form-group">
+    <label for="goal">What Is Your Main Learning Goal?</label>
+
+    <select id="goal" name="goal" required>
+        <option value="">Select your main goal</option>
+        <option>Conversation Practice</option>
+        <option>General Language Learning</option>
+        <option>Grammar &amp; Writing</option>
+        <option>Business / Professional Use</option>
+        <option>Exam Preparation</option>
+        <option>Travel</option>
+        <option>Children's Lessons</option>
+        <option>Other</option>
+    </select>
+</div>
+            <div class="form-group">
+    <label for="schedule">When Are You Usually Available for Lessons?</label>
+    <textarea id="schedule" name="schedule" rows="3"
+        placeholder="Example: Monday and Wednesday evenings, Saturday mornings"></textarea>
+</div>
+
+<div class="form-group">
+    <label for="timezone">Your Time Zone</label>
+    <select id="timezone" name="timezone" required>
+        <option value="">Select your time zone</option>
+        <option>Morocco</option>
+        <option>Europe</option>
+        <option>North America - Eastern</option>
+        <option>North America - Central</option>
+        <option>North America - Mountain</option>
+        <option>North America - Pacific</option>
+        <option>Middle East</option>
+        <option>Other</option>
+    </select>
+</div>
 
             <div class="form-group">
-                <label for="lesson-method">Lesson Method</label>
-
-                <select id="lesson-method" name="lesson-method" required>
-                    <option value="">Select an option</option>
-                    <option>Online</option>
-                    <option>In Person</option>
-                    <option>Either</option>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label for="preferred-date">Preferred Date</label>
-                <input type="date" id="preferred-date" name="preferred-date">
-            </div>
-
-            <div class="form-group">
-                <label for="preferred-time">Preferred Time</label>
-                <input type="time" id="preferred-time" name="preferred-time">
-            </div>
-
-            <div class="form-group">
-                <label for="message">Anything Else We Should Know?</label>
+               <label for="message">Anything Else That Would Help Us Match You?</label>
                 <textarea id="message" name="message" placeholder="Tell us about your goals, level, schedule, or any questions."></textarea>
             </div>
 
             <button type="submit" class="submit-button">
-                Send Lesson Request
+               Find My Teacher
             </button>
 
-            <p class="notice">
-                Submitting this request does not confirm a booking.
-                Availability, pricing and lesson details must be confirmed
-                before a lesson is scheduled.
-            </p>
+           
+                <p class="notice">
+    Submitting this form does not confirm a lesson or payment.
+    Marocora will review your preferences and help connect you with
+    an appropriate online teacher.
+</p>
+           
 
         </form>
 
