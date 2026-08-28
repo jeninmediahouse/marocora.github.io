@@ -252,11 +252,19 @@
         email || 'Not provided';
 
     document.getElementById('pay-now-button').addEventListener(
-        'click',
-        function() {
-            alert('Secure payment integration will be connected in the next step.');
-        }
-    );
+    'click',
+    function() {
+        const successParams = new URLSearchParams({
+            teacher: teacher || '',
+            time: time || '',
+            name: name || '',
+            email: email || ''
+        });
+
+        window.location.href =
+            'booking-success.html?' + successParams.toString();
+    }
+);
 </script>
 
 </body>
