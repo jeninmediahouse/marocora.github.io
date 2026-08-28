@@ -158,25 +158,35 @@ nav a {
     line-height: 1.5;
 }
 
-.available-teachers {
+
+
+
+.teacher-sections {
+    display: grid;
+    gap: 24px;
+    margin-top: 45px;
+}
+
+.teacher-language-section {
     background: white;
     border: 1px solid #e5e7eb;
+    border-left: 4px solid #168a55;
     border-radius: 10px;
-    padding: 30px;
-    text-align: center;
+    padding: 28px;
+    scroll-margin-top: 25px;
 }
 
-.available-teachers h2 {
-    margin-top: 0;
-    margin-bottom: 10px;
+.teacher-language-section h2 {
+    margin: 0 0 10px;
+    font-size: 24px;
+    color: #111827;
 }
 
-.available-teachers p {
+.teacher-language-section p {
     margin: 0;
     color: #4b5563;
     line-height: 1.6;
 }
-
 @media (max-width: 800px) {
     .language-grid {
         grid-template-columns: 1fr;
@@ -399,20 +409,46 @@ in Darija, Arabic, English, French, Spanish, and other subjects.
 
     </div>
 
-    <div class="available-teachers">
-        <h2>Available Teachers</h2>
-        <p>
-            Teacher profiles will appear here as qualified instructors
-            are approved and added to the Marocora network.
-        </p>
-    </div>
+    
 
 </div>
 
     
 
        
+<div class="teacher-sections">
 
+    <section class="teacher-language-section" id="darija">
+        <h2>Darija Teachers</h2>
+        <p>No Darija teacher profiles are published yet.</p>
+    </section>
+
+    <section class="teacher-language-section" id="arabic">
+        <h2>Arabic Teachers</h2>
+        <p>No Arabic teacher profiles are published yet.</p>
+    </section>
+
+    <section class="teacher-language-section" id="english">
+        <h2>English Teachers</h2>
+        <p>No English teacher profiles are published yet.</p>
+    </section>
+
+    <section class="teacher-language-section" id="french">
+        <h2>French Teachers</h2>
+        <p>No French teacher profiles are published yet.</p>
+    </section>
+
+    <section class="teacher-language-section" id="spanish">
+        <h2>Spanish Teachers</h2>
+        <p>No Spanish teacher profiles are published yet.</p>
+    </section>
+
+    <section class="teacher-language-section" id="other">
+        <h2>Other Languages & Subjects</h2>
+        <p>Additional teacher profiles will appear here as they are approved.</p>
+    </section>
+
+</div>
 </main>
 
 <footer>
