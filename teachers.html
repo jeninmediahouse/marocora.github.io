@@ -418,9 +418,10 @@ in Darija, Arabic, English, French, Spanish, and other subjects.
        
 <div class="teacher-results" id="teacher-results">
     <h2 id="results-title">Available Teachers</h2>
-    <p id="results-message">
-        Choose a language above to view available teacher profiles.
-    </p>
+    <div id="results-message">
+    <p>Choose a language above to view available teacher profiles.</p>
+    <div id="teacher-cards"></div>
+</div>
 </div>
 </main>
 
@@ -435,16 +436,57 @@ document.querySelectorAll('.language-card').forEach(card => {
         const language = this.dataset.language;
         const title = document.getElementById('results-title');
         const message = document.getElementById('results-message');
+const teacherCards = document.getElementById('teacher-cards');
+        if (language === 'Darija') {
+    title.textContent = 'Darija Teachers';
 
-        if (language === 'Other') {
-            title.textContent = 'Other Languages & Subjects';
-            message.textContent =
-                'Additional teacher profiles will appear here as they are approved.';
-        } else {
-            title.textContent = language + ' Teachers';
-            message.textContent =
-                'No ' + language + ' teacher profiles are published yet.';
-        }
+    message.querySelector('p').textContent =
+        'Browse available Darija teachers below.';
+
+    teacherCards.innerHTML = `
+        <div class="teacher-card">
+            <div class="teacher-top">
+                <div class="avatar">SA</div>
+                <h3>Sample Darija Teacher</h3>
+                <div class="specialty">Darija • Arabic • Online</div>
+            </div>
+
+            <div class="teacher-info">
+                <p>
+                    Online Darija teacher offering conversational Moroccan Arabic
+                    lessons for beginners, travelers, expatriates, and other learners.
+                </p>
+
+                <div class="tags">
+                    <span class="tag">Darija</span>
+                    <span class="tag">Arabic</span>
+                    <span class="tag">Conversation</span>
+                    <span class="tag">Beginner Friendly</span>
+                </div>
+
+                <a class="profile-button" href="teacher-sample.html">
+                    View Profile
+                </a>
+            </div>
+        </div>
+    `;
+
+} else if (language === 'Other') {
+    title.textContent = 'Other Languages & Subjects';
+
+    message.querySelector('p').textContent =
+        'Additional teacher profiles will appear here as they are approved.';
+
+    teacherCards.innerHTML = '';
+
+} else {
+    title.textContent = language + ' Teachers';
+
+    message.querySelector('p').textContent =
+        'No ' + language + ' teacher profiles are published yet.';
+
+    teacherCards.innerHTML = '';
+}
 
         document.getElementById('teacher-results').scrollIntoView({
             behavior: 'smooth',
