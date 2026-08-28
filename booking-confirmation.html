@@ -309,7 +309,17 @@ document.getElementById('review-phone').textContent =
 
 document.getElementById('review-notes').textContent =
     notes || 'No message provided';
+const paymentParams = new URLSearchParams({
+    teacher: teacher || '',
+    time: time || '',
+    name: name || '',
+    email: email || ''
+});
 
+document.getElementById('continue-payment').setAttribute(
+    'href',
+    'payment.html?' + paymentParams.toString()
+);
 
 </script>
 
