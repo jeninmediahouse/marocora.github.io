@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking Complete | Marocora</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f4f6f8;
+            color: #111827;
+        }
+
+        header {
+            background: #0f172a;
+            color: white;
+            padding: 20px 24px;
+        }
+
+        .header-inner {
+            max-width: 850px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            color: white;
+            text-decoration: none;
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        main {
+            max-width: 850px;
+            margin: 45px auto;
+            padding: 0 20px;
+        }
+
+        .success-card {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 14px;
+            padding: 36px;
+            box-shadow: 0 5px 18px rgba(0, 0, 0, 0.06);
+        }
+
+        .success-mark {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background: #168a55;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 34px;
+            font-weight: 700;
+            margin-bottom: 22px;
+        }
+
+        h1 {
+            margin: 0 0 12px;
+        }
+
+        .intro {
+            color: #4b5563;
+            line-height: 1.6;
+            margin-bottom: 28px;
+        }
+
+        .summary {
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 10px;
+            padding: 22px;
+            margin-bottom: 26px;
+        }
+
+        .summary h2 {
+            margin-top: 0;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            padding: 12px 0;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .summary-row:last-child {
+            border-bottom: none;
+        }
+
+        .summary-row span {
+            color: #4b5563;
+            text-align: right;
+        }
+
+        .prototype-notice {
+            background: #fff7ed;
+            border: 1px solid #fed7aa;
+            color: #9a3412;
+            padding: 16px;
+            border-radius: 8px;
+            line-height: 1.5;
+            margin-bottom: 24px;
+        }
+
+        .button {
+            display: block;
+            width: 100%;
+            padding: 14px;
+            background: #c91f25;
+            color: white;
+            text-decoration: none;
+            text-align: center;
+            border-radius: 7px;
+            font-weight: 700;
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px 20px;
+            color: #6b7280;
+            font-size: 13px;
+        }
+
+        @media (max-width: 600px) {
+            .summary-row {
+                display: block;
+            }
+
+            .summary-row span {
+                display: block;
+                text-align: left;
+                margin-top: 6px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <div class="header-inner">
+        <a href="index.html" class="logo">Marocora</a>
+    </div>
+</header>
+
+<main>
+    <div class="success-card">
+
+        <div class="success-mark">✓</div>
+
+        <h1>Booking Flow Complete</h1>
+
+        <p class="intro">
+            Your lesson information has successfully passed through the complete
+            Marocora booking workflow.
+        </p>
+
+        <div class="summary">
+            <h2>Lesson Summary</h2>
+
+            <div class="summary-row">
+                <strong>Teacher:</strong>
+                <span id="success-teacher">Loading...</span>
+            </div>
+
+            <div class="summary-row">
+                <strong>Lesson Time:</strong>
+                <span id="success-time">Loading...</span>
+            </div>
+
+            <div class="summary-row">
+                <strong>Student:</strong>
+                <span id="success-name">Loading...</span>
+            </div>
+
+            <div class="summary-row">
+                <strong>Email:</strong>
+                <span id="success-email">Loading...</span>
+            </div>
+        </div>
+
+        <div class="prototype-notice">
+            Prototype only: no payment has actually been processed and no lesson
+            has been financially confirmed yet. The real payment gateway will
+            replace this test completion step.
+        </div>
+
+        <a href="teachers.html" class="button">
+            Browse More Teachers
+        </a>
+
+    </div>
+</main>
+
+<footer>
+    © 2026 Marocora · Online Learning Marketplace
+</footer>
+
+<script>
+const params = new URLSearchParams(window.location.search);
+
+const teacher = params.get('teacher');
+const time = params.get('time');
+const name = params.get('name');
+const email = params.get('email');
+
+document.getElementById('success-teacher').textContent =
+    teacher === 'sample-darija'
+        ? 'Sample Darija Teacher'
+        : (teacher || 'Not provided');
+
+document.getElementById('success-time').textContent =
+    time || 'Not provided';
+
+document.getElementById('success-name').textContent =
+    name || 'Not provided';
+
+document.getElementById('success-email').textContent =
+    email || 'Not provided';
+</script>
+
+</body>
+</html>
