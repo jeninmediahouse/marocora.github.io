@@ -245,6 +245,29 @@ if (selectedTime) {
     document.getElementById('selected-time').textContent =
         'No lesson time selected';
 }
+const bookingForm = document.getElementById('booking-form');
+
+bookingForm.addEventListener('submit', function(event) {
+    event.preventDefault();
+
+    const studentName = document.getElementById('student-name').value.trim();
+    const studentEmail = document.getElementById('student-email').value.trim();
+    const studentPhone = document.getElementById('student-phone').value.trim();
+    const studentNotes = document.getElementById('student-notes').value.trim();
+
+    const confirmationParams = new URLSearchParams({
+        teacher: selectedTeacher || '',
+        time: selectedTime || '',
+        name: studentName,
+        email: studentEmail,
+        phone: studentPhone,
+        notes: studentNotes
+    });
+
+    window.location.href =
+        'booking-confirmation.html?' + confirmationParams.toString();
+});
+    
 </script>
 </body>
 </html>
