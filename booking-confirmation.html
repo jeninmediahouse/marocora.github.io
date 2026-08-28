@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Review Your Booking | Marocora</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f4f6f8;
+            color: #111827;
+        }
+
+        header {
+            background: #111827;
+            color: white;
+            padding: 18px 24px;
+        }
+
+        .header-inner {
+            max-width: 900px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            color: white;
+            text-decoration: none;
+            font-size: 22px;
+            font-weight: 700;
+        }
+
+        .back-link {
+            color: white;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        main {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .confirmation-card {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 32px;
+            box-shadow: 0 5px 18px rgba(0, 0, 0, 0.06);
+        }
+
+        h1 {
+            margin: 0 0 10px;
+            font-size: 32px;
+        }
+
+        .intro {
+            margin: 0 0 28px;
+            color: #4b5563;
+            line-height: 1.6;
+        }
+
+        .review-section {
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 10px;
+            padding: 22px;
+            margin-bottom: 24px;
+        }
+
+        .review-section h2 {
+            margin: 0 0 18px;
+            font-size: 22px;
+        }
+
+        .review-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            padding: 12px 0;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .review-row:last-child {
+            border-bottom: none;
+        }
+
+        .review-row strong {
+            flex-shrink: 0;
+        }
+
+        .review-row span {
+            text-align: right;
+            color: #4b5563;
+        }
+
+        .message-row {
+            display: block;
+        }
+
+        .message-row span {
+            display: block;
+            text-align: left;
+            margin-top: 10px;
+            line-height: 1.6;
+            white-space: pre-wrap;
+        }
+
+        .notice {
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 24px;
+            color: #166534;
+            line-height: 1.5;
+        }
+
+        .action-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+        }
+
+        .button {
+            display: block;
+            width: 100%;
+            padding: 14px 20px;
+            border-radius: 7px;
+            text-align: center;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 16px;
+        }
+
+        .primary-button {
+            background: #c91f25;
+            color: white;
+        }
+
+        .primary-button:hover {
+            background: #a9181e;
+        }
+
+        .secondary-button {
+            background: white;
+            color: #111827;
+            border: 1px solid #d1d5db;
+        }
+
+        .secondary-button:hover {
+            background: #f9fafb;
+        }
+
+        footer {
+            text-align: center;
+            padding: 28px 20px;
+            color: #6b7280;
+            font-size: 13px;
+        }
+
+        @media (max-width: 700px) {
+            .review-row {
+                display: block;
+            }
+
+            .review-row span {
+                display: block;
+                text-align: left;
+                margin-top: 6px;
+            }
+
+            .action-buttons {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <div class="header-inner">
+        <a href="index.html" class="logo">Marocora</a>
+
+        <a href="javascript:history.back()" class="back-link">
+            ← Edit Booking
+        </a>
+    </div>
+</header>
+
+<main>
+
+    <div class="confirmation-card">
+
+        <h1>Review Your Booking</h1>
+
+        <p class="intro">
+            Please review your lesson and contact information before continuing.
+        </p>
+
+        <div class="review-section">
+            <h2>Lesson Details</h2>
+
+            <div class="review-row">
+                <strong>Teacher:</strong>
+                <span id="review-teacher">Loading...</span>
+            </div>
+
+            <div class="review-row">
+                <strong>Selected Time:</strong>
+                <span id="review-time">Loading...</span>
+            </div>
+
+            <div class="review-row">
+                <strong>Lesson Type:</strong>
+                <span>Online</span>
+            </div>
+        </div>
+
+        <div class="review-section">
+            <h2>Your Information</h2>
+
+            <div class="review-row">
+                <strong>Full Name:</strong>
+                <span id="review-name"></span>
+            </div>
+
+            <div class="review-row">
+                <strong>Email:</strong>
+                <span id="review-email"></span>
+            </div>
+
+            <div class="review-row">
+                <strong>Phone / WhatsApp:</strong>
+                <span id="review-phone"></span>
+            </div>
+
+            <div class="review-row message-row">
+                <strong>Message to Teacher:</strong>
+                <span id="review-notes"></span>
+            </div>
+        </div>
+
+        <div class="notice">
+            Your lesson is not booked yet. The next step will securely complete
+            payment and confirm the selected lesson time.
+        </div>
+
+        <div class="action-buttons">
+
+            <a href="javascript:history.back()" class="button secondary-button">
+                Edit Information
+            </a>
+
+            <a href="#" class="button primary-button" id="continue-payment">
+                Continue to Payment
+            </a>
+
+        </div>
+
+    </div>
+
+</main>
+
+<footer>
+    © 2026 Marocora · Online Learning Marketplace
+</footer>
+
+<script>
+const params = new URLSearchParams(window.location.search);
+
+const teacher = params.get('teacher');
+const time = params.get('time');
+const name = params.get('name');
+const email = params.get('email');
+const phone = params.get('phone');
+const notes = params.get('notes');
+
+if (teacher === 'sample-darija') {
+    document.getElementById('review-teacher').textContent =
+        'Sample Darija Teacher';
+} else {
+    document.getElementById('review-teacher').textContent =
+        'Teacher not selected';
+}
+
+document.getElementById('review-time').textContent =
+    time || 'No lesson time selected';
+
+document.getElementById('review-name').textContent =
+    name || 'Not provided';
+
+document.getElementById('review-email').textContent =
+    email || 'Not provided';
+
+document.getElementById('review-phone').textContent =
+    phone || 'Not provided';
+
+document.getElementById('review-notes').textContent =
+    notes || 'No message provided';
+
+document.getElementById('continue-payment').addEventListener(
+    'click',
+    function(event) {
+        event.preventDefault();
+    }
+);
+</script>
+
+</body>
+</html>
