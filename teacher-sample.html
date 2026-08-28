@@ -182,9 +182,11 @@
     color: white;
 }
 
-.book-lesson-button:disabled {
+.book-lesson-button[aria-disabled="true"] {
     background: #9ca3af;
     cursor: not-allowed;
+    pointer-events: none;
+}r: not-allowed;
 }
         .price {
             font-size: 24px;
@@ -343,9 +345,9 @@
         </div>
     </div>
 
-   <button type="button" class="button book-lesson-button" id="book-lesson-button" disabled>
-        Book Lesson
-    </button>
+   <a href="#" class="button book-lesson-button" id="book-lesson-button" aria-disabled="true">
+    Book Lesson
+</a>
 
     <a href="teachers.html" class="secondary-button">
         Browse Other Teachers
@@ -371,8 +373,22 @@ timeSlots.forEach(slot => {
         timeSlots.forEach(item => item.classList.remove('selected'));
         this.classList.add('selected');
 
-        bookButton.disabled = false;
+        const selectedTime = this.textContent.trim();
+
+        bookButton.setAttribute(
+            'href',
+            'booking.html?teacher=sample-darija&time=' +
+            encodeURIComponent(selectedTime)
+        );
+
+        bookButton.setAttribute('aria-disabled', 'false');
     });
+});
+
+bookButton.addEventListener('click', function(event) {
+    if (this.getAttribute('aria-disabled') === 'true') {
+        event.preventDefault();
+    }
 });
 </script>
 </body>
