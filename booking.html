@@ -248,9 +248,11 @@ if (teacher) {
         'Teacher not found';
 }
 
-const selectedOffering = teacher
+
+        const selectedOffering = teacher
     ? teacher.offerings.find(offering => offering.id === "discovery-30")
     : null;
+ const isComplimentaryIntroduction = selectedOffering?.type === "complimentary-introduction";      
         if (selectedTime) {
     document.getElementById('selected-time').textContent = selectedTime;
 } else {
