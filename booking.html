@@ -252,7 +252,12 @@ if (teacher) {
         const selectedOffering = teacher
     ? teacher.offerings.find(offering => offering.id === "discovery-30")
     : null;
- const isComplimentaryIntroduction = selectedOffering?.type === "complimentary-introduction";      
+const isComplimentaryIntroduction =
+    selectedOffering &&
+    selectedOffering.type === "complimentary-introduction" &&
+    selectedOffering.pricing.baseAmount === 0; 
+        
+        const isComplimentaryIntroduction = selectedOffering?.type === "complimentary-introduction";      
         if (selectedTime) {
     document.getElementById('selected-time').textContent = selectedTime;
 } else {
