@@ -264,17 +264,21 @@ bookingForm.addEventListener('submit', function(event) {
     const studentPhone = document.getElementById('student-phone').value.trim();
     const studentNotes = document.getElementById('student-notes').value.trim();
 
-    const confirmationParams = new URLSearchParams({
-        teacher: selectedTeacher || '',
-        time: selectedTime || '',
-        name: studentName,
-        email: studentEmail,
-        phone: studentPhone,
-        notes: studentNotes
-    });
+   const bookingDetails = {
+    teacher: selectedTeacher || '',
+    time: selectedTime || '',
+    name: studentName,
+    email: studentEmail,
+    phone: studentPhone,
+    notes: studentNotes
+};
 
-    window.location.href =
-        'booking-confirmation.html?' + confirmationParams.toString();
+sessionStorage.setItem(
+    'marocoraBookingDetails',
+    JSON.stringify(bookingDetails)
+);
+
+window.location.href = 'booking-confirmation.html';
 });
     
 </script>
