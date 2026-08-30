@@ -235,7 +235,7 @@ const params = new URLSearchParams(window.location.search);
 
 const selectedTeacher = params.get('teacher');
 const selectedTime = params.get('time');
-
+const selectedOffering = params.get('offering') || 'discovery-30';
 const teacher = marocoraTeachers.find(
     teacher => teacher.id === selectedTeacher
 );
