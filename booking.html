@@ -236,9 +236,16 @@ const params = new URLSearchParams(window.location.search);
 const selectedTeacher = params.get('teacher');
 const selectedTime = params.get('time');
 
-if (selectedTeacher === 'sample-darija') {
+const teacher = marocoraTeachers.find(
+    teacher => teacher.id === selectedTeacher
+);
+
+if (teacher) {
     document.getElementById('selected-teacher').textContent =
-        'Sample Darija Teacher';
+        teacher.profile.displayName;
+} else {
+    document.getElementById('selected-teacher').textContent =
+        'Teacher not found';
 }
 
 if (selectedTime) {
