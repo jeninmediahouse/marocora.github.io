@@ -252,6 +252,11 @@ if (teacher) {
         const selectedOffering = teacher
     ? teacher.offerings.find(offering => offering.id === "discovery-30")
     : null;
+const isComplimentaryIntroduction =
+    selectedOffering &&
+    selectedOffering.type === "complimentary-introduction" &&
+    selectedOffering.pricing.baseAmount === 0;
+        
 if (selectedOffering && selectedOffering.type === "complimentary-introduction") {
     console.log("Marocora complimentary 30-minute introduction selected.");
 }
