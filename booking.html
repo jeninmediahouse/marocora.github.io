@@ -275,7 +275,8 @@ bookingForm.addEventListener('submit', function(event) {
     const studentNotes = document.getElementById('student-notes').value.trim();
 
    const bookingDetails = {
-    teacher: selectedTeacher || '',
+   offering: selectedOffering ? selectedOffering.id : '', 
+       teacher: selectedTeacher || '',
     time: selectedTime || '',
     name: studentName,
     email: studentEmail,
