@@ -235,7 +235,7 @@ const params = new URLSearchParams(window.location.search);
 
 const selectedTeacher = params.get('teacher');
 const selectedTime = params.get('time');
-const selectedOffering = params.get('offering') || 'discovery-30';
+const selectedOfferingId = params.get('offering') || 'discovery-30';
 const teacher = marocoraTeachers.find(
     teacher => teacher.id === selectedTeacher
 );
@@ -250,7 +250,7 @@ if (teacher) {
 
 
         const selectedOffering = teacher
-    ? teacher.offerings.find(offering => offering.id === "discovery-30")
+   ? teacher.offerings.find(offering => offering.id === selectedOfferingId)
     : null;
 if (selectedOffering) {
     console.log(
