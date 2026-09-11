@@ -257,15 +257,12 @@ const isFirstComplimentaryIntro =
     selectedOffering.type === "complimentary-introduction" &&
     marocoraBookingState.complimentaryIntroduction.firstIntroduction.status === "available";
       
-        const isComplimentaryIntroduction =
-        selectedOffering &&
-selectedOffering.type === "complimentary-introduction";
+        
     
         
-        <div class="notice">
-            Your lesson is not booked yet. The next step will securely complete
-            payment and confirm the selected lesson time.
-        </div>
+      <div class="notice" id="booking-notice">
+    Your lesson is not booked yet. Review the information below to continue.
+</div>
 
         <div class="action-buttons">
 
