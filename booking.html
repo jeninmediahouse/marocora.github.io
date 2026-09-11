@@ -282,6 +282,7 @@ bookingForm.addEventListener('submit', function(event) {
 
    const bookingDetails = {
    offering: selectedOffering ? selectedOffering.id : '', 
+       sessionType: selectedOffering && selectedOffering.type === 'complimentary-introduction' ? 'first-introduction' : 'paid',
        teacher: selectedTeacher || '',
     time: selectedTime || '',
     name: studentName,
