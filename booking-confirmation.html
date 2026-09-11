@@ -344,11 +344,27 @@ offering: selectedOffering ? selectedOffering.id : '',
     name: name || '',
     email: email || ''
 });
+if (
+    selectedOffering &&
+    selectedOffering.pricing &&
+    selectedOffering.pricing.baseAmount === 0
+) {
+    document.getElementById('continue-payment').textContent =
+        'Confirm Free Introduction';
 
-document.getElementById('continue-payment').setAttribute(
-    'href',
-    'payment.html?' + paymentParams.toString()
-);
+    document.getElementById('continue-payment').setAttribute(
+        'href',
+        'booking-success.html?' + paymentParams.toString()
+    );
+} else {
+    document.getElementById('continue-payment').textContent =
+        'Continue to Payment';
+
+    document.getElementById('continue-payment').setAttribute(
+        'href',
+        'payment.html?' + paymentParams.toString()
+    );
+}
 
 </script>
 
