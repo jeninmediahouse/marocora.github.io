@@ -276,8 +276,9 @@
 <footer>
     © 2026 Marocora · Online Learning Marketplace
 </footer>
+<script src="teachers-data.js"></script>
 
-<script>
+    <script>
 const params = new URLSearchParams(window.location.search);
 
 const teacher = params.get('teacher');
@@ -287,15 +288,33 @@ const email = params.get('email');
 const phone = params.get('phone');
 const notes = params.get('notes');
 
-if (teacher === 'sample-darija') {
+const selectedTeacher = marocoraTeachers.find(
+    teacherRecord => teacherRecord.id === teacher
+);
+
+if (selectedTeacher) {
     document.getElementById('review-teacher').textContent =
-        'Sample Darija Teacher';
+        selectedTeacher.profile.displayName;
 } else {
     document.getElementById('review-teacher').textContent =
-        'Teacher not selected';
+        'Teacher not found';
 }
 
-document.getElementById('review-time').textContent =
+const selectedOffering = selectedTeacher
+    ? selectedTeacher.offerings.find(
+        offering => offering.id === "discovery-30"
+      )
+    : null;
+        
+ if (selectedOffering) {
+    const offeringElement = document.getElementById('review-offering');
+
+    if (offeringElement) {
+        offeringElement.textContent = selectedOffering.title;
+    }
+}       
+        
+        document.getElementById('review-time').textContent =
     time || 'No lesson time selected';
 
 document.getElementById('review-name').textContent =
