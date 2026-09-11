@@ -252,7 +252,10 @@
             </div>
         </div>
 
- const isComplimentaryIntroduction =
+const isComplimentaryIntroduction =
+    selectedOffering?.type === "complimentary-introduction";
+        
+        const isComplimentaryIntroduction =
     selectedOffering &&
     selectedOffering.type === "complimentary-introduction";  
         
