@@ -252,7 +252,7 @@
             </div>
         </div>
 
-const isFirstComplimentaryIntro =
+
     selectedOffering &&
     selectedOffering.type === "complimentary-introduction" &&
     marocoraBookingState.complimentaryIntroduction.firstIntroduction.status === "available";
@@ -313,6 +313,10 @@ const selectedOffering = selectedTeacher
         offering => offering.id === "discovery-30"
       )
     : null;
+const isComplimentaryIntroduction =
+    selectedOffering &&
+    selectedOffering.type === "complimentary-introduction";
+        
         
  if (selectedOffering) {
     const offeringElement = document.getElementById('review-offering');
