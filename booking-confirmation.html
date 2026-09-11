@@ -336,7 +336,9 @@ document.getElementById('review-phone').textContent =
 
 document.getElementById('review-notes').textContent =
     notes || 'No message provided';
-const paymentParams = new URLSearchParams({
+
+offering: selectedOffering ? selectedOffering.id : '',        
+        const paymentParams = new URLSearchParams({
     teacher: teacher || '',
     time: time || '',
     name: name || '',
