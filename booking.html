@@ -264,8 +264,8 @@ if (selectedOffering) {
         
 const isFirstComplimentaryIntroduction =
     selectedOffering &&
-    marocoraBookingState.complimentaryIntroduction.firstIntroduction.status === "available";
-        
+    selectedOffering.type === "complimentary-introduction" &&
+    marocoraBookingState?.complimentaryIntroduction?.firstIntroduction?.status === "available";
 if (selectedOffering && selectedOffering.type === "complimentary-introduction") {
     console.log("Marocora complimentary 30-minute introduction selected.");
 }
