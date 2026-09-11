@@ -252,16 +252,15 @@
             </div>
         </div>
 
-const isComplimentaryIntroduction =
-    selectedOffering?.type === "complimentary-introduction";
-        
-        const isComplimentaryIntroduction =
+const isFirstComplimentaryIntro =
     selectedOffering &&
-    selectedOffering.type === "complimentary-introduction";  
-        
+    selectedOffering.type === "complimentary-introduction" &&
+    marocoraBookingState.complimentaryIntroduction.firstIntroduction.status === "available";
+      
         const isComplimentaryIntroduction =
-    selectedOffering &&
-    selectedOffering.type === "complimentary-introduction";   
+        selectedOffering &&
+selectedOffering.type === "complimentary-introduction";
+    
         
         <div class="notice">
             Your lesson is not booked yet. The next step will securely complete
