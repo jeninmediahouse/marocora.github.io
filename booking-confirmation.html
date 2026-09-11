@@ -345,8 +345,8 @@ document.getElementById('review-phone').textContent =
 document.getElementById('review-notes').textContent =
     notes || 'No message provided';
 
-offering: selectedOffering ? selectedOffering.id : '',        
-        const paymentParams = new URLSearchParams({
+const paymentParams = new URLSearchParams({
+    offering: selectedOffering ? selectedOffering.id : '',
     teacher: teacher || '',
     time: time || '',
     name: name || '',
