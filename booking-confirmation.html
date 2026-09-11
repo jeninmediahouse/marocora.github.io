@@ -348,11 +348,7 @@ offering: selectedOffering ? selectedOffering.id : '',
     name: name || '',
     email: email || ''
 });
-if (
-    selectedOffering &&
-    selectedOffering.pricing &&
-    selectedOffering.pricing.baseAmount === 0
-) {
+if (isComplimentaryIntroduction) {
     document.getElementById('continue-payment').textContent =
         'Confirm Free Introduction';
 
