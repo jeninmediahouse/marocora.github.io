@@ -207,6 +207,7 @@
 </footer>
 
 <script src="teachers-data.js"></script>
+<script src="booking-data.js"></script>  
     <script>
 const params = new URLSearchParams(window.location.search);
 
@@ -215,11 +216,14 @@ const time = params.get('time');
 const name = params.get('name');
 const email = params.get('email');
 
-document.getElementById('success-teacher').textContent =
-    teacher === 'sample-darija'
-        ? 'Sample Darija Teacher'
-        : (teacher || 'Not provided');
+const selectedTeacher = marocoraTeachers.find(
+    item => item.id === teacher
+);
 
+document.getElementById('success-teacher').textContent =
+    selectedTeacher
+        ? selectedTeacher.profile.displayName
+        : 'Teacher not found';
 document.getElementById('success-time').textContent =
     time || 'Not provided';
 
