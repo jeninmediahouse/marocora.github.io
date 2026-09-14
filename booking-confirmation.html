@@ -363,8 +363,8 @@ if (isComplimentaryIntroduction) {
         formData.append('_subject', 'New Marocora Lesson Request');
         formData.append('request-type', 'Free Introduction Request');
         formData.append('status', 'REQUESTED');
-        formData.append('offering', selectedOffering ? selectedOffering.name : 'Free Introduction');
-        formData.append('teacher', selectedTeacher ? selectedTeacher.name : teacher);
+       formData.append('offering', selectedOffering ? selectedOffering.title : 'Free Introduction');
+        formData.append('teacher', selectedTeacher ? selectedTeacher.profile.displayName : teacher);
         formData.append('teacher-id', teacher);
         formData.append('requested-time', time);
         formData.append('student-name', name);
