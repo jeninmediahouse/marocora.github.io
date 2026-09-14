@@ -187,6 +187,10 @@
                 <strong>Email:</strong>
                 <span id="success-email">Loading...</span>
             </div>
+            <div class="summary-row">
+    <strong>Booking Reference:</strong>
+    <span id="success-reference">Loading...</span>
+</div>
         </div>
 
         <div class="prototype-notice">
@@ -212,6 +216,7 @@ const teacher = params.get('teacher');
 const time = params.get('time');
 const name = params.get('name');
 const email = params.get('email');
+        const reference = params.get('reference');
 
 const selectedTeacher = marocoraTeachers.find(
     item => item.id === teacher
@@ -229,6 +234,9 @@ document.getElementById('success-name').textContent =
 
 document.getElementById('success-email').textContent =
     email || 'Not provided';
+document.getElementById('success-reference').textContent =
+    reference || 'Not provided';
+        
 </script>
 
 </body>
