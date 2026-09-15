@@ -308,33 +308,42 @@ if (savedStatus === 'CONFIRMED') {
                 }
             );
 
-            if (response.ok) {
-                resultMessage.className = 'message success';
-                resultMessage.textContent =
-                    'Lesson confirmed. Decision ACCEPTED has been recorded for ' +
-                    reference +
-                    '. The student confirmation email has been triggered.';
+            if (response.status >= 200 && response.status < 300) {
+    localStorage.setItem(
+        'marocora-confirmed-' + reference,
+        'CONFIRMED'
+    );
 
-                acceptButton.textContent = 'Lesson Confirmed';
-                document.getElementById('current-status').textContent = 'CONFIRMED';
-                localStorage.setItem('marocora-confirmed-' + reference, 'CONFIRMED');
-            } else {
-                resultMessage.className = 'message error';
-                resultMessage.textContent =
-                    'The decision could not be submitted. The lesson has NOT been confirmed. Please try again.';
+    document.getElementById('current-status').textContent = 'CONFIRMED';
 
-                acceptButton.disabled = false;
-                acceptButton.textContent = 'Accept & Confirm Lesson';
-            }
+    resultMessage.className = 'message success';
+    resultMessage.textContent =
+        'Lesson confirmed. Decision ACCEPTED has been recorded for ' +
+        reference +
+        '. The student confirmation email has been triggered.';
 
-        } catch (error) {
-            resultMessage.className = 'message error';
-            resultMessage.textContent =
-                'The decision could not be submitted. The lesson has NOT been confirmed. Please try again.';
+    acceptButton.disabled = true;
+    acceptButton.textContent = 'Lesson Confirmed';
+} else {
+    resultMessage.className = 'message error';
+    resultMessage.textContent =
+        'Formspree returned HTTP ' + response.status +
+        '. The lesson has NOT been confirmed.';
 
-            acceptButton.disabled = false;
-            acceptButton.textContent = 'Accept & Confirm Lesson';
-        }
+    acceptButton.disabled = false;
+    acceptButton.textContent = 'Accept & Confirm Lesson';
+}
+
+} catch (error) {
+    console.error('Marocora confirmation error:', error);
+
+    resultMessage.className = 'message error';
+    resultMessage.textContent =
+        'Confirmation error: ' + error.message;
+
+    acceptButton.disabled = false;
+    acceptButton.textContent = 'Accept & Confirm Lesson';
+}
     });
 </script>
 
