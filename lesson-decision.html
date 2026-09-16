@@ -211,7 +211,7 @@
 
         <div class="status-box">
            Current Status: <strong id="current-status">REQUESTED</strong><br>
-            Only confirm this request after the teacher has agreed to the requested time.
+          <span id="status-note">Only confirm this request after the teacher has agreed to the requested time.</span>
         </div>
 
         <button
@@ -270,11 +270,15 @@ const savedDeclineStatus = localStorage.getItem('marocora-declined-' + reference
 
 if (savedStatus === 'CONFIRMED') {
     document.getElementById('current-status').textContent = 'CONFIRMED';
+    document.getElementById('status-note').textContent =
+    'The teacher accepted this request. The lesson is confirmed.';
     acceptButton.disabled = true;
     acceptButton.textContent = 'Lesson Confirmed';
     declineButton.disabled = true;
 } else if (savedDeclineStatus === 'DECLINED') {
     document.getElementById('current-status').textContent = 'DECLINED';
+    document.getElementById('status-note').textContent =
+    'This request was not accepted. The student has been notified.';
     acceptButton.disabled = true;
     declineButton.disabled = true;
     declineButton.textContent = 'Request Declined';
@@ -332,7 +336,8 @@ if (savedStatus === 'CONFIRMED') {
     );
 
     document.getElementById('current-status').textContent = 'CONFIRMED';
-
+document.getElementById('status-note').textContent =
+    'The teacher accepted this request. The lesson is confirmed.';
     resultMessage.className = 'message success';
     resultMessage.textContent =
         'Lesson confirmed. Decision ACCEPTED has been recorded for ' +
@@ -417,7 +422,8 @@ declineButton.addEventListener('click', async function () {
             );
 
             document.getElementById('current-status').textContent = 'DECLINED';
-
+document.getElementById('status-note').textContent =
+    'This request was not accepted. The student has been notified.';
             resultMessage.className = 'message error';
             resultMessage.textContent =
                 'Lesson request declined. Decision DECLINED has been recorded for ' +
