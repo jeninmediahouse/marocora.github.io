@@ -344,6 +344,14 @@
             </button>
         </div>
     </div>
+<div>
+    <label for="offering-select"><strong>Choose Lesson:</strong></label>
+    <select id="offering-select">
+        <option value="discovery-30">Meet Your Teacher – Free</option>
+        <option value="darija-30">30-Minute Private Darija Lesson – 100 MAD</option>
+    </select>
+</div>
+                    
 
    <a href="#" class="button book-lesson-button" id="book-lesson-button" aria-disabled="true">
     Book Lesson
@@ -367,6 +375,7 @@
 <script>
 const timeSlots = document.querySelectorAll('.time-slot');
 const bookButton = document.getElementById('book-lesson-button');
+    const offeringSelect = document.getElementById('offering-select');
 
 timeSlots.forEach(slot => {
     slot.addEventListener('click', function() {
@@ -375,11 +384,13 @@ timeSlots.forEach(slot => {
 
         const selectedTime = this.textContent.trim();
 
-        bookButton.setAttribute(
-            'href',
-            'booking.html?teacher=sample-darija&time=' +
-            encodeURIComponent(selectedTime)
-        );
+       bookButton.setAttribute(
+    'href',
+    'booking.html?teacher=sample-darija&time=' +
+    encodeURIComponent(selectedTime) +
+    '&offering=' +
+    encodeURIComponent(offeringSelect.value)
+);
 
         bookButton.setAttribute('aria-disabled', 'false');
     });
