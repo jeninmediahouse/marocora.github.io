@@ -394,6 +394,19 @@ paymentParams.set('reference', bookingReference);
         }
     });
 } else {
+    const paidBookingReference =
+        'MRC-LRN-' + Date.now().toString(36).toUpperCase();
+
+    paymentParams.set('reference', paidBookingReference);
+    paymentParams.set(
+        'amount',
+        selectedOffering ? selectedOffering.pricing.baseAmount : ''
+    );
+    paymentParams.set(
+        'currency',
+        selectedOffering ? selectedOffering.pricing.baseCurrency : 'MAD'
+    );
+
     document.getElementById('continue-payment').textContent =
         'Continue to Payment';
 
