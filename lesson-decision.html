@@ -424,7 +424,7 @@ declineButton.addEventListener('click', async function () {
             document.getElementById('current-status').textContent = 'DECLINED';
 document.getElementById('status-note').textContent =
     'This request was not accepted. The student has been notified.';
-            resultMessage.className = 'message error';
+         resultMessage.className = 'message success';
             resultMessage.textContent =
                 'Lesson request declined. Decision DECLINED has been recorded for ' +
                 reference +
@@ -456,83 +456,7 @@ document.getElementById('status-note').textContent =
         acceptButton.disabled = false;
     }
 });
-declineButton.addEventListener('click', async function () {
 
-    if (!reference || !teacher || !time || !name || !email) {
-        resultMessage.className = 'message error';
-        resultMessage.textContent =
-            'This request is missing required booking information. Do not decline it.';
-        return;
-    }
-
-    const confirmedDecline = window.confirm(
-        'Decline booking ' + reference + ' for ' + name + '?'
-    );
-
-    if (!confirmedDecline) {
-        return;
-    }
-
-    declineButton.disabled = true;
-    declineButton.textContent = 'Declining...';
-    acceptButton.disabled = true;
-
-    const declineFormData = new FormData();
-
-    declineFormData.append('_subject', 'Marocora Lesson Declined - ' + reference);
-    declineFormData.append('decision', 'DECLINED');
-    declineFormData.append('status', 'DECLINED');
-    declineFormData.append('booking-reference', reference);
-    declineFormData.append('teacher', teacher);
-    declineFormData.append('requested-time', time);
-    declineFormData.append('student-name', name);
-    declineFormData.append('email', email);
-
-    try {
-        const response = await fetch(
-            'https://formspree.io/f/xbgljlay',
-            {
-                method: 'POST',
-                body: declineFormData,
-                headers: {
-                    'Accept': 'application/json'
-                }
-            }
-        );
-
-        if (response.status >= 200 && response.status < 300) {
-            localStorage.setItem(
-                'marocora-declined-' + reference,
-                'DECLINED'
-            );
-
-            document.getElementById('current-status').textContent = 'DECLINED';
-
-            resultMessage.className = 'message error';
-            resultMessage.textContent =
-                'Lesson request declined. Decision DECLINED has been recorded for ' +
-                reference +
-                '. The student has been notified.';
-
-            declineButton.disabled = true;
-            declineButton.textContent = 'Request Declined';
-            acceptButton.disabled = true;
-        } else {
-            resultMessage.className = 'message error';
-            resultMessage.textContent =
-                'Formspree returned HTTP ' + response.status +
-                '. The request has NOT been declined.';
-
-            declineButton.disabled = false;
-            declineButton.textContent = 'Decline Request';
-            acceptButton.disabled = false;
-        }
-
-    } catch (error) {
-        console.error('Marocora decline error:', error);
-
-        resultMessage.className = 'message error';
-        resultMessage.textContent =
             'Decline error: ' + error.message;
 
         declineButton.disabled = false;
