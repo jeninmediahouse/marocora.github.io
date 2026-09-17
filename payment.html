@@ -198,6 +198,21 @@
                 <strong>Lesson Type:</strong>
                 <span>Online</span>
             </div>
+<div class="summary-row">
+    <strong>Lesson:</strong>
+    <span id="payment-offering">Loading...</span>
+</div>
+
+<div class="summary-row">
+    <strong>Amount:</strong>
+    <span id="payment-amount">Loading...</span>
+</div>
+
+<div class="summary-row">
+    <strong>Booking Reference:</strong>
+    <span id="payment-reference">Loading...</span>
+</div>
+            
 
             <div class="summary-row">
                 <strong>Student:</strong>
@@ -236,6 +251,10 @@
     const time = params.get('time');
     const name = params.get('name');
     const email = params.get('email');
+    const offering = params.get('offering');
+const reference = params.get('reference');
+const amount = params.get('amount');
+const currency = params.get('currency') || 'MAD';
 
     document.getElementById('payment-teacher').textContent =
         teacher === 'sample-darija'
@@ -250,16 +269,33 @@
 
     document.getElementById('payment-email').textContent =
         email || 'Not provided';
+document.getElementById('payment-offering').textContent =
+    offering === 'darija-30'
+        ? '30-Minute Private Darija Lesson'
+        : (offering || 'Not provided');
+
+document.getElementById('payment-amount').textContent =
+    amount
+        ? amount + ' ' + currency
+        : 'Not provided';
+
+document.getElementById('payment-reference').textContent =
+    reference || 'Not provided';
+    
 
     document.getElementById('pay-now-button').addEventListener(
     'click',
     function() {
-        const successParams = new URLSearchParams({
-            teacher: teacher || '',
-            time: time || '',
-            name: name || '',
-            email: email || ''
-        });
+       const successParams = new URLSearchParams({
+    offering: offering || '',
+    teacher: teacher || '',
+    time: time || '',
+    name: name || '',
+    email: email || '',
+    reference: reference || '',
+    amount: amount || '',
+    currency: currency || 'MAD'
+});
 
         window.location.href =
             'booking-success.html?' + successParams.toString();
