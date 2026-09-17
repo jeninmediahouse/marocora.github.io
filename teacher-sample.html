@@ -401,6 +401,24 @@ bookButton.addEventListener('click', function(event) {
         event.preventDefault();
     }
 });
+offeringSelect.addEventListener('change', function() {
+    const selectedSlot = document.querySelector('.time-slot.selected');
+
+    if (!selectedSlot) {
+        return;
+    }
+
+    const selectedTime = selectedSlot.textContent.trim();
+
+    bookButton.setAttribute(
+        'href',
+        'booking.html?teacher=sample-darija&time=' +
+        encodeURIComponent(selectedTime) +
+        '&offering=' +
+        encodeURIComponent(offeringSelect.value)
+    );
+});
+    
 </script>
 </body>
 </html>
