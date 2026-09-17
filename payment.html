@@ -283,22 +283,12 @@ document.getElementById('payment-reference').textContent =
     reference || 'Not provided';
     
 
-    document.getElementById('pay-now-button').addEventListener(
+   document.getElementById('pay-now-button').addEventListener(
     'click',
     function() {
-       const successParams = new URLSearchParams({
-    offering: offering || '',
-    teacher: teacher || '',
-    time: time || '',
-    name: name || '',
-    email: email || '',
-    reference: reference || '',
-    amount: amount || '',
-    currency: currency || 'MAD'
-});
-
-        window.location.href =
-            'booking-success.html?' + successParams.toString();
+        alert(
+            'Secure payment is not connected yet. No payment has been charged.'
+        );
     }
 );
 </script>
