@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Request Translation Service | JMH Professional Network</title>
+    <title>Request Translation Service | Marocora Professional Network</title>
 
     <style>
         * {
@@ -131,7 +131,7 @@
 
 <header>
     <div class="header-inner">
-        <a href="index.html" class="logo">Jenin Media House</a>
+        <a href="index.html" class="logo">Marocora</a>
         <a href="translator-sample.html" class="back-link">← Back to Translator Profile</a>
     </div>
 </header>
@@ -144,16 +144,16 @@
 
         <p>
             Send a translation, interpretation or language-service request
-            through the JMH Professional Network.
+            through the Marocora Professional Network.
         </p>
 
     </div>
 
     <div class="form-card">
 
-        <form action="https://formspree.io/f/xeajnner" method="POST">
+        <form id="translation-request-form" action="https://formspree.io/f/xeajnner" method="POST">
 
-            <input type="hidden" name="_subject" value="New JMH Translation Service Request">
+            <input type="hidden" name="_subject" value="New Marocora Translation Service Request">
 
             <input type="hidden" name="request-type" value="Translation Service Request">
 
@@ -311,6 +311,8 @@
                 Send Translation Request
             </button>
 
+            <p id="submission-status" role="status" aria-live="polite" hidden></p>
+
             <p class="notice">
                 Submitting this request does not confirm a service booking
                 or final price. Availability, scope, turnaround time and fees
@@ -324,8 +326,9 @@
 </main>
 
 <footer>
-    © 2026 Jenin Media House · JMH Professional Network
+    © 2026 Marocora · Professional Network
 </footer>
 
+<script src="translation-request.js"></script>
 </body>
 </html>
