@@ -114,5 +114,7 @@ export function formatSlot(slot, timezone, locale = 'en') {
   return new Intl.DateTimeFormat(locale, { timeZone: timezone, dateStyle: 'full', timeStyle: 'short' }).format(new Date(slot.startsAt));
 }
 export function money(minor, currency, locale = 'en') {
-  return new Intl.NumberFormat(locale, { style: 'currency', currency }).format(minor / 100);
+  const formatter = new Intl.NumberFormat(locale, { style: 'currency', currency });
+  const fractionDigits = formatter.resolvedOptions().maximumFractionDigits;
+  return formatter.format(minor / 10 ** fractionDigits);
 }
