@@ -5,16 +5,16 @@ const marocoraTeachers = [
         profile: {
             displayName: "Sample Darija Teacher",
             photo: "",
-            headline: "Darija, Arabic & English Teacher",
+            headline: "Moroccan Darija lessons",
             country: "Morocco",
             timezone: "Africa/Casablanca",
             nativeLanguage: "Moroccan Darija"
         },
 
         verification: {
-            identityVerified: true,
-            credentialsVerified: true,
-            marocoraInterviewed: true
+            identityVerified: false,
+            credentialsVerified: false,
+            marocoraInterviewed: false
         },
 
         teaching: {
