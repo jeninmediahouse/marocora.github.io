@@ -1,5 +1,8 @@
 import { config } from './config.mjs';
 import { request } from './api.mjs';
+import { instructorStore, currentInstructor, sendInstructorLink, loadInstructorDraft,
+  saveInstructorDraft, submitInstructorDraft, signOutInstructor } from './instructor-store.mjs';
+import { normalizeInstructorDraft, requireCompleteInstructorDraft } from '../server/instructor-draft.mjs';
 
 const params = new URLSearchParams(location.search);
 let locale = params.get('lang') === 'fr' ? 'fr' : 'en';
@@ -24,6 +27,9 @@ const copy = {
     submitted: 'Profile submitted for review. It is not public yet.', error: 'We could not save this draft. Check the fields and try again.',
     precision: 'The price has more decimal places than its currency allows.', noStorage: 'Browser storage is unavailable. Download your draft to keep a copy.',
     signIn: 'Sign in to continue', opening: 'Account sign-up and submissions are not open yet.',
+    email: 'Email address', sendLink: 'Send sign-in link', linkSent: 'Check your email for a sign-in link.',
+    signedIn: 'Signed in as', signOut: 'Sign out', signInFirst: 'Sign in before submitting your profile.',
+    incomplete: 'Complete your profile, every subject, and every lesson offering before submitting.',
     exampleCategory: 'e.g. Music', exampleSubject: 'e.g. Piano', exampleQualification: 'Describe your training or experience in this subject.',
     exampleOffering: 'e.g. Beginner piano lesson', exampleCurrency: 'e.g. USD, MAD, EUR', exampleLevels: 'e.g. Beginner, Intermediate'
   },
@@ -47,6 +53,9 @@ const copy = {
     submitted: 'Profil envoyé pour examen. Il n’est pas encore public.', error: 'Impossible d’enregistrer ce brouillon. Vérifiez les champs et réessayez.',
     precision: 'Le prix comporte trop de décimales pour cette devise.', noStorage: 'Le stockage du navigateur est indisponible. Téléchargez votre brouillon pour en garder une copie.',
     signIn: 'Se connecter pour continuer', opening: 'La création de compte et l’envoi des candidatures ne sont pas encore ouverts.',
+    email: 'Adresse e-mail', sendLink: 'Envoyer le lien de connexion', linkSent: 'Vérifiez votre messagerie pour le lien de connexion.',
+    signedIn: 'Connecté avec', signOut: 'Se déconnecter', signInFirst: 'Connectez-vous avant d’envoyer votre profil.',
+    incomplete: 'Complétez votre profil, chaque matière et chaque offre de cours avant de l’envoyer.',
     exampleCategory: 'p. ex. Musique', exampleSubject: 'p. ex. Piano', exampleQualification: 'Décrivez votre formation ou votre expérience dans cette matière.',
     exampleOffering: 'p. ex. Cours de piano pour débutants', exampleCurrency: 'p. ex. USD, MAD, EUR', exampleLevels: 'p. ex. Débutant, Intermédiaire'
   }
@@ -60,6 +69,8 @@ const app = document.querySelector('#app');
 const storageKey = 'marocora.learning.instructorDraft';
 const readLocal = () => { try { return JSON.parse(localStorage.getItem(storageKey)); } catch { return null; } };
 let draft = readLocal() || blank();
+let instructor = null;
+let serverDraftExists = false;
 const digits = currency => { try { return new Intl.NumberFormat('en', { style:'currency', currency }).resolvedOptions().maximumFractionDigits; } catch { return 2; } };
 const list = value => String(value || '').split(',').map(s => s.trim()).filter(Boolean);
 const input = (field, label, value, { type='text', hint='', placeholder='', min, max } = {}) => `<label>${t(label)}<input data-field="${field}" type="${type}" value="${esc(value)}" ${placeholder ? `placeholder="${esc(t(placeholder))}"` : ''} ${min == null ? '' : `min="${min}"`} ${max == null ? '' : `max="${max}"`}></label>${hint ? `<p class="helper">${t(hint)}</p>` : ''}`;
@@ -91,7 +102,10 @@ function render() {
   document.querySelector('#browse-link').textContent = t('browse');
   document.querySelector('#browse-link').href = `learn/?lang=${locale}`;
   document.title = `${t('title')} | Marocora`;
-  app.innerHTML = `<h1>${t('title')}</h1><p class="lead">${t('intro')}</p><p class="notice">${config.apiBase ? t('live') : t('preview')}</p>
+  const auth = instructorStore ? (instructor
+    ? `<div class="auth-panel"><span>${t('signedIn')} ${esc(instructor.email)}</span> <button type="button" class="tertiary" data-action="sign-out">${t('signOut')}</button></div>`
+    : `<form id="auth-form" class="auth-panel"><label>${t('email')}<input name="email" type="email" autocomplete="email" required></label><button type="submit">${t('sendLink')}</button></form>`) : '';
+  app.innerHTML = `<h1>${t('title')}</h1><p class="lead">${t('intro')}</p><p class="notice">${instructorStore || config.apiBase ? t('live') : t('preview')}</p>${auth}
     <form id="profile-form"><section class="panel"><h2>${t('profile')}</h2><div class="grid">
       ${input('displayName','displayName',p.displayName)}${input('headline','headline',p.headline)}
       ${area('bio','bio',p.bio)}${input('countryOfResidence','country',p.countryOfResidence)}${input('city','city',p.city)}
@@ -102,8 +116,8 @@ function render() {
     </div><p class="helper">${t('availabilityHelp')}</p></section>
     <div class="section-heading"><h2>${t('subjects')}</h2><button type="button" class="secondary" data-action="add-subject" ${draft.subjects.length >= 12 ? 'disabled' : ''}>${t('addSubject')}</button></div>
     ${draft.subjects.map(subjectHTML).join('')}
-    <div class="actions"><button type="submit">${t('save')}</button><button type="button" class="secondary" data-action="download">${t('download')}</button><button type="button" data-action="submit" ${config.apiBase ? '' : 'disabled'}>${t('submit')}</button></div>
-    <p id="status" class="status" role="status">${config.apiBase ? '' : t('opening')}</p>
+    <div class="actions"><button type="submit">${t('save')}</button><button type="button" class="secondary" data-action="download">${t('download')}</button><button type="button" data-action="submit" ${instructor || config.apiBase ? '' : 'disabled'}>${t('submit')}</button></div>
+    <p id="status" class="status" role="status">${instructorStore ? (instructor ? '' : t('signInFirst')) : (config.apiBase ? '' : t('opening'))}</p>
     ${config.signInURL ? `<p><a href="${esc(config.signInURL)}">${t('signIn')}</a></p>` : ''}
     </form>`;
 }
@@ -118,43 +132,71 @@ function collect() {
   draft = { profile, subjects };
 }
 function payload() {
-  return { profile:draft.profile, subjects:draft.subjects.map(s => ({ ...s, specialties:list(s.specialties), offerings:s.offerings.map(o => {
+  return normalizeInstructorDraft({ profile:{ ...draft.profile,
+    yearsExperience:!draft.profile.yearsExperience ? null : Number(draft.profile.yearsExperience) },
+    subjects:draft.subjects.map(s => ({ ...s, specialties:list(s.specialties), offerings:s.offerings.map(o => {
     const currency = o.currency.toUpperCase();
     const factor = 10 ** digits(currency || 'USD');
     const value = o.price === '' ? null : Number(o.price) * factor;
     if (value !== null && (!Number.isFinite(value) || Math.abs(value - Math.round(value)) > 0.000001)) throw new Error('precision');
-    return { title:o.title, durationMinutes:o.durationMinutes, lessonCount:o.lessonCount, priceMinor:value === null ? null : Math.round(value), currency,
+    return { title:o.title, durationMinutes:o.durationMinutes === '' ? null : Number(o.durationMinutes),
+      lessonCount:Number(o.lessonCount), priceMinor:value === null ? null : Math.round(value), currency,
       deliveryMode:'online', levels:list(o.levels) };
-  }) })) };
+  }) })) });
 }
 function status(message, kind='success') {
   const target = document.querySelector('#status'); target.textContent = message; target.className = `status ${kind}`;
 }
 async function save() {
   collect();
-  try { payload(); }
+  let data;
+  try { data = payload(); }
   catch (error) { status(t(error.message === 'precision' ? 'precision' : 'error'),'error'); return false; }
+  if (instructor) {
+    try { await saveInstructorDraft(instructor.id, data, serverDraftExists); serverDraftExists = true; status(t('savedServer')); return true; }
+    catch { status(t('error'),'error'); return false; }
+  }
   let stored = true;
   try { localStorage.setItem(storageKey, JSON.stringify(draft)); }
   catch { stored = false; }
   if (!stored && !config.apiBase) { status(t('noStorage'),'error'); return false; }
   if (!config.apiBase) { status(t('savedLocal')); return true; }
-  try { await request('/instructor/draft', payload()); status(t('savedServer')); return true; }
+  try { await request('/instructor/draft', data); status(t('savedServer')); return true; }
   catch (error) { status(t(error.message === 'precision' ? 'precision' : 'error'),'error'); return false; }
 }
-app.addEventListener('submit', async event => { event.preventDefault(); await save(); });
+app.addEventListener('submit', async event => {
+  event.preventDefault();
+  if (event.target.id === 'auth-form') {
+    try { await sendInstructorLink(event.target.elements.email.value.trim()); status(t('linkSent')); }
+    catch { status(t('error'),'error'); }
+    return;
+  }
+  await save();
+});
 app.addEventListener('click', async event => {
   const button = event.target.closest('[data-action]'); if (!button) return;
   const action = button.dataset.action;
+  if (action === 'sign-out') {
+    try { await signOutInstructor(); instructor = null; serverDraftExists = false; draft = readLocal() || blank(); render(); }
+    catch { status(t('error'),'error'); }
+    return;
+  }
   if (action === 'download') {
     collect(); const file = new Blob([JSON.stringify(draft,null,2)], { type:'application/json' });
     const link = document.createElement('a'); link.href = URL.createObjectURL(file); link.download = 'marocora-instructor-draft.json';
     link.click(); setTimeout(() => URL.revokeObjectURL(link.href), 1000); return;
   }
   if (action === 'submit') {
-    if (!config.apiBase || !await save()) return;
-    try { await request('/instructor/submit', {}); status(t('submitted')); }
-    catch { status(t('error'),'error'); }
+    if (!instructor && !config.apiBase) return;
+    collect();
+    try { requireCompleteInstructorDraft(payload()); }
+    catch { status(t('incomplete'),'error'); return; }
+    if (!await save()) return;
+    try {
+      if (instructor) await submitInstructorDraft();
+      else await request('/instructor/submit', {});
+      status(t('submitted'));
+    } catch (error) { status(t(error.message?.includes('DRAFT_INCOMPLETE') ? 'incomplete' : 'error'),'error'); }
     return;
   }
   collect();
@@ -171,6 +213,20 @@ app.addEventListener('click', async event => {
 });
 document.querySelector('#locale').onchange = event => { collect(); locale = event.target.value; params.set('lang',locale); history.replaceState(null,'',`?${params}`); render(); };
 render();
+if (instructorStore) {
+  try {
+    instructor = await currentInstructor();
+    if (instructor) {
+      const record = await loadInstructorDraft(instructor.id);
+      serverDraftExists = !!record;
+      draft = record ? { profile:record.data.profile, subjects:record.data.subjects.map(s => ({ ...s,
+        specialties:s.specialties.join(', '), offerings:s.offerings.map(o => ({ ...o,
+          price:o.priceMinor == null ? '' : String(o.priceMinor / 10 ** digits(o.currency)),
+          levels:o.levels.join(', ') })) })) } : blank();
+    }
+    render();
+  } catch { status(t('error'),'error'); }
+}
 if (config.apiBase) {
   try {
     const response = await request('/instructor/draft');

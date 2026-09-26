@@ -1,3 +1,10 @@
-// Same-origin API; leave null on GitHub Pages until the backend is deployed.
-// Never place provider secrets here. Authentication uses server-verified sessions.
-export const config = Object.freeze({ apiBase: null, signInURL: null });
+// Only public identifiers belong here. Never place the database password or
+// Supabase secret key in a browser file. Turn on onboarding after SQL and mail QA.
+export const config = Object.freeze({
+  apiBase: null,
+  signInURL: null,
+  supabaseURL: 'https://zonojgzczpzmcfaekuml.supabase.co',
+  supabasePublishableKey: 'sb_publishable_AnBLAdSdtxogZXXSu2i0YA_0ySzG-5U',
+  instructorAuthOpen: false,
+  instructorSignupOpen: false
+});

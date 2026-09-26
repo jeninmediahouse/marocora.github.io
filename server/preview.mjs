@@ -3,7 +3,7 @@ import { readFile, stat } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { extname, relative, resolve, sep } from 'node:path';
 
-const root = resolve(fileURLToPath(new URL('../', import.meta.url)));
+const root = resolve(fileURLToPath(new URL('../.pages-dist/', import.meta.url)));
 const port = Number(process.env.PORT || 4173);
 const types = {
   '.css': 'text/css', '.html': 'text/html', '.js': 'text/javascript',

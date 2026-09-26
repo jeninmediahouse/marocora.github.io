@@ -1,5 +1,6 @@
 import { cpSync, existsSync, mkdirSync, readdirSync, rmSync } from 'node:fs';
 import { extname, join } from 'node:path';
+import { build } from 'esbuild';
 
 const root = process.cwd();
 const output = join(root, '.pages-dist');
@@ -15,7 +16,10 @@ const learning = join(root, 'learn');
 if (existsSync(learning)) {
   mkdirSync(join(output, 'learn'));
   for (const entry of readdirSync(learning, { withFileTypes: true })) {
-    if (entry.isFile() && allowed(entry.name)) cpSync(join(learning, entry.name), join(output, 'learn', entry.name));
+    if (entry.isFile() && entry.name !== 'instructor-store.mjs' && allowed(entry.name))
+      cpSync(join(learning, entry.name), join(output, 'learn', entry.name));
   }
 }
+await build({ entryPoints: [join(learning, 'instructor.mjs')], outfile: join(output, 'learn', 'instructor.mjs'),
+  bundle: true, format: 'esm', target: 'es2022', minify: true });
 console.log(`Pages artifact ready: ${output}`);
