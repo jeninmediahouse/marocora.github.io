@@ -1,0 +1,7 @@
+{
+  "name": "marocora-learning-foundation",
+  "private": true,
+  "type": "module",
+  "engines": { "node": ">=24" },
+  "scripts": { "test": "node --test tests/*.test.mjs", "preview": "node server/preview.mjs", "build:pages": "node scripts/build-pages.mjs" }
+}
