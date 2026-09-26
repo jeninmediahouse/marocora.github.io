@@ -1,0 +1,9 @@
+node_modules/
+*.sqlite
+*.sqlite-shm
+*.sqlite-wal
+.env
+.env.*
+!.env.example
+.test-output/
+.pages-dist/
