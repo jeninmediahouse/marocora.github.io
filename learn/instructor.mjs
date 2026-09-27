@@ -222,7 +222,7 @@ if (instructorStore) {
       draft = record ? { profile:record.data.profile, subjects:record.data.subjects.map(s => ({ ...s,
         specialties:s.specialties.join(', '), offerings:s.offerings.map(o => ({ ...o,
           price:o.priceMinor == null ? '' : String(o.priceMinor / 10 ** digits(o.currency)),
-          levels:o.levels.join(', ') })) })) } : blank();
+          levels:o.levels.join(', ') })) })) } : readLocal() || blank();
     }
     render();
   } catch { status(t('error'),'error'); }
