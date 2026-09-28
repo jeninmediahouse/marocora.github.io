@@ -4,6 +4,7 @@ import { feedbackHTML, reviewCopy, escapeReview } from './review-view.mjs';
 import { taxonomy, canonicalSubject } from './taxonomy.mjs';
 import { countryCodes } from './profile-fields.mjs';
 import { config } from './config.mjs';
+import { currencyCodes,currencyName,currencyDigits } from './currencies.mjs';
 import { instructorFieldProblem, fieldLabels } from './instructor-validation.mjs';
 import { request } from './api.mjs';
 import { instructorStore, currentInstructor, sendInstructorLink, loadInstructorDraft,
@@ -28,9 +29,9 @@ let review = null;
 let applicationStatus = null;
 let authVersion = 0;
 let validationMode = null;
-const digits = currency => { try { return new Intl.NumberFormat('en', { style:'currency', currency }).resolvedOptions().maximumFractionDigits; } catch { return 2; } };
+const digits = currencyDigits;
 const list = value => String(value || '').split(',').map(s => s.trim()).filter(Boolean);
-const input = (field, label, value, { type='text', hint='', placeholder='', min, max, step } = {}) => `<label>${t(label)}<input data-field="${field}" type="${type}" value="${esc(value)}" ${placeholder ? `placeholder="${esc(t(placeholder))}"` : ''} ${min == null ? '' : `min="${min}"`} ${max == null ? '' : `max="${max}"`} ${step == null ? '' : `step="${step}"`}></label>${hint ? `<p class="helper">${t(hint)}</p>` : ''}`;
+const input = (field, label, value, { type='text', hint='', placeholder='', min, max, step, listId } = {}) => `<label>${t(label)}<input data-field="${field}" type="${type}" value="${esc(value)}" ${placeholder ? `placeholder="${esc(t(placeholder))}"` : ''} ${min == null ? '' : `min="${min}"`} ${max == null ? '' : `max="${max}"`} ${step == null ? '' : `step="${step}"`} ${listId ? `list="${listId}" maxlength="3" dir="ltr" autocapitalize="characters" spellcheck="false"` : ''}></label>${hint ? `<p class="helper">${t(hint)}</p>` : ''}`;
 const area = (field, label, value, placeholder='') => `<label class="wide">${t(label)}<textarea data-field="${field}" rows="4" ${placeholder ? `placeholder="${esc(t(placeholder))}"` : ''}>${esc(value)}</textarea></label>`;
 
 function offeringHTML(offering, index) {
@@ -39,7 +40,7 @@ function offeringHTML(offering, index) {
     ${input('durationMinutes','duration',offering.durationMinutes,{type:'number',min:15,max:240})}
     ${input('lessonCount','lessons',offering.lessonCount,{type:'number',min:1,max:20})}
     ${input('price','price',offering.price,{type:'number',min:0,step:'any'})}
-    ${input('currency','currency',offering.currency,{placeholder:'exampleCurrency'})}
+    ${input('currency','currency',offering.currency,{placeholder:'exampleCurrency',listId:'currency-codes',hint:'currencyHelp'})}
     ${input('levels','levels',offering.levels,{placeholder:'exampleLevels'})}
   </div><p class="helper">${t('priceHelp')}</p></div>`;
 }
@@ -74,7 +75,7 @@ function render() {
     ? `<div class="auth-panel"><span>${t('signedIn')} ${esc(instructor.email)}</span> <button type="button" class="tertiary" data-action="sign-out">${t('signOut')}</button></div>`
     : `<form id="auth-form" class="auth-panel"><label>${t('email')}<input name="email" type="email" autocomplete="email" required></label><button type="submit">${t('sendLink')}</button></form>`) : '';
   app.innerHTML = `<h1>${t('title')}</h1><p class="lead">${t('intro')}</p><p class="notice">${instructorStore || config.apiBase ? t('live') : t('preview')}</p>${instructorStore && !instructor ? `<p class="helper">${t(config.instructorSignupOpen ? 'signupHelp' : 'existingOnly')}</p>` : ''}${auth}<div id="review-feedback">${reviewStatusHTML()}</div>
-    ${instructor && config.learningLaunchOpen ? `<p><a href="learn/schedule.html?lang=${locale}">${sharedCopy[locale].schedule}</a></p>` : ''}<form id="profile-form" novalidate><p class="helper">${t('fieldHint')}</p><div id="field-errors" role="alert" tabindex="-1" hidden></div><section class="panel"><h2>${t('profile')}</h2><div class="grid">
+    ${instructor && config.learningLaunchOpen ? `<p><a href="learn/schedule.html?lang=${locale}">${sharedCopy[locale].schedule}</a></p>` : ''}<form id="profile-form" novalidate><datalist id="currency-codes">${currencyCodes.map(code=>`<option value="${code}">${esc(currencyName(code,locale))}</option>`).join('')}</datalist><p class="helper">${t('fieldHint')}</p><div id="field-errors" role="alert" tabindex="-1" hidden></div><section class="panel"><h2>${t('profile')}</h2><div class="grid">
       ${input('displayName','displayName',p.displayName)}${input('headline','headline',p.headline)}
       ${area('bio','bio',p.bio)}${countrySelect(p.countryOfResidence)}${input('city','city',p.city)}
       ${input('timezone','timezone',p.timezone || Intl.DateTimeFormat().resolvedOptions().timeZone)}${input('yearsExperience','experience',p.yearsExperience,{type:'number',min:0,max:80})}

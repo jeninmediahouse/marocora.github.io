@@ -1,3 +1,4 @@
+import { formatMoney } from './currencies.mjs';
 import {canonicalSubject,taxonomy} from './taxonomy.mjs';
 import { extraCopy } from './review-translations.mjs';
 import { sharedCopy } from './locale.mjs';
@@ -17,8 +18,7 @@ export const fieldLabels = {
 Object.assign(fieldLabels, {"ar": {"displayName": "الاسم المعروض", "headline": "العنوان", "bio": "التعريف", "countryOfResidence": "بلد الإقامة", "city": "المدينة", "timezone": "المنطقة الزمنية", "yearsExperience": "سنوات الخبرة", "education": "التعليم", "nativeLanguages": "اللغات الأم", "spokenLanguages": "لغات أخرى", "introductionVideo": "رابط فيديو التعريف", "photoURL": "رابط الصورة", "availabilityNotes": "ملاحظات المواعيد"}, "es": {"displayName": "Nombre público", "headline": "Titular", "bio": "Presentación", "countryOfResidence": "País de residencia", "city": "Ciudad", "timezone": "Zona horaria", "yearsExperience": "Años de experiencia", "education": "Formación", "nativeLanguages": "Lenguas maternas", "spokenLanguages": "Otros idiomas", "introductionVideo": "URL del video de presentación", "photoURL": "URL de la foto", "availabilityNotes": "Notas de disponibilidad"}});
 function price(offering, locale) {
  try {
-  const formatter = new Intl.NumberFormat(locale, {style:'currency',currency:offering.currency});
-  return formatter.format(offering.priceMinor / 10 ** formatter.resolvedOptions().maximumFractionDigits);
+  return formatMoney(offering.priceMinor,offering.currency,locale);
  } catch { return `${offering.priceMinor} ${offering.currency}`; }
 }
 

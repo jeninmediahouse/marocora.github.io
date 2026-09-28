@@ -1,3 +1,4 @@
+import { currencyDigits } from './currencies.mjs';
 // Frontend guidance for the existing draft contract. The server remains authoritative.
 export const fieldLabels = {displayName:'displayName',headline:'headline',bio:'bio',countryOfResidence:'country',city:'city',timezone:'timezone',yearsExperience:'experience',education:'education',nativeLanguages:'native',spokenLanguages:'spoken',introductionVideo:'video',photoURL:'photo',availabilityNotes:'availability',category:'category',subject:'subject',qualifications:'qualifications',specialties:'specialties',title:'offeringTitle',durationMinutes:'duration',lessonCount:'lessons',price:'price',currency:'currency',levels:'levels'};
 const lengths={displayName:120,headline:180,bio:4000,countryOfResidence:100,city:120,timezone:80,education:2000,nativeLanguages:300,spokenLanguages:300,introductionVideo:500,photoURL:500,availabilityNotes:1000,category:100,subject:100,qualifications:2000,title:140,currency:3};
@@ -19,7 +20,7 @@ export function instructorFieldProblem(field,value,{complete=false,currency=''}=
  }
  if(field==='price') {
   const number=Number(text);if(!Number.isFinite(number)||number<0)return 'invalid';
-  let decimals=2;try{if(currency)decimals=new Intl.NumberFormat('en',{style:'currency',currency:currency.toUpperCase()}).resolvedOptions().maximumFractionDigits;}catch{}
+  const decimals=currencyDigits(currency||'USD');
   const minor=number*10**decimals;
   if(Math.abs(minor-Math.round(minor))>0.000001)return 'precision';
   if(!Number.isSafeInteger(Math.round(minor))||minor>1_000_000_000)return 'invalid';

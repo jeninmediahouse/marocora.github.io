@@ -83,6 +83,6 @@ test('search does not advertise an unoffered subject merely mentioned in a headl
 });
 
 test('price formatting uses the currency minor unit', () => {
-  assert.equal(money(1234, 'JPY', 'en'), '¥1,234');
+  assert.equal(money(1234, 'JPY', 'en'), 'JPY\u00a01,234');
   assert.match(money(1234, 'KWD', 'en'), /1\.234/);
 });

@@ -68,3 +68,11 @@ const validationCopy = {
  es:{fixFields:'Revisa los campos indicados:',requiredField:'Obligatorio antes de enviar',invalidField:'Revisa este valor',duplicateSubject:'Esta materia ya está incluida. Agrupa sus ofertas en una sola materia.',missingOffer:'Añade al menos una oferta de clase.',missingSubject:'Añade al menos una materia.',fieldHint:'Puedes guardar un borrador incompleto. Completa los campos obligatorios antes de enviarlo. El consentimiento es necesario para mostrar el perfil públicamente.'}
 };
 for(const lang of Object.keys(validationCopy))Object.assign(instructorCopy[lang],validationCopy[lang]);
+
+const currencyCopy={
+ en:{currency:'Currency (ISO code)',currencyHelp:'Choose or enter an international currency code, including MAD. You set the price in this currency; Marocora does not convert it automatically.',exampleCurrency:'e.g. USD, JPY, KWD, MAD'},
+ fr:{currency:'Devise (code ISO)',currencyHelp:'Choisissez ou saisissez un code de devise internationale, dont MAD. Vous fixez le prix dans cette devise ; Marocora ne le convertit pas automatiquement.',exampleCurrency:'p. ex. USD, JPY, KWD, MAD'},
+ ar:{currency:'العملة (رمز ISO)',currencyHelp:'اختر أو أدخل رمز عملة دولية، بما فيها MAD. أنت تحدد السعر بهذه العملة؛ لا يحوله ماروكورا تلقائياً.',exampleCurrency:'مثلاً USD، JPY، KWD، MAD'},
+ es:{currency:'Moneda (código ISO)',currencyHelp:'Elige o escribe un código de moneda internacional, incluido MAD. Tú fijas el precio en esa moneda; Marocora no lo convierte automáticamente.',exampleCurrency:'p. ej. USD, JPY, KWD, MAD'}
+};
+for(const lang of Object.keys(currencyCopy))Object.assign(instructorCopy[lang],currencyCopy[lang]);

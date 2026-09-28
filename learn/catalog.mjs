@@ -1,3 +1,4 @@
+import { currencyDigits,formatMoney } from './currencies.mjs';
 // Public catalog only. No identity evidence, student data or provider secrets here.
 import { taxonomy } from './taxonomy.mjs';
 export { taxonomy } from './taxonomy.mjs';
@@ -69,7 +70,7 @@ export function searchCatalog(catalog, filters = {}, locale = 'en') {
         && (!filters.specialty || o.specialtyIds.includes(filters.specialty))
         && (!filters.level || o.levels.includes(filters.level))
         && (!filters.currency || o.currency === filters.currency)
-        && (filters.maxPrice == null || filters.maxPrice === '' || (filters.currency && o.priceMinor <= Number(filters.maxPrice) * 10 ** new Intl.NumberFormat(locale, {style:"currency",currency:o.currency}).resolvedOptions().maximumFractionDigits))
+        && (filters.maxPrice == null || filters.maxPrice === '' || (filters.currency && o.priceMinor <= Number(filters.maxPrice) * 10 ** currencyDigits(o.currency)))
         && (!filters.availableOnly || (filters.slots || []).some(s=>s.instructorId===instructor.id&&s.offeringIds.includes(o.id)&&new Date(s.endsAt)-new Date(s.startsAt)>=o.durationMinutes*60000))
         && (!filters.bookable || (o.bookingEnabled && (filters.slots || []).some(s => s.instructorId === instructor.id && s.offeringIds.includes(o.id))))
         && (!filters.variety || relation.categoryMetadata?.languageVarieties?.includes(filters.variety))
@@ -104,8 +105,4 @@ export function suggestions(catalog, query, locale = 'en', includeEmpty = false)
 export function formatSlot(slot, timezone, locale = 'en') {
   return new Intl.DateTimeFormat(locale, { timeZone: timezone, dateStyle: 'full', timeStyle: 'short' }).format(new Date(slot.startsAt));
 }
-export function money(minor, currency, locale = 'en') {
-  const formatter = new Intl.NumberFormat(locale, { style: 'currency', currency });
-  const fractionDigits = formatter.resolvedOptions().maximumFractionDigits;
-  return formatter.format(minor / 10 ** fractionDigits);
-}
+export function money(minor,currency,locale='en') { return formatMoney(minor,currency,locale); }
