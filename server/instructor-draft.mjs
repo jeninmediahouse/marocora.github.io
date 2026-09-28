@@ -46,7 +46,8 @@ export function normalizeInstructorDraft(input) {
     yearsExperience, education: text(source.education, 2000),
     nativeLanguages: text(source.nativeLanguages, 300), spokenLanguages: text(source.spokenLanguages, 300),
     introductionVideo: url(source.introductionVideo), photoURL: url(source.photoURL),
-    availabilityNotes: text(source.availabilityNotes, 1000)
+    availabilityNotes: text(source.availabilityNotes, 1000),
+    publicationConsent: source.publicationConsent === true
   };
   const seen = new Set();
   const subjects = list(input.subjects).map(item => {

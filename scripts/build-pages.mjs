@@ -16,7 +16,7 @@ const learning = join(root, 'learn');
 if (existsSync(learning)) {
   mkdirSync(join(output, 'learn'));
   for (const entry of readdirSync(learning, { withFileTypes: true })) {
-    if (entry.isFile() && entry.name !== 'instructor-store.mjs' && allowed(entry.name))
+    if (entry.isFile() && !['instructor-store.mjs','learning-store.mjs'].includes(entry.name) && allowed(entry.name))
       cpSync(join(learning, entry.name), join(output, 'learn', entry.name));
   }
 }
@@ -26,3 +26,5 @@ await build({ entryPoints: [join(learning, 'instructor.mjs')], outfile: join(out
 await build({ entryPoints: [join(learning, 'staff-review.mjs')], outfile: join(output, 'learn', 'staff-review.mjs'),
   bundle: true, format: 'esm', target: 'es2022', minify: true });
 console.log(`Pages artifact ready: ${output}`);
+
+for (const entry of ["app", "account", "schedule"]) await build({entryPoints:[join(learning,`${entry}.mjs`)],outfile:join(output,"learn",`${entry}.mjs`),bundle:true,format:"esm",target:"es2022",minify:true});

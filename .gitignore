@@ -7,3 +7,6 @@ node_modules/
 !.env.example
 .test-output/
 .pages-dist/
+
+tmp/
+output/

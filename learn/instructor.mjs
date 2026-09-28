@@ -1,4 +1,6 @@
 import { feedbackHTML, reviewCopy, escapeReview } from './review-view.mjs';
+import { taxonomy, canonicalSubject } from './taxonomy.mjs';
+import { countryCodes } from './profile-fields.mjs';
 import { config } from './config.mjs';
 import { request } from './api.mjs';
 import { instructorStore, currentInstructor, sendInstructorLink, loadInstructorDraft,
@@ -22,7 +24,7 @@ const copy = {
     photoHelp: 'Use a public HTTPS link. Private verification documents are not collected on this page.',
     subjects: 'Subjects you want to teach', addSubject: 'Add another subject', removeSubject: 'Remove subject',
     category: 'Subject category', subject: 'Subject', qualifications: 'Your qualifications for this subject', specialties: 'Specialties (separate with commas)',
-    categoryHint: 'Examples: Languages, Mathematics, Music, Science, Arts, Technology, Writing.',
+    categoryHint: 'Launch subjects: English, Arabic, Darija, French, Spanish, mathematics and physics.',
     offerings: 'Lesson offerings', addOffering: 'Add another offering', removeOffering: 'Remove offering',
     offeringTitle: 'Offering title', duration: 'Minutes per lesson', lessons: 'Lessons in this offer', price: 'Total price', currency: 'Currency code', levels: 'Student levels (separate with commas)',
     priceHelp: 'Set your own price for this offering. A free introduction can be priced at zero. Prices are reviewed before publication.',
@@ -34,8 +36,8 @@ const copy = {
     linkError: 'We could not send the sign-in link. Check your email address and try again in a minute.',
     signedIn: 'Signed in as', signOut: 'Sign out', signInFirst: 'Sign in before submitting your profile.',
     incomplete: 'Complete your profile, every subject, and every lesson offering before submitting.',
-    exampleCategory: 'e.g. Music', exampleSubject: 'e.g. Piano', exampleQualification: 'Describe your training or experience in this subject.',
-    exampleOffering: 'e.g. Beginner piano lesson', exampleCurrency: 'e.g. USD, MAD, EUR', exampleLevels: 'e.g. Beginner, Intermediate'
+    exampleCategory: 'e.g. Mathematics', exampleSubject: 'e.g. Algebra', exampleQualification: 'Describe your training or experience in this subject.',
+    exampleOffering: 'e.g. Beginner algebra lesson', exampleCurrency: 'e.g. USD, MAD, EUR', exampleLevels: 'e.g. Beginner, Intermediate'
   },
   fr: {
     browse: 'Découvrir les cours', title: 'Créez votre profil de professeur', intro: 'Enseignez une ou plusieurs matières. Présentez vos qualifications pour chaque matière et fixez le prix et la durée de chaque cours.',
@@ -51,7 +53,7 @@ const copy = {
     photoHelp: 'Utilisez un lien HTTPS public. Aucun document privé de vérification n’est recueilli sur cette page.',
     subjects: 'Matières que vous souhaitez enseigner', addSubject: 'Ajouter une matière', removeSubject: 'Supprimer la matière',
     category: 'Catégorie', subject: 'Matière', qualifications: 'Vos qualifications pour cette matière', specialties: 'Spécialités (séparées par des virgules)',
-    categoryHint: 'Exemples : Langues, Mathématiques, Musique, Sciences, Arts, Technologie, Écriture.',
+    categoryHint: 'Matières au lancement : anglais, arabe, darija, français, espagnol, mathématiques et physique.',
     offerings: 'Offres de cours', addOffering: 'Ajouter une offre', removeOffering: 'Supprimer l’offre',
     offeringTitle: 'Nom de l’offre', duration: 'Minutes par cours', lessons: 'Nombre de cours dans cette offre', price: 'Prix total', currency: 'Code de devise', levels: 'Niveaux des élèves (séparés par des virgules)',
     priceHelp: 'Fixez votre propre prix pour cette offre. Une rencontre gratuite peut coûter zéro. Les prix sont examinés avant publication.',
@@ -63,8 +65,8 @@ const copy = {
     linkError: 'Impossible d’envoyer le lien de connexion. Vérifiez votre adresse e-mail et réessayez dans une minute.',
     signedIn: 'Connecté avec', signOut: 'Se déconnecter', signInFirst: 'Connectez-vous avant d’envoyer votre profil.',
     incomplete: 'Complétez votre profil, chaque matière et chaque offre de cours avant de l’envoyer.',
-    exampleCategory: 'p. ex. Musique', exampleSubject: 'p. ex. Piano', exampleQualification: 'Décrivez votre formation ou votre expérience dans cette matière.',
-    exampleOffering: 'p. ex. Cours de piano pour débutants', exampleCurrency: 'p. ex. USD, MAD, EUR', exampleLevels: 'p. ex. Débutant, Intermédiaire'
+    exampleCategory: 'p. ex. Mathématiques', exampleSubject: 'p. ex. Algèbre', exampleQualification: 'Décrivez votre formation ou votre expérience dans cette matière.',
+    exampleOffering: 'p. ex. Cours d’algèbre pour débutants', exampleCurrency: 'p. ex. USD, MAD, EUR', exampleLevels: 'p. ex. Débutant, Intermédiaire'
   }
 };
 const t = key => copy[locale][key];
@@ -95,10 +97,21 @@ function offeringHTML(offering, index) {
     ${input('levels','levels',offering.levels,{placeholder:'exampleLevels'})}
   </div><p class="helper">${t('priceHelp')}</p></div>`;
 }
+const options = (values, selected) => `<option value=""></option>${values.map(([v,n]) => `<option value="${esc(v)}" ${v===selected?'selected':''}>${esc(n)}</option>`).join('')}${selected && !values.some(([v])=>v===selected) ? `<option value="${esc(selected)}" selected>${esc(selected)}</option>` : ''}`;
+function subjectSelect(subject) {
+ const canonical = canonicalSubject(subject.category,subject.subject);
+ const category = canonical ? taxonomy.categories.find(c => c.id===canonical.categoryId).name.en : subject.category;
+ const candidates = taxonomy.subjects.filter(s => taxonomy.categories.find(c => c.id===s.categoryId).name.en===category);
+ return `<label>${t('category')}<select data-field="category">${options(taxonomy.categories.map(c=>[c.name.en,c.name[locale]]),category)}</select></label><label>${t('subject')}<select data-field="subject">${options(candidates.map(s=>[s.name.en,s.name[locale]]),canonical?.name.en || subject.subject)}</select></label>`;
+}
+function countrySelect(value) {
+ const names=new Intl.DisplayNames([locale],{type:'region'});
+ const values=countryCodes.map(c=>[c,names.of(c)]).sort((a,b)=>a[1].localeCompare(b[1],locale));
+ return `<label>${t('country')}<select data-field="countryOfResidence">${options(values,value)}</select></label>`;
+}
 function subjectHTML(subject, index) {
   return `<section class="subject-card" data-subject><div class="entry-heading"><h2>${t('subject')} ${index + 1}</h2><button type="button" class="tertiary danger" data-action="remove-subject">${t('removeSubject')}</button></div><div class="grid">
-    ${input('category','category',subject.category,{placeholder:'exampleCategory',hint:'categoryHint'})}
-    ${input('subject','subject',subject.subject,{placeholder:'exampleSubject'})}
+    ${subjectSelect(subject)}
     ${area('qualifications','qualifications',subject.qualifications,'exampleQualification')}
     ${input('specialties','specialties',subject.specialties)}
   </div><div class="section-heading"><h3>${t('offerings')}</h3><button type="button" class="secondary" data-action="add-offering" ${subject.offerings.length >= 8 ? 'disabled' : ''}>${t('addOffering')}</button></div>
@@ -115,9 +128,9 @@ function render() {
     ? `<div class="auth-panel"><span>${t('signedIn')} ${esc(instructor.email)}</span> <button type="button" class="tertiary" data-action="sign-out">${t('signOut')}</button></div>`
     : `<form id="auth-form" class="auth-panel"><label>${t('email')}<input name="email" type="email" autocomplete="email" required></label><button type="submit">${t('sendLink')}</button></form>`) : '';
   app.innerHTML = `<h1>${t('title')}</h1><p class="lead">${t('intro')}</p><p class="notice">${instructorStore || config.apiBase ? t('live') : t('preview')}</p>${instructorStore && !instructor ? `<p class="helper">${t(config.instructorSignupOpen ? 'signupHelp' : 'existingOnly')}</p>` : ''}${auth}<div id="review-feedback">${reviewStatusHTML()}</div>
-    <form id="profile-form"><section class="panel"><h2>${t('profile')}</h2><div class="grid">
+    ${instructor && config.learningLaunchOpen ? `<p><a href="learn/schedule.html?lang=${locale}">${locale==='fr'?'Mes disponibilités et demandes de cours':'My availability and lesson requests'}</a></p>` : ''}<form id="profile-form"><section class="panel"><h2>${t('profile')}</h2><div class="grid">
       ${input('displayName','displayName',p.displayName)}${input('headline','headline',p.headline)}
-      ${area('bio','bio',p.bio)}${input('countryOfResidence','country',p.countryOfResidence)}${input('city','city',p.city)}
+      ${area('bio','bio',p.bio)}${countrySelect(p.countryOfResidence)}${input('city','city',p.city)}
       ${input('timezone','timezone',p.timezone || Intl.DateTimeFormat().resolvedOptions().timeZone)}${input('yearsExperience','experience',p.yearsExperience,{type:'number',min:0,max:80})}
       ${area('education','education',p.education)}${input('nativeLanguages','native',p.nativeLanguages)}${input('spokenLanguages','spoken',p.spokenLanguages)}
       ${input('introductionVideo','video',p.introductionVideo,{type:'url'})}${input('photoURL','photo',p.photoURL,{type:'url',hint:'photoHelp'})}
@@ -125,7 +138,7 @@ function render() {
     </div><p class="helper">${t('availabilityHelp')}</p></section>
     <div class="section-heading"><h2>${t('subjects')}</h2><button type="button" class="secondary" data-action="add-subject" ${draft.subjects.length >= 12 ? 'disabled' : ''}>${t('addSubject')}</button></div>
     ${draft.subjects.map(subjectHTML).join('')}
-    <div class="actions"><button type="submit">${t('save')}</button><button type="button" class="secondary" data-action="download">${t('download')}</button><button type="button" data-action="submit" ${instructor || config.apiBase ? '' : 'disabled'}>${t('submit')}</button></div>
+    <label class="consent"><input type="checkbox" data-field="publicationConsent" ${p.publicationConsent===true?'checked':''}>${locale==='fr'?'J’autorise Marocora à publier mon nom public, ma présentation, ma résidence, mes qualifications, mes langues, mes liens média et les offres approuvées. Mon adresse e-mail et les commentaires privés ne seront pas publiés.':'I agree that Marocora may publish my display name, introduction, residence, qualifications, languages, media links and approved offerings. My email and private review feedback will not be published.'}</label><div class="actions"><button type="submit">${t('save')}</button><button type="button" class="secondary" data-action="download">${t('download')}</button><button type="button" data-action="submit" ${instructor || config.apiBase ? '' : 'disabled'}>${t('submit')}</button></div>
     <p id="status" class="status" role="status">${instructorStore ? (instructor ? '' : t('signInFirst')) : (config.apiBase ? '' : t('opening'))}</p>
     ${config.signInURL ? `<p><a href="${esc(config.signInURL)}">${t('signIn')}</a></p>` : ''}
     </form>`;
@@ -138,6 +151,7 @@ function collect() {
     const offerings = [...section.querySelectorAll('[data-offering]')].map(card => Object.fromEntries([...card.querySelectorAll('[data-field]')].map(el => [el.dataset.field, el.value.trim()])));
     return { category:value('category'), subject:value('subject'), qualifications:value('qualifications'), specialties:value('specialties'), offerings };
   });
+  profile.publicationConsent = !!app.querySelector('[data-field="publicationConsent"]')?.checked;
   draft = { profile, subjects };
 }
 function payload() {
@@ -196,6 +210,12 @@ async function save() {
   try { await request('/instructor/draft', data); status(t('savedServer')); return true; }
   catch (error) { status(t(error.message === 'precision' ? 'precision' : 'error'),'error'); return false; }
 }
+app.addEventListener('change', event => {
+ if (event.target.dataset.field==='category') {
+  collect(); const index=[...app.querySelectorAll('[data-subject]')].indexOf(event.target.closest('[data-subject]'));
+  draft.subjects[index].subject=''; render();
+ }
+});
 app.addEventListener('submit', async event => {
   event.preventDefault();
   if (event.target.id === 'auth-form') {

@@ -7,5 +7,7 @@ export const config = Object.freeze({
   supabasePublishableKey: 'sb_publishable_AnBLAdSdtxogZXXSu2i0YA_0ySzG-5U',
   instructorAuthOpen: true,
   instructorSignupOpen: true,
-  staffReviewOpen: true
+  staffReviewOpen: true,
+  learningLaunchOpen: false,
+  studentSignupOpen: false
 });

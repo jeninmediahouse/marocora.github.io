@@ -1,17 +1,6 @@
 // Public catalog only. No identity evidence, student data or provider secrets here.
-export const taxonomy = {
-  categories: [{ id: 'languages', name: { en: 'Languages', fr: 'Langues' }, active: true }],
-  subjects: [
-    { id: 'darija', categoryId: 'languages', slug: 'darija', name: { en: 'Moroccan Darija', fr: 'Darija marocaine' }, aliases: ['Moroccan Arabic', 'arabe marocain'] },
-    { id: 'arabic', categoryId: 'languages', slug: 'arabic', name: { en: 'Arabic', fr: 'Arabe' }, aliases: [] }
-  ],
-  specialties: [
-    { id: 'conversation', subjectIds: ['darija', 'arabic'], name: { en: 'Conversation', fr: 'Conversation' } },
-    { id: 'beginners', subjectIds: ['darija', 'arabic'], name: { en: 'Beginners', fr: 'Débutants' } },
-    { id: 'travel', subjectIds: ['darija'], name: { en: 'Travel', fr: 'Voyage' } },
-    { id: 'expats', subjectIds: ['darija'], name: { en: 'For expats', fr: 'Pour les expatriés' } }
-  ]
-};
+import { taxonomy } from './taxonomy.mjs';
+export { taxonomy } from './taxonomy.mjs';
 export const localize = (value, locale = 'en') => typeof value === 'string' ? value : value?.[locale] || value?.en || '';
 
 export function publishedOfferings(catalog, instructor) {
@@ -79,7 +68,8 @@ export function searchCatalog(catalog, filters = {}, locale = 'en') {
         && (!filters.specialty || o.specialtyIds.includes(filters.specialty))
         && (!filters.level || o.levels.includes(filters.level))
         && (!filters.currency || o.currency === filters.currency)
-        && (filters.maxPrice == null || filters.maxPrice === '' || (filters.currency && o.priceMinor <= Number(filters.maxPrice) * 100))
+        && (filters.maxPrice == null || filters.maxPrice === '' || (filters.currency && o.priceMinor <= Number(filters.maxPrice) * 10 ** new Intl.NumberFormat(locale, {style:"currency",currency:o.currency}).resolvedOptions().maximumFractionDigits))
+        && (!filters.availableOnly || (filters.slots || []).some(s=>s.instructorId===instructor.id&&s.offeringIds.includes(o.id)&&new Date(s.endsAt)-new Date(s.startsAt)>=o.durationMinutes*60000))
         && (!filters.bookable || (o.bookingEnabled && (filters.slots || []).some(s => s.instructorId === instructor.id && s.offeringIds.includes(o.id))))
         && (!filters.variety || relation.categoryMetadata?.languageVarieties?.includes(filters.variety))
         && (!filters.classification || relation.categoryMetadata?.classification === filters.classification);
@@ -98,14 +88,14 @@ export function searchCatalog(catalog, filters = {}, locale = 'en') {
     return b.score - a.score || a.instructor.id.localeCompare(b.instructor.id);
   });
 }
-export function suggestions(catalog, query, locale = 'en') {
+export function suggestions(catalog, query, locale = 'en', includeEmpty = false) {
   const offerings = searchCatalog(catalog, {}, locale).flatMap(row => row.offerings);
   const subjectIds = new Set(offerings.map(o => o.subjectId));
   const specialtyIds = new Set(offerings.flatMap(o => o.specialtyIds));
   const values = [
-    ...catalog.categories.filter(c => c.active && catalog.subjects.some(s => s.categoryId === c.id && subjectIds.has(s.id))),
-    ...catalog.subjects.filter(s => subjectIds.has(s.id)),
-    ...catalog.specialties.filter(s => specialtyIds.has(s.id)),
+    ...catalog.categories.filter(c => c.active && catalog.subjects.some(s => s.categoryId === c.id && (includeEmpty || subjectIds.has(s.id)))),
+    ...catalog.subjects.filter(s => s.active !== false && catalog.categories.some(c=>c.id===s.categoryId&&c.active) && (includeEmpty || subjectIds.has(s.id))),
+    ...catalog.specialties.filter(s => includeEmpty ? s.subjectIds.some(id=>catalog.subjects.some(v=>v.id===id&&v.active!==false&&catalog.categories.some(c=>c.id===v.categoryId&&c.active))) : specialtyIds.has(s.id)),
     ...offerings.map(o => ({ name: o.title }))
   ];
   return [...new Set(values.map(v => localize(v.name, locale)))].filter(v => v.toLocaleLowerCase(locale).includes(query.toLocaleLowerCase(locale))).slice(0, 12);
