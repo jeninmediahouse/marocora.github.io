@@ -1,3 +1,4 @@
+import { feedbackHTML, reviewCopy, escapeReview } from './review-view.mjs';
 import { config } from './config.mjs';
 import { request } from './api.mjs';
 import { instructorStore, currentInstructor, sendInstructorLink, loadInstructorDraft,
@@ -10,7 +11,7 @@ const copy = {
   en: {
     browse: 'Browse learning', title: 'Create your instructor profile', intro: 'Teach one subject or many. Give each subject its own qualifications and each lesson offering its own price and duration.',
     preview: 'Profile builder preview: account creation and submissions open after secure sign-in and profile hosting are connected. Your saved draft stays on this device until then.',
-    live: 'Your profile remains private until Marocora reviews and approves each subject. Saving a draft does not publish it.',
+    live: 'Marocora reviews your profile and each subject separately. Saving or approving an application does not publish it.',
     existingOnly: 'Sign-in is available for invited instructors. Public account sign-up is not open yet.',
     signupHelp: 'Create your instructor account or sign in with an email link. Verify your email, then save your private profile and submit it for review.',
     profile: 'Your public profile', displayName: 'Public display name', headline: 'Professional headline', bio: 'Introduce yourself and your teaching style',
@@ -39,7 +40,7 @@ const copy = {
   fr: {
     browse: 'Découvrir les cours', title: 'Créez votre profil de professeur', intro: 'Enseignez une ou plusieurs matières. Présentez vos qualifications pour chaque matière et fixez le prix et la durée de chaque cours.',
     preview: 'Aperçu du créateur de profil : la création de compte et l’envoi des candidatures ouvriront après la mise en place d’une connexion sécurisée et de l’hébergement des profils. Votre brouillon enregistré reste sur cet appareil.',
-    live: 'Votre profil reste privé jusqu’à ce que Marocora examine et approuve chaque matière. Un brouillon enregistré n’est pas publié.',
+    live: 'Marocora examine votre profil et chaque matière séparément. L’enregistrement ou l’approbation d’une candidature ne la publie pas.',
     existingOnly: 'La connexion est disponible pour les professeurs invités. La création publique de compte n’est pas encore ouverte.',
     signupHelp: 'Créez votre compte de professeur ou connectez-vous avec un lien envoyé par e-mail. Vérifiez votre adresse, puis enregistrez votre profil privé et envoyez-le pour examen.',
     profile: 'Votre profil public', displayName: 'Nom public', headline: 'Présentation professionnelle', bio: 'Présentez-vous et décrivez votre méthode pédagogique',
@@ -77,6 +78,8 @@ const readLocal = () => { try { return JSON.parse(localStorage.getItem(storageKe
 let draft = readLocal() || blank();
 let instructor = null;
 let serverDraftExists = false;
+let review = null;
+let applicationStatus = null;
 const digits = currency => { try { return new Intl.NumberFormat('en', { style:'currency', currency }).resolvedOptions().maximumFractionDigits; } catch { return 2; } };
 const list = value => String(value || '').split(',').map(s => s.trim()).filter(Boolean);
 const input = (field, label, value, { type='text', hint='', placeholder='', min, max } = {}) => `<label>${t(label)}<input data-field="${field}" type="${type}" value="${esc(value)}" ${placeholder ? `placeholder="${esc(t(placeholder))}"` : ''} ${min == null ? '' : `min="${min}"`} ${max == null ? '' : `max="${max}"`}></label>${hint ? `<p class="helper">${t(hint)}</p>` : ''}`;
@@ -111,7 +114,7 @@ function render() {
   const auth = instructorStore ? (instructor
     ? `<div class="auth-panel"><span>${t('signedIn')} ${esc(instructor.email)}</span> <button type="button" class="tertiary" data-action="sign-out">${t('signOut')}</button></div>`
     : `<form id="auth-form" class="auth-panel"><label>${t('email')}<input name="email" type="email" autocomplete="email" required></label><button type="submit">${t('sendLink')}</button></form>`) : '';
-  app.innerHTML = `<h1>${t('title')}</h1><p class="lead">${t('intro')}</p><p class="notice">${instructorStore || config.apiBase ? t('live') : t('preview')}</p>${instructorStore && !instructor ? `<p class="helper">${t(config.instructorSignupOpen ? 'signupHelp' : 'existingOnly')}</p>` : ''}${auth}
+  app.innerHTML = `<h1>${t('title')}</h1><p class="lead">${t('intro')}</p><p class="notice">${instructorStore || config.apiBase ? t('live') : t('preview')}</p>${instructorStore && !instructor ? `<p class="helper">${t(config.instructorSignupOpen ? 'signupHelp' : 'existingOnly')}</p>` : ''}${auth}<div id="review-feedback">${reviewStatusHTML()}</div>
     <form id="profile-form"><section class="panel"><h2>${t('profile')}</h2><div class="grid">
       ${input('displayName','displayName',p.displayName)}${input('headline','headline',p.headline)}
       ${area('bio','bio',p.bio)}${input('countryOfResidence','country',p.countryOfResidence)}${input('city','city',p.city)}
@@ -153,13 +156,36 @@ function payload() {
 function status(message, kind='success') {
   const target = document.querySelector('#status'); target.textContent = message; target.className = `status ${kind}`;
 }
+function reviewStatusHTML() {
+  if (!instructor || !config.staffReviewOpen || !applicationStatus) return '';
+  const c = reviewCopy[locale];
+  return `<p>${c.status}: ${escapeReview(c[applicationStatus] || applicationStatus)}. ${c.private}</p>${feedbackHTML(review, locale)}${review ? `<p class="helper">${c.obsolete}</p>` : ''}`;
+}
+async function refreshReview() {
+  if (!instructor || !config.staffReviewOpen) return;
+  const target = document.querySelector('#review-feedback');
+  try {
+    const record = await loadInstructorDraft(instructor.id);
+    applicationStatus = record?.status;
+    const result = await instructorStore.rpc('learning_instructor_review_feedback');
+    if (result.error) throw result.error;
+    review = result.data;
+    if (target) target.innerHTML = reviewStatusHTML();
+  } catch {
+    review = null;
+    if (target) target.textContent = locale === 'fr'
+      ? 'Impossible de charger les commentaires de l’équipe. Actualisez la page.'
+      : 'Could not load staff feedback. Refresh the page.';
+  }
+}
+
 async function save() {
   collect();
   let data;
   try { data = payload(); }
   catch (error) { status(t(error.message === 'precision' ? 'precision' : 'error'),'error'); return false; }
   if (instructor) {
-    try { await saveInstructorDraft(instructor.id, data, serverDraftExists); serverDraftExists = true; status(t('savedServer')); return true; }
+    try { await saveInstructorDraft(instructor.id, data, serverDraftExists); serverDraftExists = true; await refreshReview(); status(t('savedServer')); return true; }
     catch { status(t('error'),'error'); return false; }
   }
   let stored = true;
@@ -187,7 +213,7 @@ app.addEventListener('click', async event => {
   const button = event.target.closest('[data-action]'); if (!button) return;
   const action = button.dataset.action;
   if (action === 'sign-out') {
-    try { await signOutInstructor(); instructor = null; serverDraftExists = false; draft = readLocal() || blank(); render(); }
+    try { await signOutInstructor(); instructor = null; serverDraftExists = false; review = null; applicationStatus = null; draft = readLocal() || blank(); render(); }
     catch { status(t('error'),'error'); }
     return;
   }
@@ -205,6 +231,7 @@ app.addEventListener('click', async event => {
     try {
       if (instructor) await submitInstructorDraft();
       else await request('/instructor/submit', {});
+      await refreshReview();
       status(t('submitted'));
     } catch (error) { status(t(error.message?.includes('DRAFT_INCOMPLETE') ? 'incomplete' : 'error'),'error'); }
     return;
@@ -229,6 +256,7 @@ if (instructorStore) {
     if (instructor) {
       const record = await loadInstructorDraft(instructor.id);
       serverDraftExists = !!record;
+      await refreshReview();
       draft = record ? { profile:record.data.profile, subjects:record.data.subjects.map(s => ({ ...s,
         specialties:s.specialties.join(', '), offerings:s.offerings.map(o => ({ ...o,
           price:o.priceMinor == null ? '' : String(o.priceMinor / 10 ** digits(o.currency)),

@@ -22,4 +22,7 @@ if (existsSync(learning)) {
 }
 await build({ entryPoints: [join(learning, 'instructor.mjs')], outfile: join(output, 'learn', 'instructor.mjs'),
   bundle: true, format: 'esm', target: 'es2022', minify: true });
+
+await build({ entryPoints: [join(learning, 'staff-review.mjs')], outfile: join(output, 'learn', 'staff-review.mjs'),
+  bundle: true, format: 'esm', target: 'es2022', minify: true });
 console.log(`Pages artifact ready: ${output}`);

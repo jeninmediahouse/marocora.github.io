@@ -6,5 +6,6 @@ export const config = Object.freeze({
   supabaseURL: 'https://zonojgzczpzmcfaekuml.supabase.co',
   supabasePublishableKey: 'sb_publishable_AnBLAdSdtxogZXXSu2i0YA_0ySzG-5U',
   instructorAuthOpen: true,
-  instructorSignupOpen: true
+  instructorSignupOpen: true,
+  staffReviewOpen: false
 });
