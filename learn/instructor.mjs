@@ -25,6 +25,7 @@ let instructor = null;
 let serverDraftExists = false;
 let review = null;
 let applicationStatus = null;
+let authVersion = 0;
 const digits = currency => { try { return new Intl.NumberFormat('en', { style:'currency', currency }).resolvedOptions().maximumFractionDigits; } catch { return 2; } };
 const list = value => String(value || '').split(',').map(s => s.trim()).filter(Boolean);
 const input = (field, label, value, { type='text', hint='', placeholder='', min, max } = {}) => `<label>${t(label)}<input data-field="${field}" type="${type}" value="${esc(value)}" ${placeholder ? `placeholder="${esc(t(placeholder))}"` : ''} ${min == null ? '' : `min="${min}"`} ${max == null ? '' : `max="${max}"`}></label>${hint ? `<p class="helper">${t(hint)}</p>` : ''}`;
@@ -122,14 +123,18 @@ function reviewStatusHTML() {
 async function refreshReview() {
   if (!instructor || !config.staffReviewOpen) return;
   const target = document.querySelector('#review-feedback');
+  const version = authVersion, userId = instructor.id;
   try {
-    const record = await loadInstructorDraft(instructor.id);
+    const record = await loadInstructorDraft(userId);
+    if (version !== authVersion || instructor?.id !== userId) return;
     applicationStatus = record?.status;
     const result = await instructorStore.rpc('learning_instructor_review_feedback');
+    if (version !== authVersion || instructor?.id !== userId) return;
     if (result.error) throw result.error;
     review = result.data;
     if (target) target.innerHTML = reviewStatusHTML();
   } catch {
+    if (version !== authVersion || instructor?.id !== userId) return;
     review = null;
     if (target) target.textContent = sharedCopy[locale].feedbackError;
   }
@@ -213,19 +218,34 @@ app.addEventListener('click', async event => {
 document.querySelector('#locale').onchange = event => { const fields=captureFields(app); collect(); locale = changeLocale(event.target.value,params); render();restoreFields(app,fields);translateHeader(locale); };
 render();
 if (instructorStore) {
+  // Clear private account content when another open tab signs out. Late reads
+  // must not restore a previous account's draft or review after that event.
+  instructorStore.auth.onAuthStateChange(event => {
+    if (event !== 'SIGNED_OUT') return;
+    authVersion++;
+    instructor = null; serverDraftExists = false; review = null;
+    applicationStatus = null; draft = blank(); render();
+  });
+  const version = authVersion;
   try {
-    instructor = await currentInstructor();
-    if (instructor) {
-      const record = await loadInstructorDraft(instructor.id);
-      serverDraftExists = !!record;
-      await refreshReview();
-      draft = record ? { profile:record.data.profile, subjects:record.data.subjects.map(s => ({ ...s,
-        specialties:s.specialties.join(', '), offerings:s.offerings.map(o => ({ ...o,
-          price:o.priceMinor == null ? '' : String(o.priceMinor / 10 ** digits(o.currency)),
-          levels:o.levels.join(', ') })) })) } : readLocal() || blank();
+    const signedIn = await currentInstructor();
+    if (version === authVersion) instructor = signedIn;
+    if (instructor && version === authVersion) {
+      const userId = instructor.id;
+      const record = await loadInstructorDraft(userId);
+      if (version === authVersion && instructor?.id === userId) {
+        serverDraftExists = !!record;
+        await refreshReview();
+        if (version === authVersion && instructor?.id === userId) {
+          draft = record ? { profile:record.data.profile, subjects:record.data.subjects.map(s => ({ ...s,
+            specialties:s.specialties.join(', '), offerings:s.offerings.map(o => ({ ...o,
+              price:o.priceMinor == null ? '' : String(o.priceMinor / 10 ** digits(o.currency)),
+              levels:o.levels.join(', ') })) })) } : readLocal() || blank();
+        }
+      }
     }
     render();
-  } catch { status(t('error'),'error'); }
+  } catch { if (version === authVersion) status(t('error'),'error'); }
 }
 if (config.apiBase) {
   try {
