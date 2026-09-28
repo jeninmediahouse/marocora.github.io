@@ -12,6 +12,7 @@ const copy = {
     preview: 'Profile builder preview: account creation and submissions open after secure sign-in and profile hosting are connected. Your saved draft stays on this device until then.',
     live: 'Your profile remains private until Marocora reviews and approves each subject. Saving a draft does not publish it.',
     existingOnly: 'Sign-in is available for invited instructors. Public account sign-up is not open yet.',
+    signupHelp: 'Create your instructor account or sign in with an email link. Verify your email, then save your private profile and submit it for review.',
     profile: 'Your public profile', displayName: 'Public display name', headline: 'Professional headline', bio: 'Introduce yourself and your teaching style',
     country: 'Country of residence', city: 'City or region (optional)', timezone: 'Your time zone', experience: 'Years of teaching experience',
     education: 'Education and credentials (optional)', native: 'Native language(s), if relevant', spoken: 'Other languages you speak (optional)',
@@ -29,6 +30,7 @@ const copy = {
     precision: 'The price has more decimal places than its currency allows.', noStorage: 'Browser storage is unavailable. Download your draft to keep a copy.',
     signIn: 'Sign in to continue', opening: 'Account sign-up and submissions are not open yet.',
     email: 'Email address', sendLink: 'Send sign-in link', linkSent: 'Check your email for a sign-in link.',
+    linkError: 'We could not send the sign-in link. Check your email address and try again in a minute.',
     signedIn: 'Signed in as', signOut: 'Sign out', signInFirst: 'Sign in before submitting your profile.',
     incomplete: 'Complete your profile, every subject, and every lesson offering before submitting.',
     exampleCategory: 'e.g. Music', exampleSubject: 'e.g. Piano', exampleQualification: 'Describe your training or experience in this subject.',
@@ -39,6 +41,7 @@ const copy = {
     preview: 'Aperçu du créateur de profil : la création de compte et l’envoi des candidatures ouvriront après la mise en place d’une connexion sécurisée et de l’hébergement des profils. Votre brouillon enregistré reste sur cet appareil.',
     live: 'Votre profil reste privé jusqu’à ce que Marocora examine et approuve chaque matière. Un brouillon enregistré n’est pas publié.',
     existingOnly: 'La connexion est disponible pour les professeurs invités. La création publique de compte n’est pas encore ouverte.',
+    signupHelp: 'Créez votre compte de professeur ou connectez-vous avec un lien envoyé par e-mail. Vérifiez votre adresse, puis enregistrez votre profil privé et envoyez-le pour examen.',
     profile: 'Votre profil public', displayName: 'Nom public', headline: 'Présentation professionnelle', bio: 'Présentez-vous et décrivez votre méthode pédagogique',
     country: 'Pays de résidence', city: 'Ville ou région (facultatif)', timezone: 'Votre fuseau horaire', experience: 'Années d’expérience pédagogique',
     education: 'Formation et diplômes (facultatif)', native: 'Langue(s) maternelle(s), si pertinent', spoken: 'Autres langues parlées (facultatif)',
@@ -56,6 +59,7 @@ const copy = {
     precision: 'Le prix comporte trop de décimales pour cette devise.', noStorage: 'Le stockage du navigateur est indisponible. Téléchargez votre brouillon pour en garder une copie.',
     signIn: 'Se connecter pour continuer', opening: 'La création de compte et l’envoi des candidatures ne sont pas encore ouverts.',
     email: 'Adresse e-mail', sendLink: 'Envoyer le lien de connexion', linkSent: 'Vérifiez votre messagerie pour le lien de connexion.',
+    linkError: 'Impossible d’envoyer le lien de connexion. Vérifiez votre adresse e-mail et réessayez dans une minute.',
     signedIn: 'Connecté avec', signOut: 'Se déconnecter', signInFirst: 'Connectez-vous avant d’envoyer votre profil.',
     incomplete: 'Complétez votre profil, chaque matière et chaque offre de cours avant de l’envoyer.',
     exampleCategory: 'p. ex. Musique', exampleSubject: 'p. ex. Piano', exampleQualification: 'Décrivez votre formation ou votre expérience dans cette matière.',
@@ -107,7 +111,7 @@ function render() {
   const auth = instructorStore ? (instructor
     ? `<div class="auth-panel"><span>${t('signedIn')} ${esc(instructor.email)}</span> <button type="button" class="tertiary" data-action="sign-out">${t('signOut')}</button></div>`
     : `<form id="auth-form" class="auth-panel"><label>${t('email')}<input name="email" type="email" autocomplete="email" required></label><button type="submit">${t('sendLink')}</button></form>`) : '';
-  app.innerHTML = `<h1>${t('title')}</h1><p class="lead">${t('intro')}</p><p class="notice">${instructorStore || config.apiBase ? t('live') : t('preview')}</p>${instructorStore && !config.instructorSignupOpen ? `<p class="helper">${t('existingOnly')}</p>` : ''}${auth}
+  app.innerHTML = `<h1>${t('title')}</h1><p class="lead">${t('intro')}</p><p class="notice">${instructorStore || config.apiBase ? t('live') : t('preview')}</p>${instructorStore && !instructor ? `<p class="helper">${t(config.instructorSignupOpen ? 'signupHelp' : 'existingOnly')}</p>` : ''}${auth}
     <form id="profile-form"><section class="panel"><h2>${t('profile')}</h2><div class="grid">
       ${input('displayName','displayName',p.displayName)}${input('headline','headline',p.headline)}
       ${area('bio','bio',p.bio)}${input('countryOfResidence','country',p.countryOfResidence)}${input('city','city',p.city)}
@@ -169,8 +173,12 @@ async function save() {
 app.addEventListener('submit', async event => {
   event.preventDefault();
   if (event.target.id === 'auth-form') {
+    const sendButton = event.target.querySelector('button');
+    if (sendButton.disabled) return;
+    sendButton.disabled = true;
     try { await sendInstructorLink(event.target.elements.email.value.trim()); status(t('linkSent')); }
-    catch { status(t('error'),'error'); }
+    catch { status(t('linkError'),'error'); }
+    finally { sendButton.disabled = false; }
     return;
   }
   await save();
