@@ -1,3 +1,4 @@
+import { resolveLocale,applyLocale,changeLocale,captureFields,restoreFields,translateHeader,sharedCopy } from './locale.mjs';
 import { publicationControls,publicPreviewHTML } from './publication-view.mjs';
 import { launchCopy } from './launch-copy.mjs';
 import { config } from './config.mjs';
@@ -5,8 +6,8 @@ import { instructorStore, currentInstructor, signOutInstructor } from './instruc
 import { reviewCopy, applicationHTML, escapeReview } from './review-view.mjs';
 const app = document.querySelector('#app');
 const params = new URLSearchParams(location.search);
-let locale = params.get('lang') === 'fr' ? 'fr' : 'en';
-let user = null, rows = [], busy = false;
+let locale = resolveLocale(location.search);
+let user = null, rows = [], publications=[], busy = false, access=false;
 const previews=new Map();
 const t = key => reviewCopy[locale][key];
 async function rpc(name, args) {
@@ -15,7 +16,7 @@ async function rpc(name, args) {
   return data;
 }
 function shell(message = '') {
-  document.documentElement.lang = locale;
+  applyLocale(locale);translateHeader(locale);
   document.title = `${t('title')} | Marocora`;
   document.querySelector('#locale').value = locale;
   const link = document.querySelector('#apply-link'); link.textContent = t('apply'); link.href = `teacher-apply.html?lang=${locale}`;
@@ -28,13 +29,17 @@ async function load() {
     if (!config.staffReviewOpen) { shell(t('setup')); return; }
     user = await currentInstructor();
     if (!user) { shell(t('signin')); return; }
-    if (!await rpc('learning_staff_review_access')) { shell(t('denied')); return; }
+    access=await rpc('learning_staff_review_access');
+    if (!access) { shell(t('denied')); return; }
     rows = await rpc('learning_staff_review_queue');previews.clear();
-    const publications=config.learningLaunchOpen?await rpc('learning_staff_publications'):[];
+    publications=config.learningLaunchOpen?await rpc('learning_staff_publications'):[];
+    renderQueue();
+  } catch { rows = []; shell(t('error')); }
+}
+function renderQueue(){
     shell();
     app.insertAdjacentHTML('beforeend', `<div class="actions"><button data-action="refresh">${t('refresh')}</button><button class="secondary" data-action="out">${t('out')}</button></div>${rows.length ? rows.map(r => applicationHTML(r,locale,user.id)+(config.learningLaunchOpen?publicationControls(r,locale,user.id):'')).join('') : `<p>${t('empty')}</p>`}`);
-      if(publications.length)app.insertAdjacentHTML('beforeend',`<section class="panel"><h2>${launchCopy[locale].publication}</h2>${publications.map(p=>`<div data-publication="${escapeReview(p.user_id)}"><p>${escapeReview(p.displayName)} · ${escapeReview(p.revision)} · ${p.visible?(locale==='fr'?'Publié':'Published'):(locale==='fr'?'Masqué':'Hidden')}</p><button class="secondary" data-action="unpublish">${launchCopy[locale].unpublish}</button><p role="status"></p></div>`).join('')}</section>`);
-  } catch { rows = []; shell(t('error')); }
+      if(publications.length)app.insertAdjacentHTML('beforeend',`<section class="panel"><h2>${launchCopy[locale].publication}</h2>${publications.map(p=>`<div data-publication="${escapeReview(p.user_id)}"><p>${escapeReview(p.displayName)} · ${escapeReview(p.revision)} · ${sharedCopy[locale][p.visible?'published':'hidden']}</p><button class="secondary" data-action="unpublish">${launchCopy[locale].unpublish}</button><p role="status"></p></div>`).join('')}</section>`);
 }
 app.addEventListener('submit', async event => {
   event.preventDefault();
@@ -83,12 +88,12 @@ app.addEventListener('click', async event => {
 });
 document.querySelector('#locale').onchange = async event => {
   if (busy) { event.target.value = locale; return; }
-  locale = event.target.value; params.set('lang',locale); history.replaceState(null,'',`?${params}`); await load();
+  const forms=[...app.querySelectorAll('form[data-applicant]')].map(form=>({id:form.dataset.applicant,state:captureFields(form)}));locale=changeLocale(event.target.value,params);if(access && user){previews.clear();renderQueue();for(const item of forms){const form=[...app.querySelectorAll('form[data-applicant]')].find(f=>f.dataset.applicant===item.id);if(form)restoreFields(form,item.state);}}else await load();translateHeader(locale);
 };
 await load();
 
 if (config.staffReviewOpen && instructorStore) {
   instructorStore.auth.onAuthStateChange(event => {
-    if (event === 'SIGNED_OUT') { rows = []; user = null; shell(t('signin')); }
+    if (event === 'SIGNED_OUT') { rows = []; user = null; access=false;publications=[]; shell(t('signin')); }
   });
 }

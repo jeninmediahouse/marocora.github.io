@@ -31,7 +31,7 @@ export class Marketplace {
  // Call only after a sign-in adapter has verified the provider subject.
  provisionInstructorAccount(authSubject, locale='en') {
   if(typeof authSubject!=='string' || !authSubject.trim() || authSubject.length>255) fail('INVALID_AUTH_SUBJECT');
-  if(!['en','fr'].includes(locale)) fail('INVALID_LOCALE');
+  if(!['en','ar','fr','es'].includes(locale)) fail('INVALID_LOCALE');
   return this.tx(()=> {
    const existing=this.one('SELECT id,role FROM accounts WHERE auth_subject=?',authSubject);
    if(existing) {
@@ -139,7 +139,7 @@ export class Marketplace {
    // Free introduction is retained; eligibility must be explicitly configured server-side.
    if(q.total===0 && !this.fees.freeIntroEligibility?.(studentId,q.offering,this)) fail('INTRO_ELIGIBILITY_NOT_CONFIGURED',503);
    const id=randomUUID(), now=this.clock();
-   this.run(`INSERT INTO bookings(id,student_id,instructor_id,offering_id,slot_id,status,starts_at,ends_at,expires_at,goal,timezone,locale,quote,policy_snapshot,offering_snapshot,idempotency_key,created_at) VALUES(?,?,?,?,?,'held',?,?,?,?,?,?,?,?,?,?,?)`,id,studentId,q.offering.instructorId,input.offeringId,input.slotId,Date.parse(q.slot.startsAt),Date.parse(q.slot.startsAt)+q.offering.durationMinutes*60000,now+this.holdMinutes*60000,goal,input.timezone,input.locale==='fr'?'fr':'en',json(q),json(q.policy),json(q.offering),input.idempotencyKey,now);
+   this.run(`INSERT INTO bookings(id,student_id,instructor_id,offering_id,slot_id,status,starts_at,ends_at,expires_at,goal,timezone,locale,quote,policy_snapshot,offering_snapshot,idempotency_key,created_at) VALUES(?,?,?,?,?,'held',?,?,?,?,?,?,?,?,?,?,?)`,id,studentId,q.offering.instructorId,input.offeringId,input.slotId,Date.parse(q.slot.startsAt),Date.parse(q.slot.startsAt)+q.offering.durationMinutes*60000,now+this.holdMinutes*60000,goal,input.timezone,['en','ar','fr','es'].includes(input.locale)?input.locale:'en',json(q),json(q.policy),json(q.offering),input.idempotencyKey,now);
    this.event(id,'reservation_created',{},studentId);
    return this.one('SELECT * FROM bookings WHERE id=?',id);
   });

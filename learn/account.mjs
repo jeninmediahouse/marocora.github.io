@@ -1,3 +1,4 @@
+import { resolveLocale,applyLocale,changeLocale,captureFields,restoreFields,translateHeader,sharedCopy } from './locale.mjs';
 import { config } from './config.mjs';
 import { currentUser,signOut,onSignOut,sendStudentLink,learningRPC,studentDashboard,publicCatalog,publicSlots } from './learning-store.mjs';
 import { taxonomy,localize,money,formatSlot } from './catalog.mjs';
@@ -5,13 +6,12 @@ import { escapeReview as e } from './review-view.mjs';
 import { launchCopy } from './launch-copy.mjs';
 import { requestHTML,readPendingSelection } from './account-view.mjs';
 const params=new URLSearchParams(location.search);
-let storedLocale;try{storedLocale=localStorage.getItem('marocora.student.locale');}catch{}
-let locale=params.get('lang')==='fr'||(!params.has('lang')&&storedLocale==='fr')?'fr':'en';
+let locale=resolveLocale(location.search);
 let user=null,dashboard=null,catalog=null,selection=null,busy=false,profileDirty=false;
 const app=document.querySelector('#app'),t=k=>launchCopy[locale][k];
 function status(message,error=false){const s=document.querySelector('#status');if(s){s.textContent=message;s.className=error?'error':'status';}}
 function render(message='') {
- document.documentElement.lang=locale;document.title=`${t('account')} | Marocora`;document.querySelector('#locale').value=locale;
+ applyLocale(locale);translateHeader(locale);document.title=`${t('account')} | Marocora`;document.querySelector('#locale').value=locale;
  for(const [id,key] of [['browse','browse'],['teach','teach']]){document.querySelector('#'+id).textContent=t(key);document.querySelector('#'+id).href=id==='browse'?`./?lang=${locale}`:`../teacher-apply.html?lang=${locale}`;}
  app.innerHTML=`<h1>${t('account')}</h1><p id="status" role="status">${e(message)}</p>`;
  if(!config.learningLaunchOpen){status(t('setup'));return;}
@@ -20,7 +20,7 @@ function render(message='') {
  app.insertAdjacentHTML('beforeend',`<div class="actions"><p>${t('signed')} ${e(user.email)}</p><button class="secondary" data-action="out">${t('out')}</button></div><section class="panel"><h2>${t('account')}</h2><form id="student-form"><label>${t('name')}<input name="display_name" value="${e(p.display_name||'')}" maxlength="120" autocomplete="name" required></label><label>${t('timezone')}<input name="timezone" value="${e(zone)}" required></label><label>${t('goals')}<textarea name="goals" maxlength="2000" dir="auto">${e(p.goals||'')}</textarea></label><fieldset><legend>${t('subjects')}</legend><div class="subject-choices">${taxonomy.subjects.map(s=>`<label><input type="checkbox" name="subjects" value="${s.id}" ${(p.subjects||[]).includes(s.id)?'checked':''}>${e(localize(s.name,locale))}</label>`).join('')}</div></fieldset><p class="muted">${t('privacy')}</p><button>${t('save')}</button></form></section><section id="pending-selection"></section><section><h2>${t('favorites')}</h2><div class="pills">${(dashboard?.favorites||[]).map(id=>catalog?.instructors.find(i=>i.id===id)).filter(Boolean).map(i=>`<a class="pill" href="./?instructor=${e(i.id)}&amp;lang=${locale}" dir="auto">${e(i.displayName)}</a>`).join('')||`<p>${t('noFavorites')}</p>`}</div></section><section><h2>${t('requests')}</h2>${(dashboard?.requests||[]).map(r=>requestHTML(r,locale)).join('')||`<p>${t('emptyRequests')}</p>`}</section>`);
  if(selection) {
   const {pending,teacher,offer,slot}=selection;
-  document.querySelector('#pending-selection').innerHTML=`<div class="panel"><h2>${t('reviewSelection')}</h2><p dir="auto">${e(teacher.displayName)} · ${e(localize(offer.title,locale))}</p><p>${e(formatSlot(slot,pending.timezone,locale))} (${e(pending.timezone)})</p><p>${e(offer.durationMinutes)} min · ${e(money(offer.priceMinor,offer.currency,locale))}</p><p dir="auto">${e(pending.goal)}</p><p class="notice">${t('requestNote')}</p>${dashboard?.profile?`<button data-action="request">${t('continueRequest')}</button>`:`<p>${t('profileRequired')}</p>`}</div>`;
+  document.querySelector('#pending-selection').innerHTML=`<div class="panel"><h2>${t('reviewSelection')}</h2><p dir="auto">${e(teacher.displayName)} · ${e(localize(offer.title,locale))}</p><p>${e(formatSlot(slot,pending.timezone,locale))} (${e(pending.timezone)})</p><p>${e(offer.durationMinutes)} ${sharedCopy[locale].minutes} · ${e(money(offer.priceMinor,offer.currency,locale))}</p><p dir="auto">${e(pending.goal)}</p><p class="notice">${t('requestNote')}</p>${dashboard?.profile?`<button data-action="request">${t('continueRequest')}</button>`:`<p>${t('profileRequired')}</p>`}</div>`;
  }
 }
 async function load(message='') {
@@ -46,7 +46,7 @@ app.addEventListener('click',async event=>{
  }catch(error){status(t(error.message?.includes('REQUEST_LIMIT')?'requestLimit':'error'),true);}finally{busy=false;b.disabled=false;}
 });
 window.addEventListener('beforeunload',event=>{if(profileDirty){event.preventDefault();event.returnValue='';}});
-document.querySelector('#locale').onchange=event=>{params.set('lang',event.target.value);location.search=params.toString();};
+document.querySelector('#locale').onchange=event=>{if(busy){event.target.value=locale;return;}const fields=captureFields(app);locale=changeLocale(event.target.value,params);render();restoreFields(app,fields);translateHeader(locale);};
 render(t('loading'));
 if(config.learningLaunchOpen){try{await load();}catch{render(t('error'));}}
 

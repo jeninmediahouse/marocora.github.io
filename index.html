@@ -566,7 +566,7 @@ nav a {
     
  }   
     </style>
-</head>
+<style>header nav{display:flex;align-items:center;gap:22px;flex-wrap:wrap}header nav a{margin:0}.hero-accent{white-space:normal}.hero-content{min-width:0}.network-category{min-width:0;overflow-wrap:anywhere}.site-language{display:flex;align-items:center;gap:8px;font-size:14px}.site-language select{font:inherit;padding:8px;border-radius:6px;min-height:40px;background:white;color:#17352a}html[dir=rtl] .hero-content{direction:rtl}html[dir=rtl] .hero h1{letter-spacing:normal}html[dir=rtl] .contact-info a{direction:ltr;unicode-bidi:isolate}@media(max-width:800px){.hero-content{width:100%;max-width:650px}.hero{min-height:0;padding:56px 8%}.hero h1{font-size:clamp(30px,7vw,44px)}.hero p{font-size:18px}.hero-buttons{flex-wrap:wrap}.network-categories,.service-grid{grid-template-columns:minmax(0,1fr)}.contact-layout,.about-layout{flex-direction:column;gap:28px}.network-join{padding:28px 20px}.language-list{flex-wrap:wrap}}@media(max-width:600px){header{flex-wrap:wrap;gap:14px}header nav{justify-content:center;gap:12px}.site-language{width:100%;justify-content:center}}</style><script type="module" src="home-language.mjs?v=20260928-languages1"></script></head>
 
 <body>
 
@@ -581,7 +581,7 @@ nav a {
         <a href="#languages">Languages</a>
 
     <a href="contact.html">Contact</a>
-    </nav>
+    <label class="site-language"><span id="language-label">Language</span><select id="locale" aria-label="Language"><option value="en">English</option><option value="ar">العربية</option><option value="fr">Français</option><option value="es">Español</option></select></label></nav>
 </header>
 
 <section class="hero" id="home">
@@ -650,7 +650,7 @@ nav a {
         <strong>French</strong>
         <span>Français</span>
     </div>
-</div> 
+<div class="language-item"><strong>Spanish</strong><span>Español</span></div></div>
 </section>
 <section class="network" id="network">
 

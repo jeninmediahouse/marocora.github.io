@@ -1,6 +1,7 @@
 // Public catalog only. No identity evidence, student data or provider secrets here.
 import { taxonomy } from './taxonomy.mjs';
 export { taxonomy } from './taxonomy.mjs';
+const translations = value => typeof value === 'string' ? [value] : Object.values(value || {});
 export const localize = (value, locale = 'en') => typeof value === 'string' ? value : value?.[locale] || value?.en || '';
 
 export function publishedOfferings(catalog, instructor) {
@@ -63,7 +64,7 @@ export function searchCatalog(catalog, filters = {}, locale = 'en') {
       const relation = instructor.subjects.find(s => s.subjectId === o.subjectId);
       const subject = catalog.subjects.find(s => s.id === o.subjectId);
       const category = catalog.categories.find(c => c.id === subject?.categoryId);
-      const words = [instructor.displayName, localize(subject?.name, locale), ...(subject?.aliases || []), localize(category.name, locale), localize(o.title, locale), ...o.specialtyIds.map(id => localize(catalog.specialties.find(s => s.id === id)?.name, locale))].join(' ').toLocaleLowerCase(locale);
+      const words = [instructor.displayName, ...translations(subject?.name), ...(subject?.aliases || []), ...translations(category.name), ...translations(o.title), ...o.specialtyIds.flatMap(id => translations(catalog.specialties.find(s => s.id === id)?.name))].join(' ').toLocaleLowerCase(locale);
       return (!query || words.includes(query)) && (!filters.subject || o.subjectId === filters.subject)
         && (!filters.specialty || o.specialtyIds.includes(filters.specialty))
         && (!filters.level || o.levels.includes(filters.level))

@@ -36,6 +36,8 @@ const pid=await rpc(staff,'publish_learning_instructor',[teacher,2,[0,1]]);
 let catalog=await anon('learning_public_catalog');assert.equal(catalog.instructors.length,1);assert.equal(catalog.offerings.length,2);assert.deepEqual(catalog.instructors[0].subjects.map(s=>s.subjectId),['english','algebra']);assert.ok(!JSON.stringify(catalog).includes(teacher));assert.ok(!JSON.stringify(catalog).includes('NEVER_PUBLIC'));assert.equal(catalog.offerings[0].bookingEnabled,false);assert.equal(catalog.offerings[0].specialtyIds[0],'conversation');assert.deepEqual(catalog.offerings[0].levels,['beginner','high-school']);
 assert.equal(await rpc(staff,'publish_learning_instructor',[teacher,2,[0,1]]),pid);
 await rpc(student,'learning_save_student_profile',['Fixture Student','Europe/Paris','fr','Fixture goal',['english','geometry']]);
+for(const locale of ['ar','es']){await rpc(student,'learning_save_student_profile',['Fixture Student','Europe/Paris',locale,'Fixture goal',['english','geometry']]);assert.equal((await rpc(student,'learning_student_dashboard')).profile.locale,locale);checks++;}
+await denied(student,'learning_save_student_profile',['Fixture Student','Europe/Paris','de','Fixture goal',[]],'INVALID_STUDENT_PROFILE');
 await denied(other,'learning_save_student_profile',['Name','Bad/Zone','en','',[]],'INVALID_STUDENT_PROFILE');
 assert.equal((await rpc(other,'learning_student_dashboard')).profile,null);
 await rpc(student,'learning_set_favorite',[pid,true]);assert.equal((await rpc(student,'learning_student_dashboard')).favorites[0],pid);assert.equal((await rpc(other,'learning_student_dashboard')).favorites.length,0);

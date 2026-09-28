@@ -14,7 +14,7 @@ export async function sendStudentLink(email,locale='en') {
  // This exact callback must be allowlisted in Supabase before activation.
  const {error}=await instructorStore.auth.signInWithOtp({email,options:{emailRedirectTo:`${location.origin}/learn/account.html`,shouldCreateUser:true}});
  if(error) throw error;
- try { localStorage.setItem('marocora.student.locale',locale); } catch {}
+ try { localStorage.setItem('marocora.locale',locale); } catch {}
 }
 export async function publicCatalog() {
  const data=await learningRPC('learning_public_catalog');

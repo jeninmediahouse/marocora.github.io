@@ -8,38 +8,38 @@ create table if not exists public.learning_launch_subjects (
 alter table public.learning_launch_subjects enable row level security;
 revoke all on public.learning_launch_subjects from public,anon,authenticated;
 insert into public.learning_launch_subjects(id,category_id,name_en,name_fr,aliases,category_aliases) values
-('english','languages','English','Anglais',array['english','english','anglais','anglais'],array['languages','languages','langues']),
-('arabic','languages','Arabic','Arabe',array['arabic','arabic','arabe','arabe'],array['languages','languages','langues']),
-('darija','languages','Moroccan Darija','Darija marocaine',array['darija','moroccan darija','darija marocaine','darija','moroccan arabic','arabe marocain'],array['languages','languages','langues']),
-('french','languages','French','Français',array['french','french','français','francais'],array['languages','languages','langues']),
-('spanish','languages','Spanish','Espagnol',array['spanish','spanish','espagnol','espagnol'],array['languages','languages','langues']),
-('arithmetic','mathematics','Arithmetic','Arithmétique',array['arithmetic','arithmetic','arithmétique','arithmetique','basic math'],array['mathematics','mathematics','mathématiques']),
-('pre-algebra','mathematics','Pre-algebra','Pré-algèbre',array['pre-algebra','pre-algebra','pré-algèbre','prealgebra'],array['mathematics','mathematics','mathématiques']),
-('algebra','mathematics','Algebra','Algèbre',array['algebra','algebra','algèbre','algebre'],array['mathematics','mathematics','mathématiques']),
-('geometry','mathematics','Geometry','Géométrie',array['geometry','geometry','géométrie','geometrie','geomatry'],array['mathematics','mathematics','mathématiques']),
-('trigonometry','mathematics','Trigonometry','Trigonométrie',array['trigonometry','trigonometry','trigonométrie','trigonometrie'],array['mathematics','mathematics','mathématiques']),
-('precalculus','mathematics','Precalculus','Pré-calcul',array['precalculus','precalculus','pré-calcul','pre-calculus'],array['mathematics','mathematics','mathématiques']),
-('calculus','mathematics','Calculus','Calcul différentiel et intégral',array['calculus','calculus','calcul différentiel et intégral','calculus'],array['mathematics','mathematics','mathématiques']),
-('statistics','mathematics','Statistics','Statistiques',array['statistics','statistics','statistiques','statistiques'],array['mathematics','mathematics','mathématiques']),
-('probability','mathematics','Probability','Probabilités',array['probability','probability','probabilités','probabilites'],array['mathematics','mathematics','mathématiques']),
-('linear-algebra','mathematics','Linear algebra','Algèbre linéaire',array['linear-algebra','linear algebra','algèbre linéaire','linear algebra'],array['mathematics','mathematics','mathématiques']),
-('discrete-mathematics','mathematics','Discrete mathematics','Mathématiques discrètes',array['discrete-mathematics','discrete mathematics','mathématiques discrètes','discrete math'],array['mathematics','mathematics','mathématiques']),
-('physics','science','Physics','Physique',array['physics','physics','physique','physique'],array['science','science','sciences'])
+('english','languages','English','Anglais',array['english','english','anglais','anglais','الإنجليزية','inglés'],array['languages','languages','langues','اللغات','idiomas']),
+('arabic','languages','Arabic','Arabe',array['arabic','arabic','arabe','arabe','العربية','árabe'],array['languages','languages','langues','اللغات','idiomas']),
+('darija','languages','Moroccan Darija','Darija marocaine',array['darija','moroccan darija','darija marocaine','darija','moroccan arabic','arabe marocain','الدارجة المغربية','darija marroquí'],array['languages','languages','langues','اللغات','idiomas']),
+('french','languages','French','Français',array['french','french','français','francais','الفرنسية','francés'],array['languages','languages','langues','اللغات','idiomas']),
+('spanish','languages','Spanish','Espagnol',array['spanish','spanish','espagnol','espagnol','الإسبانية','español'],array['languages','languages','langues','اللغات','idiomas']),
+('arithmetic','mathematics','Arithmetic','Arithmétique',array['arithmetic','arithmetic','arithmétique','arithmetique','basic math','الحساب','aritmética'],array['mathematics','mathematics','mathématiques','الرياضيات','matemáticas']),
+('pre-algebra','mathematics','Pre-algebra','Pré-algèbre',array['pre-algebra','pre-algebra','pré-algèbre','prealgebra','تمهيد الجبر','preálgebra'],array['mathematics','mathematics','mathématiques','الرياضيات','matemáticas']),
+('algebra','mathematics','Algebra','Algèbre',array['algebra','algebra','algèbre','algebre','الجبر','álgebra'],array['mathematics','mathematics','mathématiques','الرياضيات','matemáticas']),
+('geometry','mathematics','Geometry','Géométrie',array['geometry','geometry','géométrie','geometrie','geomatry','الهندسة','geometría'],array['mathematics','mathematics','mathématiques','الرياضيات','matemáticas']),
+('trigonometry','mathematics','Trigonometry','Trigonométrie',array['trigonometry','trigonometry','trigonométrie','trigonometrie','حساب المثلثات','trigonometría'],array['mathematics','mathematics','mathématiques','الرياضيات','matemáticas']),
+('precalculus','mathematics','Precalculus','Pré-calcul',array['precalculus','precalculus','pré-calcul','pre-calculus','تمهيد التفاضل والتكامل','precálculo'],array['mathematics','mathematics','mathématiques','الرياضيات','matemáticas']),
+('calculus','mathematics','Calculus','Calcul différentiel et intégral',array['calculus','calculus','calcul différentiel et intégral','calculus','التفاضل والتكامل','cálculo'],array['mathematics','mathematics','mathématiques','الرياضيات','matemáticas']),
+('statistics','mathematics','Statistics','Statistiques',array['statistics','statistics','statistiques','statistiques','الإحصاء','estadística'],array['mathematics','mathematics','mathématiques','الرياضيات','matemáticas']),
+('probability','mathematics','Probability','Probabilités',array['probability','probability','probabilités','probabilites','الاحتمالات','probabilidad'],array['mathematics','mathematics','mathématiques','الرياضيات','matemáticas']),
+('linear-algebra','mathematics','Linear algebra','Algèbre linéaire',array['linear-algebra','linear algebra','algèbre linéaire','linear algebra','الجبر الخطي','álgebra lineal'],array['mathematics','mathematics','mathématiques','الرياضيات','matemáticas']),
+('discrete-mathematics','mathematics','Discrete mathematics','Mathématiques discrètes',array['discrete-mathematics','discrete mathematics','mathématiques discrètes','discrete math','الرياضيات المتقطعة','matemáticas discretas'],array['mathematics','mathematics','mathématiques','الرياضيات','matemáticas']),
+('physics','science','Physics','Physique',array['physics','physics','physique','physique','الفيزياء','física'],array['science','science','sciences','العلوم','ciencias'])
 on conflict(id) do update set category_id=excluded.category_id,name_en=excluded.name_en,name_fr=excluded.name_fr,aliases=excluded.aliases,category_aliases=excluded.category_aliases;
 create table if not exists public.learning_launch_specialties(id text primary key,subject_ids text[] not null,aliases text[] not null);
 alter table public.learning_launch_specialties enable row level security;
 revoke all on public.learning_launch_specialties from public,anon,authenticated;
 insert into public.learning_launch_specialties(id,subject_ids,aliases) values
-('conversation',array['english','arabic','darija','french','spanish'],array['conversation','conversation','conversation']),
-('beginners',array['english','arabic','darija','french','spanish'],array['beginners','beginners','débutants']),
-('travel',array['english','arabic','darija','french','spanish'],array['travel','travel','voyage']),
-('expats',array['darija'],array['expats','for expats','pour les expatriés']),
-('business',array['english','arabic','french','spanish'],array['business','business language','langue professionnelle']),
-('mechanics',array['physics'],array['mechanics','mechanics','mécanique']),
-('electricity',array['physics'],array['electricity','electricity and magnetism','électricité et magnétisme']),
-('waves',array['physics'],array['waves','waves and optics','ondes et optique']),
-('thermodynamics',array['physics'],array['thermodynamics','thermodynamics','thermodynamique']),
-('modern-physics',array['physics'],array['modern-physics','modern physics','physique moderne'])
+('conversation',array['english','arabic','darija','french','spanish'],array['conversation','conversation','conversation','المحادثة','conversación']),
+('beginners',array['english','arabic','darija','french','spanish'],array['beginners','beginners','débutants','المبتدئون','principiantes']),
+('travel',array['english','arabic','darija','french','spanish'],array['travel','travel','voyage','السفر','viajes']),
+('expats',array['darija'],array['expats','for expats','pour les expatriés','للمقيمين الأجانب','para expatriados']),
+('business',array['english','arabic','french','spanish'],array['business','business language','langue professionnelle','لغة الأعمال','idioma para negocios']),
+('mechanics',array['physics'],array['mechanics','mechanics','mécanique','الميكانيكا','mecánica']),
+('electricity',array['physics'],array['electricity','electricity and magnetism','électricité et magnétisme','الكهرباء والمغناطيسية','electricidad y magnetismo']),
+('waves',array['physics'],array['waves','waves and optics','ondes et optique','الموجات والبصريات','ondas y óptica']),
+('thermodynamics',array['physics'],array['thermodynamics','thermodynamics','thermodynamique','الديناميكا الحرارية','termodinámica']),
+('modern-physics',array['physics'],array['modern-physics','modern physics','physique moderne','الفيزياء الحديثة','física moderna'])
 on conflict(id) do update set subject_ids=excluded.subject_ids,aliases=excluded.aliases;
 create table if not exists public.learning_country_codes(id text primary key);
 alter table public.learning_country_codes enable row level security;
@@ -65,7 +65,7 @@ revoke all on public.learning_publication_events from public,anon,authenticated;
 create table if not exists public.learning_student_profiles (
  user_id uuid primary key references auth.users(id) on delete cascade,
  display_name text not null check(length(display_name) between 1 and 120),
- timezone text not null, locale text not null check(locale in ('en','fr')),
+ timezone text not null, locale text not null check(locale in ('en','ar','fr','es')),
  goals text not null default '' check(length(goals)<=2000),
  subjects text[] not null default '{}', updated_at timestamptz not null default now()
 );
@@ -189,7 +189,7 @@ begin
     'subjectId',t.id,'title',o->>'title','durationMinutes',(o->>'durationMinutes')::integer,
     'lessonCount',coalesce(o->>'lessonCount','1')::integer,'priceMinor',(o->>'priceMinor')::bigint,
     'currency',o->>'currency','deliveryMode','online','kind',case when coalesce(o->>'lessonCount','1')::integer>1 then 'package' else 'lesson' end,
-    'levels',(select coalesce(jsonb_agg(case lower(btrim(value)) when 'beginner' then 'beginner' when 'débutant' then 'beginner' when 'debutant' then 'beginner' when 'intermediate' then 'intermediate' when 'intermédiaire' then 'intermediate' when 'intermediaire' then 'intermediate' when 'advanced' then 'advanced' when 'avancé' then 'advanced' when 'avance' then 'advanced' when 'primary-school' then 'primary-school' when 'primary school' then 'primary-school' when 'elementary school' then 'primary-school' when 'primaire' then 'primary-school' when 'middle-school' then 'middle-school' when 'middle school' then 'middle-school' when 'collège' then 'middle-school' when 'high-school' then 'high-school' when 'high school' then 'high-school' when 'lycée' then 'high-school' when 'lycee' then 'high-school' when 'university' then 'university' when 'université' then 'university' when 'universite' then 'university' when 'adult' then 'adult' when 'adults' then 'adult' when 'adulte' then 'adult' when 'adultes' then 'adult' else value end),'[]') from jsonb_array_elements_text(coalesce(o->'levels','[]'))),'specialtyIds',spids,'active',true,'bookingEnabled',false));
+    'levels',(select coalesce(jsonb_agg(case lower(btrim(value)) when 'beginner' then 'beginner' when 'débutant' then 'beginner' when 'debutant' then 'beginner' when 'intermediate' then 'intermediate' when 'intermédiaire' then 'intermediate' when 'intermediaire' then 'intermediate' when 'advanced' then 'advanced' when 'avancé' then 'advanced' when 'avance' then 'advanced' when 'primary-school' then 'primary-school' when 'primary school' then 'primary-school' when 'elementary school' then 'primary-school' when 'primaire' then 'primary-school' when 'middle-school' then 'middle-school' when 'middle school' then 'middle-school' when 'collège' then 'middle-school' when 'high-school' then 'high-school' when 'high school' then 'high-school' when 'lycée' then 'high-school' when 'lycee' then 'high-school' when 'university' then 'university' when 'université' then 'university' when 'universite' then 'university' when 'adult' then 'adult' when 'adults' then 'adult' when 'adulte' then 'adult' when 'adultes' then 'adult' when 'مبتدئ' then 'beginner' when 'principiante' then 'beginner' when 'متوسط' then 'intermediate' when 'intermedio' then 'intermediate' when 'متقدم' then 'advanced' when 'avanzado' then 'advanced' when 'المرحلة الابتدائية' then 'primary-school' when 'primaria' then 'primary-school' when 'المرحلة الإعدادية' then 'middle-school' when 'secundaria inicial' then 'middle-school' when 'المرحلة الثانوية' then 'high-school' when 'bachillerato' then 'high-school' when 'الجامعة' then 'university' when 'universidad' then 'university' when 'الكبار' then 'adult' when 'adultos' then 'adult' else value end),'[]') from jsonb_array_elements_text(coalesce(o->'levels','[]'))),'specialtyIds',spids,'active',true,'bookingEnabled',false));
    k:=k+1;
   end loop;
  end loop;
@@ -259,7 +259,7 @@ begin
  if auth.uid() is null then raise exception 'AUTH_REQUIRED'; end if;
  if display_name is null or length(btrim(display_name)) not between 1 and 120
  or timezone is null or not exists(select 1 from pg_catalog.pg_timezone_names where name=timezone)
- or locale is null or locale not in ('en','fr') or goals is null or length(goals)>2000
+ or locale is null or locale not in ('en','ar','fr','es') or goals is null or length(goals)>2000
  or subjects is null or cardinality(subjects)>17
  or exists(select 1 from unnest(subjects) s where s is null or not exists(select 1 from public.learning_launch_subjects t where t.id=s)) then raise exception 'INVALID_STUDENT_PROFILE'; end if;
  insert into public.learning_student_profiles(user_id,display_name,timezone,locale,goals,subjects)

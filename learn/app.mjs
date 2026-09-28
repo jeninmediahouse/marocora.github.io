@@ -1,3 +1,4 @@
+import { resolveLocale,applyLocale,changeLocale,captureFields,restoreFields,translateHeader,sharedCopy } from './locale.mjs';
 import { currentUser,onSignOut,learningRPC,studentDashboard,publicCatalog,publicSlots } from './learning-store.mjs';
 import { launchCopy } from './launch-copy.mjs';
 import { fromLegacy, localize, publishedOfferings, publishedSubjects, searchCatalog, suggestions, money, formatSlot } from './catalog.mjs';
@@ -6,7 +7,7 @@ import { config } from './config.mjs';
 import { api } from './api.mjs';
 const params = new URLSearchParams(location.search);
 if([...params.keys()].some(k=>k!=='lang'))document.querySelector('meta[name=robots]').content='noindex,follow';
-let locale = params.get('lang') === 'fr' ? 'fr' : 'en';
+let locale = resolveLocale(location.search);
 let catalog = fromLegacy(typeof marocoraTeachers === 'undefined' ? [] : marocoraTeachers);
 const app = document.querySelector('#app');
 const t = key => strings[locale][key] || launchCopy[locale][key] || key;
@@ -22,7 +23,7 @@ try { formatSlot({ startsAt: Date.now() }, timezone); } catch { timezone = 'UTC'
 const country = code => code ? new Intl.DisplayNames([locale], { type: 'region' }).of(code) : t('undisclosed');
 const subjectName = id => l(catalog.subjects.find(s => s.id === id)?.name) || id;
 const languageSubjects = instructor => publishedSubjects(catalog,instructor).filter(({ subject }) => subject?.categoryId === 'languages');
-const languageName = id => ({ en: { darija:'Moroccan Darija', arabic:'Arabic', english:'English', french:'French' }, fr:{ darija:'Darija marocaine', arabic:'Arabe', english:'Anglais', french:'Français' } }[locale][id] || subjectName(id));
+const languageName = subjectName;
 const option = (value, text, selected) => `<option value="${e(value)}" ${value === selected ? 'selected' : ''}>${e(text)}</option>`;
 const select = (id, label, values, selected = '') => `<label>${e(label)}<select id="${id}">${option('', t('all'), selected)}${values.map(([v,n]) => option(v,n,selected)).join('')}</select></label>`;
 const row = (label, value) => `<div><dt>${e(label)}</dt><dd>${e(value)}</dd></div>`;
@@ -31,7 +32,7 @@ const specialtyNames = offering => (offering.specialtyIds || []).map(id => l(cat
 const verifiedLabels = instructor => (instructor.verifications || []).filter(v => v.status === 'verified').map(v => l(v.label)).filter(Boolean);
 const videoLink = instructor => instructor.introductionVideo && safeURL(instructor.introductionVideo) ? `<a class="button secondary" href="${e(safeURL(instructor.introductionVideo))}" target="_blank" rel="noopener noreferrer">${t('previewVideo')}</a>` : '';
 function heading() {
- document.documentElement.lang = locale; document.documentElement.dir = 'ltr';
+ applyLocale(locale);translateHeader(locale);
  document.querySelector('#brand').textContent = t('brand'); document.querySelector('#brand').href = url({});
  document.querySelector('#home').textContent = t('home'); document.querySelector('#browse').textContent = t('browse'); document.querySelector('#browse').href = url({});
  document.querySelector('#locale').value = locale; document.title = t('brand');
@@ -49,10 +50,11 @@ function card({ instructor:i, offerings }) {
  const verifications = verifiedLabels(i);
  return `<article class="card"><div class="card-head">${avatar(i)}<div>${i.status === 'sample' ? `<span class="pill">${t('sample')}</span>` : ''}<h2 dir="auto">${e(i.displayName)}</h2><p>${e(l(i.headline))}</p></div></div><p dir="auto">${e(l(i.bio))}</p><p class="muted">${e(country(i.countryOfResidence))}${i.yearsExperience != null ? ` · ${e(i.yearsExperience)} ${t('years')}` : ''}</p><div class="pills">${[...new Set(offerings.map(o => subjectName(o.subjectId)))].map(n => `<span class="pill">${e(n)}</span>`).join('')}</div>${specialties.length ? `<p class="muted">${t('specialties')}: ${e(specialties.join(', '))}</p>` : ''}${languageSubjects(i).some(({subject}) => offerings.some(o => o.subjectId === subject.id)) && i.nativeLanguages?.length ? `<p>${t('native')}: ${e(i.nativeLanguages.map(languageName).join(', '))}</p>` : ''}${verifications.length ? `<p class="muted">${t('verification')}: ${e(verifications.join(', '))}</p>` : ''}<p class="muted">${i.performance?.reviewCount ? `${e(i.performance.rating)} / 5 · ${e(i.performance.reviewCount)} ${t('reviews')}` : t('noReviews')}</p><p class="price">${t('from')} ${currencies.map(c => money(Math.min(...offerings.filter(o => o.currency === c).map(o => o.priceMinor)),c,locale)).map(e).join(' / ')}</p><div class="actions"><a class="button" href="${url({ instructor:i.id })}">${t('profile')}</a><button class="secondary" data-save="${e(i.id)}" aria-pressed="${favorites.includes(i.id)}">${t(favorites.includes(i.id) ? 'unsave' : 'save')}</button></div></article>`;
 }
+let browseSpecialty='', refreshBrowse=()=>{};
 function browse() {
  const pref = read('marocora.learning.preferences', {}, sessionStorage);
  app.innerHTML = `<section class="hero"><h1>${t('intro')}</h1><p>${t('tagline')}</p>${catalog.instructors.some(i => i.status === 'sample') ? `<p class="notice">${t('sampleNotice')}</p>` : ''}</section><form id="search-form" class="search"><label>${t('search')}<input id="query" list="suggestions" placeholder="${t('searchPlaceholder')}" value="${e(params.get('q') || '')}"><datalist id="suggestions"></datalist></label><button>${t('submit')}</button></form><div class="launch-subjects" aria-label="${t('launchSubjects')}">${catalog.subjects.filter(s=>s.active!==false&&catalog.categories.some(c=>c.id===s.categoryId&&c.active)).map(s=>`<a href="${url({subject:s.id})}">${e(l(s.name))}</a>`).join('')}</div><div id="refinements" class="refinements"></div><details><summary>${t('match')}</summary><div class="match-grid">${select('match-subject',t('subject'),catalog.subjects.filter(s => s.active!==false&&catalog.categories.some(c=>c.id===s.categoryId&&c.active)).map(s => [s.id,l(s.name)]),params.get('subject') || '')}${select('level',t('level'),['beginner','intermediate','advanced','primary-school','middle-school','high-school','university','adult'].map(s => [s,t(s)]))}${catalog.instructors.some(i=>i.teachingStyles?.length)?select('style',t('style'),[...new Set(catalog.instructors.flatMap(i=>i.teachingStyles||[]))].map(s=>[s,t(s)])):''}${catalog.instructors.some(i=>i.subjects.some(s=>s.categoryMetadata?.classification))?select('classification',t('background'),[...new Set(catalog.instructors.flatMap(i=>i.subjects.map(s=>s.categoryMetadata?.classification).filter(Boolean)))].map(s=>[s,t(({ 'native-speaker':'nativeSpeaker',bilingual:'bilingual','fluent-c2':'fluent'})[s]||s)])):''}<label>${t('goal')}<textarea id="match-goal" maxlength="2000">${e(pref.goal || '')}</textarea></label><label>${t('deadline')}<input id="deadline" type="date" value="${e(pref.deadline || '')}"></label><label>${t('schedule')}<input id="schedule" maxlength="200" value="${e(pref.schedule || '')}"></label></div><p class="muted">${t('matchingNote')}</p></details><div class="layout"><section class="filters"><h2>${t('filters')}</h2>${select('country',t('country'),[...new Set(catalog.instructors.map(i => i.countryOfResidence).filter(Boolean))].map(c => [c,country(c)]))}${select('native',t('native'),[...new Set(catalog.instructors.flatMap(i => i.nativeLanguages))].map(s => [s,languageName(s)]))}${select('spoken',t('otherLanguage'),[...new Set(catalog.instructors.flatMap(i => i.spokenLanguages.map(l => l.id)))].map(s => [s,languageName(s)]))}${catalog.instructors.some(i=>i.subjects.some(s=>s.categoryMetadata?.languageVarieties?.length))?select('variety',t('variety'),[...new Set(catalog.instructors.flatMap(i=>i.subjects.flatMap(s=>s.categoryMetadata?.languageVarieties||[])))].map(s=>[s,s])):''}${select('currency',t('currency'),[...new Set(catalog.instructors.flatMap(i => publishedOfferings(catalog,i).map(o => o.currency)))].map(c => [c,c]),'')}<label>${t('budget')}<input id="budget" type="number" min="0" step="1"></label><label>${t('sort')}<select id="sort">${[['best','best'],['rating','rating'],['experience','experience'],['price-asc','priceAsc'],['price-desc','priceDesc']].map(([v,k]) => option(v,t(k),'best')).join('')}</select></label>${['verified','bookable','saved'].map(id => `<label><input type="checkbox" id="${id}">${t(id==='bookable'&&config.learningLaunchOpen?'available':id)}</label>`).join('')}<p class="muted">${t(student?'savedAccount':'savedDevice')}</p><a href="${url({})}">${t('clear')}</a></section><section id="results" class="results" aria-live="polite"></section></div>`;
- let specialty = ''; let slots = [];
+ let specialty = browseSpecialty; let slots = [];
  const value = id => document.getElementById(id)?.value || '';
  const update = () => {
    write('marocora.learning.preferences', { goal:value('match-goal'), deadline:value('deadline'), schedule:value('schedule') }, sessionStorage);
@@ -67,11 +69,11 @@ function browse() {
    const subject = catalog.subjects.filter(s => s.active!==false&&catalog.categories.some(c=>c.id===s.categoryId&&c.active)).find(s => s.id === value('match-subject') || l(s.name).toLowerCase() === value('query').trim().toLowerCase() || s.id === value('query').trim().toLowerCase());
    const target = document.querySelector('#refinements');
    target.innerHTML = subject && catalog.specialties.some(s=>s.subjectIds.includes(subject.id)) ? `<strong>${t('refine')}</strong><div>${catalog.specialties.filter(s => s.subjectIds.includes(subject.id)).map(s => `<button class="secondary" data-specialty="${e(s.id)}">${e(l(s.name))}</button>`).join('')}<button class="secondary" data-specialty="">${t('skip')}</button></div>` : '';
-   target.querySelectorAll('button').forEach(b => b.onclick = () => { specialty = b.dataset.specialty; document.querySelector('#match-subject').value = subject.id; update(); });
+   target.querySelectorAll('button').forEach(b => b.onclick = () => { specialty = browseSpecialty = b.dataset.specialty; document.querySelector('#match-subject').value = subject.id; update(); });
  };
- app.querySelectorAll('input,select,textarea').forEach(el => el.addEventListener('input', () => { if (el.id === 'query' || el.id === 'match-subject') { specialty = ''; refine(); } update(); }));
+ app.querySelectorAll('input,select,textarea').forEach(el => el.addEventListener('input', () => { if (el.id === 'query' || el.id === 'match-subject') { specialty = browseSpecialty = ''; refine(); } update(); }));
  document.querySelector('#search-form').onsubmit = event => { event.preventDefault(); refine(); update(); };
- update(); refine();
+ refreshBrowse=update;update(); refine();
  if (config.apiBase || config.learningLaunchOpen) Promise.all(catalog.instructors.map(i => config.learningLaunchOpen ? publicSlots(i.id) : api.slots(i.id))).then(rows => { slots = rows.flat(); update(); }).catch(() => {});
 }
 async function profile(id) {
@@ -152,13 +154,12 @@ async function confirmation() {
    if (booking.reviewEligible) document.querySelector('#review-form').onsubmit = async event => { event.preventDefault(); try { await api.review({bookingId:booking.id,rating:Number(document.querySelector('#review-rating').value),body:document.querySelector('#review-body').value}); document.querySelector('#review-form').remove(); document.querySelector('#review-status').textContent=t('success'); } catch { document.querySelector('#review-status').textContent=t('problem'); } };
  } catch { document.querySelector('#booking').textContent = t('problem'); }
 }
-document.querySelector('#locale').onchange = event => { params.set('lang',event.target.value); location.search=params.toString(); };
+let translating=false;
+async function renderPage(){heading();if(params.get('instructor'))await profile(params.get('instructor'));else if(params.get('view')==='checkout')await checkout();else if(params.get('view')==='confirmation')await confirmation();else browse();translateHeader(locale);}
+document.querySelector('#locale').onchange=async event=>{if(translating){event.target.value=locale;return;}translating=true;const fields=captureFields(app);locale=changeLocale(event.target.value,params);try{await renderPage();restoreFields(app,fields);if(document.querySelector('#search-form'))refreshBrowse();else if(document.querySelector('#offering'))document.querySelector('#offering').dispatchEvent(new Event('change'));}finally{translating=false;}};
 heading();
 if (config.learningLaunchOpen) { try { catalog=await publicCatalog();student=await currentUser();if(student){const dash=await studentDashboard();favorites=dash.favorites||[];}}catch{app.innerHTML=`<h1>${t('problem')}</h1><a class="button" href="${url({})}">${t('retry')}</a>`;throw new Error('Catalog unavailable');} }
 else if (config.apiBase) { try { catalog = await api.catalog(); } catch { app.innerHTML = `<h1>${t('problem')}</h1>`; throw new Error('Catalog unavailable'); } }
-if (params.get('instructor')) await profile(params.get('instructor'));
-else if (params.get('view') === 'checkout') await checkout();
-else if (params.get('view') === 'confirmation') await confirmation();
-else browse();
+await renderPage();
 
 onSignOut(()=>{student=null;favorites=read("marocora.learning.favorites",[]);saveButtons();});

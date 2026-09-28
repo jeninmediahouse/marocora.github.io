@@ -14,7 +14,7 @@ test('publication consent is explicit and public preview escapes all applicant c
  assert.equal(normalizeInstructorDraft({profile:{publicationConsent:'true'},subjects:[]}).profile.publicationConsent,false);
  assert.equal(normalizeInstructorDraft({profile:{publicationConsent:true},subjects:[]}).profile.publicationConsent,true);
  const payload={instructor:{displayName:'<script>alert(1)</script>',headline:'<img src=x>',bio:'<svg>',countryOfResidence:'MA',timezone:'UTC',education:[],subjects:[{subjectId:'english',qualifications:'<script>private</script>'}]},specialties:[],offerings:[]};
- for(const lang of ['en','fr']){const html=publicPreviewHTML(payload,lang);assert.ok(!html.includes('<script>'));assert.ok(!html.includes('<img'));assert.ok(html.includes('&lt;script&gt;'));assert.ok(html.includes('data-action="publish" disabled'));assert.equal(publicationControls({excluded:true},lang,'staff'),'');}
+ for(const lang of ['en','ar','fr','es']){const html=publicPreviewHTML(payload,lang);assert.ok(!html.includes('<script>'));assert.ok(!html.includes('<img'));assert.ok(html.includes('&lt;script&gt;'));assert.ok(html.includes('data-action="publish" disabled'));assert.equal(publicationControls({excluded:true},lang,'staff'),'');}
 });
 test('signup continuation preserves a bounded lesson selection and rejects expired data',()=>{
  const value={instructorId:'id',offeringId:'offer',slotId:'slot',goal:'Learn algebra',savedAt:Date.now()};const storage={getItem:()=>JSON.stringify(value)};

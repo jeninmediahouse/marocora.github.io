@@ -1,3 +1,5 @@
+import { resolveLocale,applyLocale,changeLocale,captureFields,restoreFields,translateHeader,sharedCopy } from './locale.mjs';
+import { instructorCopy as copy } from './instructor-copy.mjs';
 import { feedbackHTML, reviewCopy, escapeReview } from './review-view.mjs';
 import { taxonomy, canonicalSubject } from './taxonomy.mjs';
 import { countryCodes } from './profile-fields.mjs';
@@ -8,67 +10,8 @@ import { instructorStore, currentInstructor, sendInstructorLink, loadInstructorD
 import { normalizeInstructorDraft, requireCompleteInstructorDraft } from '../server/instructor-draft.mjs';
 
 const params = new URLSearchParams(location.search);
-let locale = params.get('lang') === 'fr' ? 'fr' : 'en';
-const copy = {
-  en: {
-    browse: 'Browse learning', title: 'Create your instructor profile', intro: 'Teach one subject or many. Give each subject its own qualifications and each lesson offering its own price and duration.',
-    preview: 'Profile builder preview: account creation and submissions open after secure sign-in and profile hosting are connected. Your saved draft stays on this device until then.',
-    live: 'Marocora reviews your profile and each subject separately. Saving or approving an application does not publish it.',
-    existingOnly: 'Sign-in is available for invited instructors. Public account sign-up is not open yet.',
-    signupHelp: 'Create your instructor account or sign in with an email link. Verify your email, then save your private profile and submit it for review.',
-    profile: 'Your public profile', displayName: 'Public display name', headline: 'Professional headline', bio: 'Introduce yourself and your teaching style',
-    country: 'Country of residence', city: 'City or region (optional)', timezone: 'Your time zone', experience: 'Years of teaching experience',
-    education: 'Education and credentials (optional)', native: 'Native language(s), if relevant', spoken: 'Other languages you speak (optional)',
-    video: 'Introduction video link (optional)', photo: 'Public photo link (optional)', availability: 'General availability (optional)',
-    availabilityHelp: 'Actual bookable dates and times will be added after account setup and instructor approval.',
-    photoHelp: 'Use a public HTTPS link. Private verification documents are not collected on this page.',
-    subjects: 'Subjects you want to teach', addSubject: 'Add another subject', removeSubject: 'Remove subject',
-    category: 'Subject category', subject: 'Subject', qualifications: 'Your qualifications for this subject', specialties: 'Specialties (separate with commas)',
-    categoryHint: 'Launch subjects: English, Arabic, Darija, French, Spanish, mathematics and physics.',
-    offerings: 'Lesson offerings', addOffering: 'Add another offering', removeOffering: 'Remove offering',
-    offeringTitle: 'Offering title', duration: 'Minutes per lesson', lessons: 'Lessons in this offer', price: 'Total price', currency: 'Currency code', levels: 'Student levels (separate with commas)',
-    priceHelp: 'Set your own price for this offering. A free introduction can be priced at zero. Prices are reviewed before publication.',
-    save: 'Save draft', download: 'Download draft', submit: 'Submit for review', savedLocal: 'Draft saved on this device.', savedServer: 'Draft saved to your account.',
-    submitted: 'Profile submitted for review. It is not public yet.', error: 'We could not save this draft. Check the fields and try again.',
-    precision: 'The price has more decimal places than its currency allows.', noStorage: 'Browser storage is unavailable. Download your draft to keep a copy.',
-    signIn: 'Sign in to continue', opening: 'Account sign-up and submissions are not open yet.',
-    email: 'Email address', sendLink: 'Send sign-in link', linkSent: 'Check your email for a sign-in link.',
-    linkError: 'We could not send the sign-in link. Check your email address and try again in a minute.',
-    signedIn: 'Signed in as', signOut: 'Sign out', signInFirst: 'Sign in before submitting your profile.',
-    incomplete: 'Complete your profile, every subject, and every lesson offering before submitting.',
-    exampleCategory: 'e.g. Mathematics', exampleSubject: 'e.g. Algebra', exampleQualification: 'Describe your training or experience in this subject.',
-    exampleOffering: 'e.g. Beginner algebra lesson', exampleCurrency: 'e.g. USD, MAD, EUR', exampleLevels: 'e.g. Beginner, Intermediate'
-  },
-  fr: {
-    browse: 'Découvrir les cours', title: 'Créez votre profil de professeur', intro: 'Enseignez une ou plusieurs matières. Présentez vos qualifications pour chaque matière et fixez le prix et la durée de chaque cours.',
-    preview: 'Aperçu du créateur de profil : la création de compte et l’envoi des candidatures ouvriront après la mise en place d’une connexion sécurisée et de l’hébergement des profils. Votre brouillon enregistré reste sur cet appareil.',
-    live: 'Marocora examine votre profil et chaque matière séparément. L’enregistrement ou l’approbation d’une candidature ne la publie pas.',
-    existingOnly: 'La connexion est disponible pour les professeurs invités. La création publique de compte n’est pas encore ouverte.',
-    signupHelp: 'Créez votre compte de professeur ou connectez-vous avec un lien envoyé par e-mail. Vérifiez votre adresse, puis enregistrez votre profil privé et envoyez-le pour examen.',
-    profile: 'Votre profil public', displayName: 'Nom public', headline: 'Présentation professionnelle', bio: 'Présentez-vous et décrivez votre méthode pédagogique',
-    country: 'Pays de résidence', city: 'Ville ou région (facultatif)', timezone: 'Votre fuseau horaire', experience: 'Années d’expérience pédagogique',
-    education: 'Formation et diplômes (facultatif)', native: 'Langue(s) maternelle(s), si pertinent', spoken: 'Autres langues parlées (facultatif)',
-    video: 'Lien vers une vidéo de présentation (facultatif)', photo: 'Lien vers une photo publique (facultatif)', availability: 'Disponibilités générales (facultatif)',
-    availabilityHelp: 'Les dates et heures réservables seront ajoutées après la création du compte et l’approbation du professeur.',
-    photoHelp: 'Utilisez un lien HTTPS public. Aucun document privé de vérification n’est recueilli sur cette page.',
-    subjects: 'Matières que vous souhaitez enseigner', addSubject: 'Ajouter une matière', removeSubject: 'Supprimer la matière',
-    category: 'Catégorie', subject: 'Matière', qualifications: 'Vos qualifications pour cette matière', specialties: 'Spécialités (séparées par des virgules)',
-    categoryHint: 'Matières au lancement : anglais, arabe, darija, français, espagnol, mathématiques et physique.',
-    offerings: 'Offres de cours', addOffering: 'Ajouter une offre', removeOffering: 'Supprimer l’offre',
-    offeringTitle: 'Nom de l’offre', duration: 'Minutes par cours', lessons: 'Nombre de cours dans cette offre', price: 'Prix total', currency: 'Code de devise', levels: 'Niveaux des élèves (séparés par des virgules)',
-    priceHelp: 'Fixez votre propre prix pour cette offre. Une rencontre gratuite peut coûter zéro. Les prix sont examinés avant publication.',
-    save: 'Enregistrer le brouillon', download: 'Télécharger le brouillon', submit: 'Envoyer pour examen', savedLocal: 'Brouillon enregistré sur cet appareil.', savedServer: 'Brouillon enregistré dans votre compte.',
-    submitted: 'Profil envoyé pour examen. Il n’est pas encore public.', error: 'Impossible d’enregistrer ce brouillon. Vérifiez les champs et réessayez.',
-    precision: 'Le prix comporte trop de décimales pour cette devise.', noStorage: 'Le stockage du navigateur est indisponible. Téléchargez votre brouillon pour en garder une copie.',
-    signIn: 'Se connecter pour continuer', opening: 'La création de compte et l’envoi des candidatures ne sont pas encore ouverts.',
-    email: 'Adresse e-mail', sendLink: 'Envoyer le lien de connexion', linkSent: 'Vérifiez votre messagerie pour le lien de connexion.',
-    linkError: 'Impossible d’envoyer le lien de connexion. Vérifiez votre adresse e-mail et réessayez dans une minute.',
-    signedIn: 'Connecté avec', signOut: 'Se déconnecter', signInFirst: 'Connectez-vous avant d’envoyer votre profil.',
-    incomplete: 'Complétez votre profil, chaque matière et chaque offre de cours avant de l’envoyer.',
-    exampleCategory: 'p. ex. Mathématiques', exampleSubject: 'p. ex. Algèbre', exampleQualification: 'Décrivez votre formation ou votre expérience dans cette matière.',
-    exampleOffering: 'p. ex. Cours d’algèbre pour débutants', exampleCurrency: 'p. ex. USD, MAD, EUR', exampleLevels: 'p. ex. Débutant, Intermédiaire'
-  }
-};
+let locale = resolveLocale(location.search);
+
 const t = key => copy[locale][key];
 const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c]));
 const blankOffering = () => ({ title:'', durationMinutes:'', lessonCount:'1', price:'', currency:'', levels:'' });
@@ -119,7 +62,7 @@ function subjectHTML(subject, index) {
 }
 function render() {
   const p = draft.profile || {};
-  document.documentElement.lang = locale;
+  applyLocale(locale);translateHeader(locale);
   document.querySelector('#locale').value = locale;
   document.querySelector('#browse-link').textContent = t('browse');
   document.querySelector('#browse-link').href = `learn/?lang=${locale}`;
@@ -128,7 +71,7 @@ function render() {
     ? `<div class="auth-panel"><span>${t('signedIn')} ${esc(instructor.email)}</span> <button type="button" class="tertiary" data-action="sign-out">${t('signOut')}</button></div>`
     : `<form id="auth-form" class="auth-panel"><label>${t('email')}<input name="email" type="email" autocomplete="email" required></label><button type="submit">${t('sendLink')}</button></form>`) : '';
   app.innerHTML = `<h1>${t('title')}</h1><p class="lead">${t('intro')}</p><p class="notice">${instructorStore || config.apiBase ? t('live') : t('preview')}</p>${instructorStore && !instructor ? `<p class="helper">${t(config.instructorSignupOpen ? 'signupHelp' : 'existingOnly')}</p>` : ''}${auth}<div id="review-feedback">${reviewStatusHTML()}</div>
-    ${instructor && config.learningLaunchOpen ? `<p><a href="learn/schedule.html?lang=${locale}">${locale==='fr'?'Mes disponibilités et demandes de cours':'My availability and lesson requests'}</a></p>` : ''}<form id="profile-form"><section class="panel"><h2>${t('profile')}</h2><div class="grid">
+    ${instructor && config.learningLaunchOpen ? `<p><a href="learn/schedule.html?lang=${locale}">${sharedCopy[locale].schedule}</a></p>` : ''}<form id="profile-form"><section class="panel"><h2>${t('profile')}</h2><div class="grid">
       ${input('displayName','displayName',p.displayName)}${input('headline','headline',p.headline)}
       ${area('bio','bio',p.bio)}${countrySelect(p.countryOfResidence)}${input('city','city',p.city)}
       ${input('timezone','timezone',p.timezone || Intl.DateTimeFormat().resolvedOptions().timeZone)}${input('yearsExperience','experience',p.yearsExperience,{type:'number',min:0,max:80})}
@@ -138,10 +81,11 @@ function render() {
     </div><p class="helper">${t('availabilityHelp')}</p></section>
     <div class="section-heading"><h2>${t('subjects')}</h2><button type="button" class="secondary" data-action="add-subject" ${draft.subjects.length >= 12 ? 'disabled' : ''}>${t('addSubject')}</button></div>
     ${draft.subjects.map(subjectHTML).join('')}
-    <label class="consent"><input type="checkbox" data-field="publicationConsent" ${p.publicationConsent===true?'checked':''}>${locale==='fr'?'J’autorise Marocora à publier mon nom public, ma présentation, ma résidence, mes qualifications, mes langues, mes liens média et les offres approuvées. Mon adresse e-mail et les commentaires privés ne seront pas publiés.':'I agree that Marocora may publish my display name, introduction, residence, qualifications, languages, media links and approved offerings. My email and private review feedback will not be published.'}</label><div class="actions"><button type="submit">${t('save')}</button><button type="button" class="secondary" data-action="download">${t('download')}</button><button type="button" data-action="submit" ${instructor || config.apiBase ? '' : 'disabled'}>${t('submit')}</button></div>
+    <label class="consent"><input type="checkbox" data-field="publicationConsent" ${p.publicationConsent===true?'checked':''}>${sharedCopy[locale].consent}</label><div class="actions"><button type="submit">${t('save')}</button><button type="button" class="secondary" data-action="download">${t('download')}</button><button type="button" data-action="submit" ${instructor || config.apiBase ? '' : 'disabled'}>${t('submit')}</button></div>
     <p id="status" class="status" role="status">${instructorStore ? (instructor ? '' : t('signInFirst')) : (config.apiBase ? '' : t('opening'))}</p>
     ${config.signInURL ? `<p><a href="${esc(config.signInURL)}">${t('signIn')}</a></p>` : ''}
     </form>`;
+  translateHeader(locale);
 }
 
 function collect() {
@@ -187,9 +131,7 @@ async function refreshReview() {
     if (target) target.innerHTML = reviewStatusHTML();
   } catch {
     review = null;
-    if (target) target.textContent = locale === 'fr'
-      ? 'Impossible de charger les commentaires de l’équipe. Actualisez la page.'
-      : 'Could not load staff feedback. Refresh the page.';
+    if (target) target.textContent = sharedCopy[locale].feedbackError;
   }
 }
 
@@ -268,7 +210,7 @@ app.addEventListener('click', async event => {
   }
   render();
 });
-document.querySelector('#locale').onchange = event => { collect(); locale = event.target.value; params.set('lang',locale); history.replaceState(null,'',`?${params}`); render(); };
+document.querySelector('#locale').onchange = event => { const fields=captureFields(app); collect(); locale = changeLocale(event.target.value,params); render();restoreFields(app,fields);translateHeader(locale); };
 render();
 if (instructorStore) {
   try {
