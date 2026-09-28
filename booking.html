@@ -161,6 +161,8 @@
       
       
     </style>
+<link rel="stylesheet" href="site-language.css?v=20260928-site1">
+<script type="module" src="site-language.mjs?v=20260928-site1"></script>
 </head>
 
 <body>
@@ -308,7 +310,7 @@ sessionStorage.setItem(
     JSON.stringify(bookingDetails)
 );
 
-window.location.href = 'booking-confirmation.html';
+window.location.href = window.MarocoraSite.localURL('booking-confirmation.html');
 });
     
 </script>

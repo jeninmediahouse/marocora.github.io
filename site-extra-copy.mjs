@@ -1,0 +1,21 @@
+export const extraCopy={
+ 'Not provided':{en:'Not provided',fr:'Non renseigné',ar:'غير محدد',es:'No indicado'},
+ 'No lesson time selected':{en:'No lesson time selected',fr:'Aucun horaire de cours sélectionné',ar:'لم يتم اختيار موعد الدرس',es:'No se seleccionó un horario'},
+ 'No message provided':{en:'No message provided',fr:'Aucun message renseigné',ar:'لا توجد رسالة',es:'No se indicó un mensaje'},
+ 'Teacher not found':{en:'Teacher not found',fr:'Professeur introuvable',ar:'لم يتم العثور على المدرس',es:'Profesor no encontrado'},
+ 'Request Free Introduction':{en:'Request Free Introduction',fr:'Demander une présentation gratuite',ar:'اطلب لقاء تعارف مجانياً',es:'Solicitar presentación gratuita'},
+ 'Continue to Payment':{en:'Continue to Payment',fr:'Continuer vers le paiement',ar:'المتابعة إلى الدفع',es:'Continuar al pago'},
+ 'Secure payment is not connected yet. No payment has been charged.':{en:'Secure payment is not connected yet. No payment has been charged.',fr:'Le paiement sécurisé n’est pas encore connecté. Aucun montant n’a été débité.',ar:'الدفع الآمن غير متصل بعد. لم يتم خصم أي مبلغ.',es:'El pago seguro aún no está conectado. No se ha cobrado ningún importe.'},
+ 'We could not submit your request. Please try again.':{en:'We could not confirm receipt. Check your email before retrying to avoid a duplicate.',fr:'Réception non confirmée. Vérifiez votre messagerie avant de réessayer pour éviter un doublon.',ar:'تعذر تأكيد الاستلام. راجع بريدك قبل إعادة المحاولة لتجنب تكرار الطلب.',es:'No pudimos confirmar la recepción. Revisa tu correo antes de volver a intentarlo para evitar duplicados.'},
+ 'CONFIRMED':{en:'CONFIRMED',fr:'CONFIRMÉ',ar:'مؤكد',es:'CONFIRMADO'},
+ 'DECLINED':{en:'DECLINED',fr:'REFUSÉ',ar:'مرفوض',es:'RECHAZADO'},
+ 'Confirming...':{en:'Confirming...',fr:'Confirmation…',ar:'جارٍ التأكيد…',es:'Confirmando…'},
+ 'Declining...':{en:'Declining...',fr:'Refus…',ar:'جارٍ الرفض…',es:'Rechazando…'},
+ 'Lesson Confirmed':{en:'Lesson Confirmed',fr:'Cours confirmé',ar:'تم تأكيد الدرس',es:'Clase confirmada'},
+ 'Request Declined':{en:'Request Declined',fr:'Demande refusée',ar:'تم رفض الطلب',es:'Solicitud rechazada'},
+ 'This request is missing required booking information. Do not confirm it.':{en:'This request is missing required booking information. Do not confirm it.',fr:'Des informations obligatoires manquent. Ne confirmez pas cette demande.',ar:'معلومات الحجز المطلوبة ناقصة. لا تؤكد هذا الطلب.',es:'Faltan datos obligatorios. No confirmes esta solicitud.'},
+ 'This request is missing required booking information. Do not decline it.':{en:'This request is missing required booking information. Do not decline it.',fr:'Des informations obligatoires manquent. Ne refusez pas cette demande.',ar:'معلومات الحجز المطلوبة ناقصة. لا ترفض هذا الطلب.',es:'Faltan datos obligatorios. No rechaces esta solicitud.'},
+ 'The teacher accepted this request. The lesson is confirmed.':{en:'The teacher accepted this request. The lesson is confirmed.',fr:'Le professeur a accepté la demande. Le cours est confirmé.',ar:'قبل المدرس الطلب. تم تأكيد الدرس.',es:'El profesor aceptó la solicitud. La clase está confirmada.'},
+ 'This request was not accepted. The student has been notified.':{en:'This request was not accepted. Notification delivery must be checked separately.',fr:'Cette demande a été refusée. La réception de la notification doit être vérifiée séparément.',ar:'لم يتم قبول الطلب. يجب التحقق من وصول الإشعار بشكل منفصل.',es:'No se aceptó la solicitud. La entrega de la notificación debe comprobarse por separado.'},
+ 'Example: 120 MAD/page, 300 MAD/hour, or quote based':{en:'Enter your own price and currency, or offer a custom quote',fr:'Indiquez votre tarif et votre devise, ou proposez un devis',ar:'أدخل سعرك وعملتك أو قدم عرض سعر مخصصاً',es:'Indica tu precio y moneda, o propone un presupuesto personalizado'}
+};

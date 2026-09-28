@@ -185,6 +185,8 @@
             }
         }
     </style>
+<link rel="stylesheet" href="site-language.css?v=20260928-site1">
+<script type="module" src="site-language.mjs?v=20260928-site1"></script>
 </head>
 
 <body>
@@ -375,6 +377,7 @@ const adminDecisionUrl =
     decisionParams.toString();
         
         const formData = new FormData();
+        formData.append('interface_language', window.MarocoraSite.locale);
         formData.append('_subject', 'New Marocora Lesson Request');
         formData.append('request-type', 'Free Introduction Request');
         formData.append('status', 'REQUESTED');
@@ -400,12 +403,12 @@ paymentParams.set('reference', bookingReference);
 
             if (response.ok) {
                 window.location.href =
-                    'booking-success.html?' + paymentParams.toString();
+                    window.MarocoraSite.localURL('booking-success.html?' + paymentParams.toString());
             } else {
-                alert('We could not submit your request. Please try again.');
+                alert(window.MarocoraSite.t('We could not submit your request. Please try again.'));
             }
         } catch (error) {
-            alert('We could not submit your request. Please try again.');
+            alert(window.MarocoraSite.t('We could not submit your request. Please try again.'));
         }
     });
 } else {

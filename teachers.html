@@ -322,6 +322,8 @@ footer {
     }
 }
 </style>
+<link rel="stylesheet" href="site-language.css?v=20260928-site1">
+<script type="module" src="site-language.mjs?v=20260928-site1"></script>
 </head>
 
 <body>
@@ -378,32 +380,32 @@ footer {
 
     <div class="language-grid">
 
-       <a class="language-card" href="#" data-language="Darija">
+       <a class="language-card" href="learn/?subject=darija" data-language="Darija">
             <h3>Darija</h3>
             <p>Moroccan Arabic</p>
         </a>
 
-       <a class="language-card" href="#" data-language="Arabic">
+       <a class="language-card" href="learn/?subject=arabic" data-language="Arabic">
             <h3>Arabic</h3>
             <p>Modern Standard Arabic and more</p>
         </a>
 
-      <a class="language-card" href="#" data-language="English">
+      <a class="language-card" href="learn/?subject=english" data-language="English">
             <h3>English</h3>
             <p>General, conversational and professional English</p>
         </a>
 
-    <a class="language-card" href="#" data-language="French">
+    <a class="language-card" href="learn/?subject=french" data-language="French">
             <h3>French</h3>
             <p>General, conversational and professional French</p>
         </a>
 
-       <a class="language-card" href="#" data-language="Spanish">
+       <a class="language-card" href="learn/?subject=spanish" data-language="Spanish">
             <h3>Spanish</h3>
             <p>General and conversational Spanish</p>
         </a>
 
-     <a class="language-card" href="#" data-language="Other">
+     <a class="language-card" href="learn/" data-language="Other">
             <h3>Other Subjects</h3>
             <p>Browse additional languages and subjects</p>
         </a>
@@ -429,71 +431,6 @@ footer {
 <footer>
    © 2026 Marocora · Casablanca–Nouaceur, Morocco
 </footer>
-<script>
-document.querySelectorAll('.language-card').forEach(card => {
-    card.addEventListener('click', function(event) {
-        event.preventDefault();
 
-        const language = this.dataset.language;
-        const title = document.getElementById('results-title');
-        const message = document.getElementById('results-message');
-const teacherCards = document.getElementById('teacher-cards');
-        if (language === 'Darija') {
-    title.textContent = 'Darija Teachers';
-
-    message.querySelector('p').textContent =
-        'Browse available Darija teachers below.';
-
-    teacherCards.innerHTML = `
-        <div class="teacher-card">
-            <div class="teacher-top">
-                <div class="avatar">SD</div>
-                <h3>Sample Darija Teacher</h3>
-                <div class="specialty">Darija • Online</div>
-            </div>
-
-            <div class="teacher-info">
-                <p>
-                    Online Darija teacher offering conversational Moroccan Arabic
-                    lessons for beginners, travelers, expatriates, and other learners.
-                </p>
-
-                <div class="tags">
-                    <span class="tag">Darija</span>
-                    <span class="tag">Conversation</span>
-                    <span class="tag">Beginner Friendly</span>
-                </div>
-
-                <a class="profile-button" href="teacher-sample.html">
-                    View Profile
-                </a>
-            </div>
-        </div>
-    `;
-
-} else if (language === 'Other') {
-    title.textContent = 'Other Languages & Subjects';
-
-    message.querySelector('p').textContent =
-        'Additional teacher profiles will appear here as they are approved.';
-
-    teacherCards.innerHTML = '';
-
-} else {
-    title.textContent = language + ' Teachers';
-
-    message.querySelector('p').textContent =
-        'No ' + language + ' teacher profiles are published yet.';
-
-    teacherCards.innerHTML = '';
-}
-
-        document.getElementById('teacher-results').scrollIntoView({
-            behavior: 'smooth',
-            block: 'start'
-        });
-    });
-});
-</script>
 </body>
 </html>

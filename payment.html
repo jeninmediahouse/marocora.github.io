@@ -161,6 +161,8 @@
             }
         }
     </style>
+<link rel="stylesheet" href="site-language.css?v=20260928-site1">
+<script type="module" src="site-language.mjs?v=20260928-site1"></script>
 </head>
 
 <body>
@@ -286,9 +288,7 @@ document.getElementById('payment-reference').textContent =
    document.getElementById('pay-now-button').addEventListener(
     'click',
     function() {
-        alert(
-            'Secure payment is not connected yet. No payment has been charged.'
-        );
+        alert(window.MarocoraSite.t('Secure payment is not connected yet. No payment has been charged.'));
     }
 );
 </script>
