@@ -8,6 +8,6 @@ export const config = Object.freeze({
   instructorAuthOpen: true,
   instructorSignupOpen: true,
   staffReviewOpen: true,
-  learningLaunchOpen: false,
-  studentSignupOpen: false
+  learningLaunchOpen: true,
+  studentSignupOpen: true
 });
