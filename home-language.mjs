@@ -1,5 +1,5 @@
 import {resolveLocale,changeLocale,applyLocale,sharedCopy} from './learn/locale.mjs';
-import {homeCopy} from './home-copy.mjs';
+import {homeCopy} from './home-copy.mjs?v=20260928-site1';
 const params=new URLSearchParams(location.search);
 let locale=resolveLocale(location.search);
 const normalize=text=>text.replace(/\s+/g,' ').trim();

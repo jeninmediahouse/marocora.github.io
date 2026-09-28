@@ -192,10 +192,10 @@ export const homeCopy = {
     "es": "Profesionales legales y empresariales"
   },
   "Connect with verified lawyers, accountants, real estate professionals, and business consultants in Morocco.": {
-    "en": "Connect with verified lawyers, accountants, real estate professionals, and business consultants in Morocco.",
-    "fr": "Rencontrez des avocats, comptables, professionnels de l’immobilier et consultants d’entreprise vérifiés au Maroc.",
-    "ar": "تواصل مع محامين ومحاسبين ومهنيي عقارات ومستشاري أعمال متحقق منهم في المغرب.",
-    "es": "Conecta con abogados, contables, profesionales inmobiliarios y consultores empresariales verificados en Marruecos."
+    "en": "Explore legal, accounting, real estate and business consulting services in Morocco.",
+    "fr": "Explorez les services juridiques, comptables, immobiliers et de conseil aux entreprises au Maroc.",
+    "ar": "استكشف الخدمات القانونية والمحاسبية والعقارية واستشارات الأعمال في المغرب.",
+    "es": "Explora servicios jurídicos, contables, inmobiliarios y de consultoría empresarial en Marruecos."
   },
   "Explore Professionals →": {
     "en": "Explore Professionals →",
@@ -210,10 +210,10 @@ export const homeCopy = {
     "es": "Salud y servicios médicos"
   },
   "Connect with verified doctors, dentists, veterinarians, clinics, eye centers, and other healthcare professionals.": {
-    "en": "Connect with verified doctors, dentists, veterinarians, clinics, eye centers, and other healthcare professionals.",
-    "fr": "Rencontrez des médecins, dentistes, vétérinaires, cliniques, centres ophtalmologiques et autres professionnels de santé vérifiés.",
-    "ar": "تواصل مع أطباء وأطباء أسنان وأطباء بيطريين وعيادات ومراكز عيون ومهنيي صحة متحقق منهم.",
-    "es": "Conecta con médicos, dentistas, veterinarios, clínicas, centros oftalmológicos y otros profesionales sanitarios verificados."
+    "en": "Explore medical, dental, veterinary, clinic and eye-care services.",
+    "fr": "Explorez les services médicaux, dentaires, vétérinaires, cliniques et ophtalmologiques.",
+    "ar": "استكشف الخدمات الطبية وخدمات الأسنان والطب البيطري والعيادات والعناية بالعيون.",
+    "es": "Explora servicios médicos, dentales, veterinarios, clínicos y de atención ocular."
   },
   "Explore Health Professionals →": {
     "en": "Explore Health Professionals →",
@@ -370,5 +370,17 @@ export const homeCopy = {
     "fr": "© 2026 Marocora. Tous droits réservés. — Casablanca, Maroc",
     "ar": "© 2026 ماروكورا. جميع الحقوق محفوظة. — الدار البيضاء، المغرب",
     "es": "© 2026 Marocora. Todos los derechos reservados. — Casablanca, Marruecos"
+  },
+  "Explore legal, accounting, real estate and business consulting services in Morocco.": {
+    "en": "Explore legal, accounting, real estate and business consulting services in Morocco.",
+    "fr": "Explorez les services juridiques, comptables, immobiliers et de conseil aux entreprises au Maroc.",
+    "ar": "استكشف الخدمات القانونية والمحاسبية والعقارية واستشارات الأعمال في المغرب.",
+    "es": "Explora servicios jurídicos, contables, inmobiliarios y de consultoría empresarial en Marruecos."
+  },
+  "Explore medical, dental, veterinary, clinic and eye-care services.": {
+    "en": "Explore medical, dental, veterinary, clinic and eye-care services.",
+    "fr": "Explorez les services médicaux, dentaires, vétérinaires, cliniques et ophtalmologiques.",
+    "ar": "استكشف الخدمات الطبية وخدمات الأسنان والطب البيطري والعيادات والعناية بالعيون.",
+    "es": "Explora servicios médicos, dentales, veterinarios, clínicos y de atención ocular."
   }
 };
