@@ -4,6 +4,7 @@ import { feedbackHTML, reviewCopy, escapeReview } from './review-view.mjs';
 import { taxonomy, canonicalSubject } from './taxonomy.mjs';
 import { countryCodes } from './profile-fields.mjs';
 import { config } from './config.mjs';
+import { instructorFieldProblem, fieldLabels } from './instructor-validation.mjs';
 import { request } from './api.mjs';
 import { instructorStore, currentInstructor, sendInstructorLink, loadInstructorDraft,
   saveInstructorDraft, submitInstructorDraft, signOutInstructor } from './instructor-store.mjs';
@@ -26,9 +27,10 @@ let serverDraftExists = false;
 let review = null;
 let applicationStatus = null;
 let authVersion = 0;
+let validationMode = null;
 const digits = currency => { try { return new Intl.NumberFormat('en', { style:'currency', currency }).resolvedOptions().maximumFractionDigits; } catch { return 2; } };
 const list = value => String(value || '').split(',').map(s => s.trim()).filter(Boolean);
-const input = (field, label, value, { type='text', hint='', placeholder='', min, max } = {}) => `<label>${t(label)}<input data-field="${field}" type="${type}" value="${esc(value)}" ${placeholder ? `placeholder="${esc(t(placeholder))}"` : ''} ${min == null ? '' : `min="${min}"`} ${max == null ? '' : `max="${max}"`}></label>${hint ? `<p class="helper">${t(hint)}</p>` : ''}`;
+const input = (field, label, value, { type='text', hint='', placeholder='', min, max, step } = {}) => `<label>${t(label)}<input data-field="${field}" type="${type}" value="${esc(value)}" ${placeholder ? `placeholder="${esc(t(placeholder))}"` : ''} ${min == null ? '' : `min="${min}"`} ${max == null ? '' : `max="${max}"`} ${step == null ? '' : `step="${step}"`}></label>${hint ? `<p class="helper">${t(hint)}</p>` : ''}`;
 const area = (field, label, value, placeholder='') => `<label class="wide">${t(label)}<textarea data-field="${field}" rows="4" ${placeholder ? `placeholder="${esc(t(placeholder))}"` : ''}>${esc(value)}</textarea></label>`;
 
 function offeringHTML(offering, index) {
@@ -36,7 +38,7 @@ function offeringHTML(offering, index) {
     ${input('title','offeringTitle',offering.title,{placeholder:'exampleOffering'})}
     ${input('durationMinutes','duration',offering.durationMinutes,{type:'number',min:15,max:240})}
     ${input('lessonCount','lessons',offering.lessonCount,{type:'number',min:1,max:20})}
-    ${input('price','price',offering.price,{type:'number',min:0})}
+    ${input('price','price',offering.price,{type:'number',min:0,step:'any'})}
     ${input('currency','currency',offering.currency,{placeholder:'exampleCurrency'})}
     ${input('levels','levels',offering.levels,{placeholder:'exampleLevels'})}
   </div><p class="helper">${t('priceHelp')}</p></div>`;
@@ -72,7 +74,7 @@ function render() {
     ? `<div class="auth-panel"><span>${t('signedIn')} ${esc(instructor.email)}</span> <button type="button" class="tertiary" data-action="sign-out">${t('signOut')}</button></div>`
     : `<form id="auth-form" class="auth-panel"><label>${t('email')}<input name="email" type="email" autocomplete="email" required></label><button type="submit">${t('sendLink')}</button></form>`) : '';
   app.innerHTML = `<h1>${t('title')}</h1><p class="lead">${t('intro')}</p><p class="notice">${instructorStore || config.apiBase ? t('live') : t('preview')}</p>${instructorStore && !instructor ? `<p class="helper">${t(config.instructorSignupOpen ? 'signupHelp' : 'existingOnly')}</p>` : ''}${auth}<div id="review-feedback">${reviewStatusHTML()}</div>
-    ${instructor && config.learningLaunchOpen ? `<p><a href="learn/schedule.html?lang=${locale}">${sharedCopy[locale].schedule}</a></p>` : ''}<form id="profile-form"><section class="panel"><h2>${t('profile')}</h2><div class="grid">
+    ${instructor && config.learningLaunchOpen ? `<p><a href="learn/schedule.html?lang=${locale}">${sharedCopy[locale].schedule}</a></p>` : ''}<form id="profile-form" novalidate><p class="helper">${t('fieldHint')}</p><div id="field-errors" role="alert" tabindex="-1" hidden></div><section class="panel"><h2>${t('profile')}</h2><div class="grid">
       ${input('displayName','displayName',p.displayName)}${input('headline','headline',p.headline)}
       ${area('bio','bio',p.bio)}${countrySelect(p.countryOfResidence)}${input('city','city',p.city)}
       ${input('timezone','timezone',p.timezone || Intl.DateTimeFormat().resolvedOptions().timeZone)}${input('yearsExperience','experience',p.yearsExperience,{type:'number',min:0,max:80})}
@@ -87,7 +89,45 @@ function render() {
     ${config.signInURL ? `<p><a href="${esc(config.signInURL)}">${t('signIn')}</a></p>` : ''}
     </form>`;
   translateHeader(locale);
+  app.querySelectorAll('#profile-form [data-field]').forEach((field,index)=>{field.id=`profile-field-${index}`;});
+  if(validationMode!==null) validateFields(validationMode,false);
 }
+
+function validateFields(complete=false,focus=true) {
+  validationMode=complete;
+  const problems=[];
+  for(const field of app.querySelectorAll('#profile-form [data-field]')) {
+    field.removeAttribute('aria-invalid'); field.removeAttribute('aria-describedby');
+    if(field.dataset.field==='publicationConsent')continue;
+    const card=field.closest('[data-offering]'),subject=field.closest('[data-subject]');
+    const currency=card?.querySelector('[data-field="currency"]')?.value.trim()||'';
+    const problem=instructorFieldProblem(field.dataset.field,field.value,{complete,currency});
+    if(problem||field.validity.badInput) {
+      let label=t(fieldLabels[field.dataset.field]);
+      if(subject)label=`${t('subject')} ${[...app.querySelectorAll('[data-subject]')].indexOf(subject)+1} · ${label}`;
+      if(card)label+=` · ${t('offerings')} ${[...subject.querySelectorAll('[data-offering]')].indexOf(card)+1}`;
+      problems.push({field,label,message:t(problem==='required'?'requiredField':problem==='precision'?'precision':'invalidField')});
+    }
+  }
+  const subjects=[...app.querySelectorAll('[data-subject]')],seen=new Set();
+  subjects.forEach((section,index)=>{
+    const category=section.querySelector('[data-field="category"]'),subject=section.querySelector('[data-field="subject"]');
+    const key=`${category.value.trim().toLowerCase()}\0${subject.value.trim().toLowerCase()}`;
+    if(category.value&&subject.value&&seen.has(key))problems.push({field:subject,label:`${t('subject')} ${index+1}`,message:t('duplicateSubject')});
+    seen.add(key);
+    if(complete&&!section.querySelector('[data-offering]'))problems.push({field:section.querySelector('[data-action="add-offering"]'),label:`${t('subject')} ${index+1}`,message:t('missingOffer')});
+  });
+  if(complete&&!subjects.length)problems.push({field:app.querySelector('[data-action="add-subject"]'),label:t('subjects'),message:t('missingSubject')});
+  const summary=app.querySelector('#field-errors'); summary.hidden=!problems.length;
+  summary.innerHTML=problems.length?`<p>${t('fixFields')}</p><ul>${problems.map((issue,index)=>{
+    const field=issue.field;field.id||=`profile-action-${index}`;
+    const errorId=`field-error-${index}`;field.setAttribute('aria-invalid','true');field.setAttribute('aria-describedby',errorId);
+    return `<li id="${errorId}"><a href="#${field.id}" data-error-target="${field.id}">${esc(issue.label)}: ${esc(issue.message)}</a></li>`;
+  }).join('')}</ul>`:'';
+  if(problems.length&&focus)summary.focus();
+  return !problems.length;
+}
+app.addEventListener('input',event=>{if(validationMode!==null&&event.target.closest('#profile-form'))validateFields(validationMode,false);});
 
 function collect() {
   const profile = Object.fromEntries([...app.querySelectorAll('.panel [data-field]')].map(el => [el.dataset.field, el.value.trim()]));
@@ -141,6 +181,7 @@ async function refreshReview() {
 }
 
 async function save() {
+  if(!validateFields(false))return false;
   collect();
   let data;
   try { data = payload(); }
@@ -177,10 +218,13 @@ app.addEventListener('submit', async event => {
   await save();
 });
 app.addEventListener('click', async event => {
+  const errorLink=event.target.closest('[data-error-target]');
+  if(errorLink){event.preventDefault();document.getElementById(errorLink.dataset.errorTarget)?.focus();return;}
   const button = event.target.closest('[data-action]'); if (!button) return;
+  event.preventDefault();
   const action = button.dataset.action;
   if (action === 'sign-out') {
-    try { await signOutInstructor(); instructor = null; serverDraftExists = false; review = null; applicationStatus = null; draft = readLocal() || blank(); render(); }
+    try { await signOutInstructor(); instructor = null; serverDraftExists = false; review = null; applicationStatus = null; draft = readLocal() || blank(); validationMode = null; render(); }
     catch { status(t('error'),'error'); }
     return;
   }
@@ -191,6 +235,7 @@ app.addEventListener('click', async event => {
   }
   if (action === 'submit') {
     if (!instructor && !config.apiBase) return;
+    if(!validateFields(true))return;
     collect();
     try { requireCompleteInstructorDraft(payload()); }
     catch { status(t('incomplete'),'error'); return; }
@@ -224,7 +269,7 @@ if (instructorStore) {
     if (event !== 'SIGNED_OUT') return;
     authVersion++;
     instructor = null; serverDraftExists = false; review = null;
-    applicationStatus = null; draft = blank(); render();
+    applicationStatus = null; draft = blank(); validationMode = null; render();
   });
   const version = authVersion;
   try {

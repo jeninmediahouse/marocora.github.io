@@ -60,3 +60,11 @@ export const instructorCopy = {
   }
 };
 Object.assign(instructorCopy, extraCopy);
+
+const validationCopy = {
+ en:{fixFields:'Check the highlighted fields:',requiredField:'Required before submission',invalidField:'Check this value',duplicateSubject:'This subject is already listed. Combine its offers in one subject.',missingOffer:'Add at least one lesson offering.',missingSubject:'Add at least one subject.',fieldHint:'You can save an incomplete draft. Required fields must be completed before submitting. Publication consent is needed for public display.'},
+ fr:{fixFields:'Vérifiez les champs indiqués :',requiredField:'Obligatoire avant l’envoi',invalidField:'Vérifiez cette valeur',duplicateSubject:'Cette matière est déjà indiquée. Regroupez ses offres dans une seule matière.',missingOffer:'Ajoutez au moins une offre de cours.',missingSubject:'Ajoutez au moins une matière.',fieldHint:'Vous pouvez enregistrer un brouillon incomplet. Les champs obligatoires doivent être complétés avant l’envoi. Le consentement est nécessaire pour la publication.'},
+ ar:{fixFields:'راجع الحقول المحددة:',requiredField:'مطلوب قبل الإرسال',invalidField:'راجع هذه القيمة',duplicateSubject:'هذه المادة مضافة بالفعل. اجمع عروضها في مادة واحدة.',missingOffer:'أضف عرض درس واحداً على الأقل.',missingSubject:'أضف مادة واحدة على الأقل.',fieldHint:'يمكنك حفظ مسودة غير مكتملة. أكمل الحقول المطلوبة قبل الإرسال. الموافقة على النشر ضرورية لعرض الملف للعامة.'},
+ es:{fixFields:'Revisa los campos indicados:',requiredField:'Obligatorio antes de enviar',invalidField:'Revisa este valor',duplicateSubject:'Esta materia ya está incluida. Agrupa sus ofertas en una sola materia.',missingOffer:'Añade al menos una oferta de clase.',missingSubject:'Añade al menos una materia.',fieldHint:'Puedes guardar un borrador incompleto. Completa los campos obligatorios antes de enviarlo. El consentimiento es necesario para mostrar el perfil públicamente.'}
+};
+for(const lang of Object.keys(validationCopy))Object.assign(instructorCopy[lang],validationCopy[lang]);
