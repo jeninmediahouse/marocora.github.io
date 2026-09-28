@@ -11,6 +11,7 @@ const copy = {
     browse: 'Browse learning', title: 'Create your instructor profile', intro: 'Teach one subject or many. Give each subject its own qualifications and each lesson offering its own price and duration.',
     preview: 'Profile builder preview: account creation and submissions open after secure sign-in and profile hosting are connected. Your saved draft stays on this device until then.',
     live: 'Your profile remains private until Marocora reviews and approves each subject. Saving a draft does not publish it.',
+    existingOnly: 'Sign-in is available for invited instructors. Public account sign-up is not open yet.',
     profile: 'Your public profile', displayName: 'Public display name', headline: 'Professional headline', bio: 'Introduce yourself and your teaching style',
     country: 'Country of residence', city: 'City or region (optional)', timezone: 'Your time zone', experience: 'Years of teaching experience',
     education: 'Education and credentials (optional)', native: 'Native language(s), if relevant', spoken: 'Other languages you speak (optional)',
@@ -37,6 +38,7 @@ const copy = {
     browse: 'Découvrir les cours', title: 'Créez votre profil de professeur', intro: 'Enseignez une ou plusieurs matières. Présentez vos qualifications pour chaque matière et fixez le prix et la durée de chaque cours.',
     preview: 'Aperçu du créateur de profil : la création de compte et l’envoi des candidatures ouvriront après la mise en place d’une connexion sécurisée et de l’hébergement des profils. Votre brouillon enregistré reste sur cet appareil.',
     live: 'Votre profil reste privé jusqu’à ce que Marocora examine et approuve chaque matière. Un brouillon enregistré n’est pas publié.',
+    existingOnly: 'La connexion est disponible pour les professeurs invités. La création publique de compte n’est pas encore ouverte.',
     profile: 'Votre profil public', displayName: 'Nom public', headline: 'Présentation professionnelle', bio: 'Présentez-vous et décrivez votre méthode pédagogique',
     country: 'Pays de résidence', city: 'Ville ou région (facultatif)', timezone: 'Votre fuseau horaire', experience: 'Années d’expérience pédagogique',
     education: 'Formation et diplômes (facultatif)', native: 'Langue(s) maternelle(s), si pertinent', spoken: 'Autres langues parlées (facultatif)',
@@ -105,7 +107,7 @@ function render() {
   const auth = instructorStore ? (instructor
     ? `<div class="auth-panel"><span>${t('signedIn')} ${esc(instructor.email)}</span> <button type="button" class="tertiary" data-action="sign-out">${t('signOut')}</button></div>`
     : `<form id="auth-form" class="auth-panel"><label>${t('email')}<input name="email" type="email" autocomplete="email" required></label><button type="submit">${t('sendLink')}</button></form>`) : '';
-  app.innerHTML = `<h1>${t('title')}</h1><p class="lead">${t('intro')}</p><p class="notice">${instructorStore || config.apiBase ? t('live') : t('preview')}</p>${auth}
+  app.innerHTML = `<h1>${t('title')}</h1><p class="lead">${t('intro')}</p><p class="notice">${instructorStore || config.apiBase ? t('live') : t('preview')}</p>${instructorStore && !config.instructorSignupOpen ? `<p class="helper">${t('existingOnly')}</p>` : ''}${auth}
     <form id="profile-form"><section class="panel"><h2>${t('profile')}</h2><div class="grid">
       ${input('displayName','displayName',p.displayName)}${input('headline','headline',p.headline)}
       ${area('bio','bio',p.bio)}${input('countryOfResidence','country',p.countryOfResidence)}${input('city','city',p.city)}
