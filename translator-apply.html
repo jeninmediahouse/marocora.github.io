@@ -126,7 +126,8 @@ footer {
 }
 </style>
 <link rel="stylesheet" href="site-language.css?v=20260928-site1">
-<script type="module" src="site-language.mjs?v=20260929-home4"></script>
+<script type="module" src="site-language.mjs?v=20260929-translation1"></script>
+<link rel="stylesheet" href="translation-service.css?v=20260929-translation1">
 </head>
 
 <body>
@@ -142,7 +143,7 @@ footer {
 
     <div class="intro">
 
-        <h1>Apply as a Translator or Language Professional</h1>
+        <h1>Apply as a Translation Provider</h1>
 
         <p>
             Join the Marocora Professional Network and connect with clients
@@ -202,19 +203,7 @@ footer {
                 >
             </div>
 
-            <div class="form-group">
-                <label for="services">Main Services</label>
-
-                <select id="services" name="services" required>
-                    <option value="">Select primary service</option>
-                    <option>Document Translation</option>
-                    <option>Certified / Sworn Translation</option>
-                    <option>Interpretation</option>
-                    <option>Business Translation</option>
-                    <option>Website & Digital Translation</option>
-                    <option>General Language Services</option>
-                </select>
-            </div>
+            <fieldset class="translation-details" data-service-offers><legend>Services You Offer</legend><p>Select every service you provide.</p><label class="translation-choice"><input type="checkbox" id="service-offer-0" name="services" value="Document Translation"> <span>Document Translation</span></label><label class="translation-choice"><input type="checkbox" id="service-offer-1" name="services" value="Certified / Sworn Translation"> <span>Certified / Sworn Translation</span></label><label class="translation-choice"><input type="checkbox" id="service-offer-2" name="services" value="Interpretation"> <span>Interpretation</span></label><label class="translation-choice"><input type="checkbox" id="service-offer-3" name="services" value="Business Translation"> <span>Business Translation</span></label><label class="translation-choice"><input type="checkbox" id="service-offer-4" name="services" value="Website &amp; Digital Translation"> <span>Website & Digital Translation</span></label><label class="translation-choice"><input type="checkbox" id="service-offer-5" name="services" value="Other Language Service"> <span>Other Language Service</span></label></fieldset>
 
             <div class="form-group">
                 <label for="sworn-status">Are You a Sworn / Certified Translator?</label>
@@ -228,7 +217,7 @@ footer {
                 </select>
             </div>
 
-            <div class="form-group">
+            <div class="form-group" data-registration hidden><label for="registration-authority">Registration Authority / Country</label><input id="registration-authority" name="registration-authority" type="text" maxlength="300"></div><div class="form-group">
                 <label for="experience">Years of Professional Experience</label>
                 <input type="number" id="experience" name="experience" min="0" required>
             </div>
@@ -254,16 +243,7 @@ footer {
                 </select>
             </div>
 
-            <div class="form-group">
-                <label for="rates">Typical Rates / Pricing</label>
-
-                <input
-                    type="text"
-                    id="rates"
-                    name="rates"
-                    placeholder="Example: 120 MAD/page, 300 MAD/hour, or quote based"
-                >
-            </div>
+            <div class="form-group" ><label for="pricing-method">Your Pricing Method</label><select id="pricing-method" name="pricing-method"><option value="Custom Quotes">Custom Quotes</option><option value="Starting Rate">Starting Rate</option></select></div><fieldset class="translation-details" data-starting-rate hidden><legend>Starting Rate</legend><div class="form-group" ><label for="rate-amount">Your Starting Price</label><input id="rate-amount" name="rate-amount" type="number" min="0" step="any"></div><div class="form-group" ><label for="rate-currency">Currency</label><input id="rate-currency" name="rate-currency" type="text" list="translation-currencies" maxlength="3" dir="ltr" autocomplete="off"></div><datalist id="translation-currencies"></datalist><div class="form-group" ><label for="rate-unit">Pricing Unit</label><select id="rate-unit" name="rate-unit" ><option value="">Select an option</option><option value="Per Word">Per Word</option><option value="Per Page">Per Page</option><option value="Per Hour">Per Hour</option><option value="Per Project">Per Project</option></select></div></fieldset><p class="translation-note">You choose your own rates, units and currencies. Marocora does not set your service price.</p><div class="form-group" ><label for="rates">Additional Pricing Notes</label><input id="rates" name="rates" type="text" maxlength="1000"></div>
 
             <div class="form-group">
                 <label for="credentials">Credentials / Qualifications</label>
@@ -294,8 +274,9 @@ footer {
                 ></textarea>
             </div>
 
-            <button type="submit" class="submit-button">
-                Submit Translator Application
+            <p class="translation-note">Application review is separate from publication. Your contact details and private review information are not part of the public profile.</p>
+<button type="submit" class="submit-button">
+                Submit Provider Application
             </button>
 
             <p class="notice">

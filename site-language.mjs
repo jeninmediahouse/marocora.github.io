@@ -3,8 +3,9 @@ import {siteCopy} from './site-copy.mjs';
 import {homeCopy} from './home-copy.mjs';
 import {siteUI} from './site-ui-copy.mjs';
 import {extraCopy} from './site-extra-copy.mjs';
+import {translationCopy} from './translation-copy.mjs';
 
-const copy={...homeCopy,...siteCopy,...extraCopy}, originals=new WeakMap(), attributes=new WeakMap();
+const copy={...homeCopy,...siteCopy,...extraCopy,...translationCopy}, originals=new WeakMap(), attributes=new WeakMap();
 const norm=s=>s.replace(/\s+/g,' ').trim();
 let locale=resolveLocale(location.search), observer;
 const t=s=>copy[norm(s)]?.[locale] ?? s;
@@ -36,8 +37,8 @@ function translate(root){
   const href=a.getAttribute('href');if(!href||href.startsWith('#'))continue;
   const u=new URL(href,document.baseURI);if(u.origin===location.origin&&/^https?:$/.test(u.protocol))a.href=localURL(href);
  }
- for(const field of root.querySelectorAll('input[type=email],input[type=tel],input[type=url],input[type=number],input[type=datetime-local]'))field.dir='ltr';
- for(const field of root.querySelectorAll('input[type=text],textarea'))field.dir='auto';
+ for(const field of root.querySelectorAll('input[type=email],input[type=tel],input[type=url],input[type=number],input[type=date],input[type=datetime-local],input[data-currency-code]'))field.dir='ltr';
+ for(const field of root.querySelectorAll('input[type=text]:not([data-currency-code]),textarea'))field.dir='auto';
  for(const field of root.querySelectorAll('input[name=interface_language]'))field.value=locale;
 }
 const bar=document.createElement('div');bar.className='site-language-bar';bar.dataset.siteLanguage='';
@@ -54,13 +55,15 @@ function render(){
  translate(document.documentElement);document.dispatchEvent(new CustomEvent('marocora:language',{detail:{locale}}));if(observer)watch();
 }
 function validateForm(form){
+ form.dispatchEvent(new CustomEvent('marocora:beforevalidate'));
  const invalid=[...form.elements].find(n=>n.willValidate&&!n.validity.valid);
- if(invalid){const status=form.querySelector('[data-form-status]')||form.querySelector('[role=status]');if(status){status.hidden=false;status.textContent=ui('checkFields');}invalid.focus();return false;}return true;
+ if(invalid){const status=form.querySelector('[data-form-status]')||form.querySelector('[role=status]');if(status){status.hidden=false;status.textContent=invalid.validity.customError?invalid.validationMessage:ui('checkFields');}invalid.setAttribute('aria-invalid','true');invalid.focus();return false;}return true;
 }
 window.MarocoraSite={t,ui,localURL,validateForm,get locale(){return locale;}};
 selector.addEventListener('change',()=>{locale=selector.value;render();});
 const destinations={'contact.html':'contact-thank-you.html','join.html':'thank-you.html','translator-apply.html':'translator-application-thank-you.html','lesson-request.html':'lesson-thank-you.html','translation-request.html':'translation-thank-you.html'};
 const page=location.pathname.split('/').pop();
+if(['translation-request.html','translator-apply.html'].includes(page))await import('./translation-service.mjs?v=20260929-translation1');
 for(const form of document.forms){
  if(!form.action.includes('formspree.io'))continue;
  const language=document.createElement('input');language.type='hidden';language.name='interface_language';language.value=locale;form.append(language);
@@ -77,4 +80,4 @@ for(const form of document.forms){
  });
 }
 render();observer=new MutationObserver(()=>{observer.disconnect();translate(document.documentElement);watch();});watch();
-await import('./site-services.mjs');
+await import('./site-services.mjs?v=20260929-translation1');

@@ -127,7 +127,8 @@
         }
     </style>
 <link rel="stylesheet" href="site-language.css?v=20260928-site1">
-<script type="module" src="site-language.mjs?v=20260929-home4"></script>
+<script type="module" src="site-language.mjs?v=20260929-translation1"></script>
+<link rel="stylesheet" href="translation-service.css?v=20260929-translation1">
 </head>
 
 <body>
@@ -135,7 +136,7 @@
 <header>
     <div class="header-inner">
         <a href="index.html" class="logo">Marocora</a>
-        <a href="translator-sample.html" class="back-link">← Back to Translator Profile</a>
+        <a href="translators.html" class="back-link">← Back to Translators</a>
     </div>
 </header>
 
@@ -143,7 +144,7 @@
 
     <div class="intro">
 
-        <h1>Request Translation Service</h1>
+        <h1>Request a Translation Quote</h1>
 
         <p>
             Send a translation, interpretation or language-service request
@@ -158,9 +159,10 @@
 
             <input type="hidden" name="_subject" value="New Marocora Translation Service Request">
 
-            <input type="hidden" name="request-type" value="Translation Service Request">
+            <input type="hidden" name="request-type" value="Translation Quote Request"><input type="hidden" name="request-stage" value="Quote requested">
+<p class="translation-note">Your request is unassigned until a suitable provider agrees to quote. No price or booking is confirmed when you send it.</p>
 
-            <input type="hidden" name="provider" value="Sample Translator Profile">
+            <input type="hidden" name="provider" value="Unassigned">
 
             <div class="form-group">
 
@@ -246,7 +248,7 @@
 
                 </select>
 
-            </div>
+            </div><div class="form-group" data-language-other="source" hidden><label for="source-other">Other Source Language</label><input id="source-other" name="source-other" type="text" maxlength="100"></div>
 
             <div class="form-group">
 
@@ -270,9 +272,9 @@
 
                 </select>
 
-            </div>
+            </div><div class="form-group" data-language-other="target" hidden><label for="target-other">Other Target Language</label><input id="target-other" name="target-other" type="text" maxlength="100"></div>
 
-            <div class="form-group">
+            <fieldset class="translation-details" data-interpretation hidden><legend>Interpretation Details</legend><div class="form-group" ><label for="interpretation-mode">Interpretation Mode</label><select id="interpretation-mode" name="interpretation-mode" ><option value="">Select an option</option><option value="Remote">Remote</option><option value="In Person">In Person</option></select></div><div class="form-group" ><label for="appointment">Preferred Date and Time</label><input id="appointment" name="appointment" type="datetime-local" ></div><div class="form-group" ><label for="timezone">Time Zone</label><input id="timezone" name="timezone" type="text" placeholder="Africa/Casablanca" maxlength="100"></div><div class="form-group" ><label for="duration">Estimated Duration (minutes)</label><input id="duration" name="duration" type="number" min="1" step="1"></div><div class="form-group" data-meeting-location><label for="meeting-location">Meeting Location / City</label><input id="meeting-location" name="meeting-location" type="text" maxlength="300"></div></fieldset><fieldset class="translation-details" data-certified hidden><legend>Certified / Sworn Translation</legend><div class="form-group" ><label for="receiving-authority">Receiving Organisation / Country</label><input id="receiving-authority" name="receiving-authority" type="text" maxlength="300"></div><div class="form-group" ><label for="recipient-requirements">Requirements Stated by the Recipient</label><textarea id="recipient-requirements" name="recipient-requirements" maxlength="3000"></textarea></div></fieldset><fieldset class="translation-details" data-written><legend>Document / Content Details</legend><div class="form-group">
 
                 <label for="deadline">Preferred Deadline</label>
 
@@ -284,7 +286,7 @@
 
             </div>
 
-            <div class="form-group">
+            <div class="form-group" ><label for="document-type">Document Type / Content Format</label><input id="document-type" name="document-type" type="text" placeholder="Example: contract, article, website or presentation" maxlength="200"></div><div class="form-group" ><label for="word-count">Approximate Word Count</label><input id="word-count" name="word-count" type="number" min="1" step="1"></div><div class="form-group">
 
                 <label for="document-pages">Approximate Number of Pages</label>
 
@@ -298,20 +300,21 @@
 
             </div>
 
-            <div class="form-group">
+            </fieldset><div class="form-group" ><label for="quote-currency">Preferred Quote Currency (optional)</label><input id="quote-currency" name="quote-currency" type="text" list="translation-currencies" maxlength="3" dir="ltr" autocomplete="off"></div><datalist id="translation-currencies"></datalist><div class="form-group" ><label for="budget">Your Budget (optional)</label><input id="budget" name="budget" type="number" min="0" step="any"></div><p class="translation-note">Your budget is a preference. The provider sets the final price and currency in their quote.</p><div class="form-group">
 
                 <label for="message">Tell Us About Your Request</label>
 
                 <textarea
                     id="message"
-                    name="message"
+                    name="message" required maxlength="5000"
                     placeholder="Describe the document, interpretation assignment, subject matter, deadline, or any special requirements."
                 ></textarea>
 
             </div>
 
-            <button type="submit" class="submit-button">
-                Send Translation Request
+            <p class="translation-note">For an initial quote, describe the content and estimated length. Share documents after the provider and sharing method are agreed.</p>
+<button type="submit" class="submit-button">
+                Send Quote Request
             </button>
 
             <p id="submission-status" role="status" aria-live="polite" hidden></p>

@@ -29,12 +29,3 @@ if(page==='contact.html'){
   const render=()=>{note.textContent=api.ui('selected')+': '+api.t(service);};document.addEventListener('marocora:language',render);render();
  }
 }
-if(page==='translators.html'){
- const filters=document.querySelector('.filters'),input=filters.querySelector('input'),selects=[...filters.querySelectorAll('select')];
- const cards=[...document.querySelectorAll('.translator-card')].map(card=>({card,index:card.dataset.searchIndex}));
- const note=document.createElement('p');note.dataset.siteLanguage='';note.className='service-request-note';filters.after(note);
- const request=document.createElement('a');request.dataset.siteLanguage='';request.className='profile-button';note.after(request);
- const empty=document.createElement('p');empty.dataset.siteLanguage='';empty.setAttribute('role','status');document.querySelector('.translator-grid').after(empty);
- function filter(){let count=0;for(const item of cards){const queries=[input.value,...selects.filter(s=>s.selectedIndex>0).map(s=>s.value)].map(normalize);item.card.hidden=queries.some(q=>!item.index.includes(q));if(!item.card.hidden)count++;}empty.hidden=!!count;empty.textContent=api.ui('noServices');}
- function render(){note.textContent=api.ui('sampleNotice');request.textContent=api.ui('request');request.href=api.localURL('translation-request.html');filter();}input.addEventListener('input',filter);selects.forEach(s=>s.addEventListener('change',filter));document.addEventListener('marocora:language',render);render();
-}
