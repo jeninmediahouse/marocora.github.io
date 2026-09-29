@@ -7,19 +7,27 @@ const walker=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);
 const translated=[];
 while(walker.nextNode()) {
  const n=walker.currentNode;
- if(n.parentElement.closest('script,style,select,.language-item span'))continue;
+ if(n.parentElement.closest('script,style,select,.language-shortcuts,.language-item span'))continue;
  const key=normalize(n.textContent);
  if(homeCopy[key])translated.push({node:n,key});
 }
-const links=[...document.querySelectorAll('a[href]')].map(node=>({node,href:node.getAttribute('href')}));
+const links=[...document.querySelectorAll('a[href]:not([data-language-choice])')].map(node=>({node,href:node.getAttribute('href')}));
 function render(){
  applyLocale(locale);
  for(const {node,key} of translated)node.textContent=homeCopy[key][locale];
  document.querySelector('#locale').value=locale;
  document.querySelector('#locale').setAttribute('aria-label',sharedCopy[locale].language);
  document.querySelector('#language-label').textContent=sharedCopy[locale].language;
+ for(const link of document.querySelectorAll('[data-language-choice]')){
+  const url=new URL(location.href);url.searchParams.set('lang',link.dataset.languageChoice);
+  link.href=url.pathname+url.search+url.hash;
+  if(link.dataset.languageChoice===locale)link.setAttribute('aria-current','true');else link.removeAttribute('aria-current');
+ }
  for(const {node,href} of links){const u=new URL(href,location.href);if(u.origin===location.origin){u.searchParams.set('lang',locale);node.href=u.pathname+u.search+u.hash;}}
  document.title={en:'Marocora — Services in Morocco',fr:'Marocora — Services au Maroc',ar:'ماروكورا — خدمات في المغرب',es:'Marocora — Servicios en Marruecos'}[locale];
 }
 document.querySelector('#locale').onchange=event=>{locale=changeLocale(event.target.value,params);render();};
+for(const link of document.querySelectorAll('[data-language-choice]'))link.addEventListener('click',event=>{
+ event.preventDefault();locale=changeLocale(link.dataset.languageChoice,params);render();
+});
 render();
