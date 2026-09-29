@@ -9,7 +9,7 @@ const norm=s=>s.replace(/\s+/g,' ').trim();
 let locale=resolveLocale(location.search), observer;
 const t=s=>copy[norm(s)]?.[locale] ?? s;
 const ui=k=>siteUI[locale][k];
-function localURL(value){const u=new URL(value,document.baseURI);if(u.origin===location.origin&&/^https?:$/.test(u.protocol))u.searchParams.set('lang',locale);return u.href;}
+function localURL(value){const u=new URL(value,document.baseURI);if(u.origin===location.origin&&/^https?:$/.test(u.protocol)){u.searchParams.set('lang',locale);if(['/', '/index.html'].includes(u.pathname))u.searchParams.set('v','20260929-home3');}return u.href;}
 const skip=n=>n.parentElement?.closest('script,style,textarea,[data-user-content],[data-site-language]');
 function translate(root){
  // Preserve canonical submission values before translating visible option labels.
@@ -41,7 +41,7 @@ function translate(root){
  for(const field of root.querySelectorAll('input[name=interface_language]'))field.value=locale;
 }
 const bar=document.createElement('div');bar.className='site-language-bar';bar.dataset.siteLanguage='';
-bar.innerHTML='<a href="index.html">Marocora</a><label><span></span> <select id="site-locale"></select></label>';
+bar.innerHTML='<a href="/?v=20260929-home3">Marocora</a><label><span></span> <select id="site-locale"></select></label>';
 const selector=bar.querySelector('select');
 for(const [value,label] of Object.entries(localeNames)){const option=document.createElement('option');option.value=value;option.textContent=label;selector.append(option);}
 document.body.prepend(bar);
