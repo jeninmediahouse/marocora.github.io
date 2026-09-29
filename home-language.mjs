@@ -1,7 +1,7 @@
 import {resolveLocale,changeLocale,applyLocale,sharedCopy} from './learn/locale.mjs';
 import {homeCopy} from './home-copy.mjs?v=20260928-site1';
 const params=new URLSearchParams(location.search);
-params.set('v','20260929-home3');
+params.set('v','20260929-home4');
 let locale=resolveLocale(location.search);
 const normalize=text=>text.replace(/\s+/g,' ').trim();
 const walker=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);
@@ -20,11 +20,11 @@ function render(){
  document.querySelector('#locale').setAttribute('aria-label',sharedCopy[locale].language);
  document.querySelector('#language-label').textContent=sharedCopy[locale].language;
  for(const link of document.querySelectorAll('[data-language-choice]')){
-  const url=new URL(location.href);url.searchParams.set('lang',link.dataset.languageChoice);url.searchParams.set('v','20260929-home3');
+  const url=new URL(location.href);url.searchParams.set('lang',link.dataset.languageChoice);url.searchParams.set('v','20260929-home4');
   link.href=url.pathname+url.search+url.hash;
   if(link.dataset.languageChoice===locale)link.setAttribute('aria-current','true');else link.removeAttribute('aria-current');
  }
- for(const {node,href} of links){const u=new URL(href,location.href);if(u.origin===location.origin){u.searchParams.set('lang',locale);if(['/', '/index.html'].includes(u.pathname))u.searchParams.set('v','20260929-home3');node.href=u.pathname+u.search+u.hash;}}
+ for(const {node,href} of links){const u=new URL(href,location.href);if(u.origin===location.origin){u.searchParams.set('lang',locale);if(['/', '/index.html'].includes(u.pathname))u.searchParams.set('v','20260929-home4');node.href=u.pathname+u.search+u.hash;}}
  document.title={en:'Marocora — Services in Morocco',fr:'Marocora — Services au Maroc',ar:'ماروكورا — خدمات في المغرب',es:'Marocora — Servicios en Marruecos'}[locale];
 }
 document.querySelector('#locale').onchange=event=>{locale=changeLocale(event.target.value,params);render();};
