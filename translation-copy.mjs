@@ -451,3 +451,13 @@ export const translationCopy = {
     "es": "200 MAD"
   }
 };
+
+Object.assign(translationCopy,{
+  "Featured Translators":{en:"Featured Translators",ar:"مترجمون مختارون",fr:"Traducteurs à découvrir",es:"Traductores destacados"},
+  "Meet Tanya Naser":{en:"Meet Tanya Naser",ar:"تعرّف على Tanya Naser",fr:"Découvrez Tanya Naser",es:"Conoce a Tanya Naser"},
+  "Arabic and English document translation · Raleigh, North Carolina":{en:"Arabic and English document translation · Raleigh, North Carolina",ar:"ترجمة وثائق بين العربية والإنجليزية · رالي، كارولاينا الشمالية",fr:"Traduction de documents arabe–anglais · Raleigh, Caroline du Nord",es:"Traducción de documentos árabe–inglés · Raleigh, Carolina del Norte"},
+  "Remote document translation · custom quotes":{en:"Remote document translation · custom quotes",ar:"ترجمة وثائق عن بُعد · عروض أسعار مخصصة",fr:"Traduction de documents à distance · devis personnalisés",es:"Traducción de documentos a distancia · presupuestos personalizados"},
+  "View Tanya Naser's profile":{en:"View Tanya Naser's profile",ar:"عرض ملف Tanya Naser",fr:"Voir le profil de Tanya Naser",es:"Ver el perfil de Tanya Naser"},
+  "Tanya Naser · Marocora Translator Profile":{en:"Tanya Naser · Marocora Translator Profile",ar:"Tanya Naser · ملف مترجمة في ماروكورا",fr:"Tanya Naser · Profil de traductrice Marocora",es:"Tanya Naser · Perfil de traductora en Marocora"},
+  "Tanya Naser":{en:"Tanya Naser",ar:"Tanya Naser",fr:"Tanya Naser",es:"Tanya Naser"}
+});
