@@ -3,7 +3,7 @@ import {siteCopy} from './site-copy.mjs';
 import {homeCopy} from './home-copy.mjs';
 import {siteUI} from './site-ui-copy.mjs';
 import {extraCopy} from './site-extra-copy.mjs';
-import {translationCopy} from './translation-copy.mjs';
+import {translationCopy} from './translation-copy.mjs?v=20260930-tanya1';
 
 const copy={...homeCopy,...siteCopy,...extraCopy,...translationCopy}, originals=new WeakMap(), attributes=new WeakMap();
 const norm=s=>s.replace(/\s+/g,' ').trim();
