@@ -401,5 +401,53 @@ export const translationCopy = {
     "fr": "Envoyer la candidature",
     "ar": "أرسل طلب الانضمام",
     "es": "Enviar solicitud de incorporación"
+  },
+  "Meet Tareq Naser": {
+    "en": "Meet Tareq Naser",
+    "fr": "Découvrez Tareq Naser",
+    "ar": "تعرّف على Tareq Naser",
+    "es": "Conoce a Tareq Naser"
+  },
+  "Arabic and English translation and interpretation · Casablanca": {
+    "en": "Arabic and English translation and interpretation · Casablanca",
+    "fr": "Traduction et interprétation arabe–anglais · Casablanca",
+    "ar": "ترجمة تحريرية وشفوية بين العربية والإنجليزية · الدار البيضاء",
+    "es": "Traducción e interpretación árabe–inglés · Casablanca"
+  },
+  "Non-sworn written translation: 200 MAD per page.": {
+    "en": "Non-sworn written translation: 200 MAD per page.",
+    "fr": "Traduction écrite non assermentée : 200 MAD par page.",
+    "ar": "الترجمة التحريرية غير المحلّفة: 200 درهم مغربي للصفحة.",
+    "es": "Traducción escrita no jurada: 200 MAD por página."
+  },
+  "View Tareq Naser's profile": {
+    "en": "View Tareq Naser's profile",
+    "fr": "Voir le profil de Tareq Naser",
+    "ar": "عرض ملف Tareq Naser",
+    "es": "Ver el perfil de Tareq Naser"
+  },
+  "Tareq Naser · Marocora Translator Profile": {
+    "en": "Tareq Naser · Marocora Translator Profile",
+    "fr": "Tareq Naser · Profil de traducteur Marocora",
+    "ar": "Tareq Naser · ملف مترجم في ماروكورا",
+    "es": "Tareq Naser · Perfil de traductor en Marocora"
+  },
+  "Tareq Naser": {
+    "en": "Tareq Naser",
+    "fr": "Tareq Naser",
+    "ar": "Tareq Naser",
+    "es": "Tareq Naser"
+  },
+  "TN": {
+    "en": "TN",
+    "fr": "TN",
+    "ar": "TN",
+    "es": "TN"
+  },
+  "200 MAD": {
+    "en": "200 MAD",
+    "fr": "200 MAD",
+    "ar": "200 MAD",
+    "es": "200 MAD"
   }
 };
