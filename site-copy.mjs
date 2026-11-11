@@ -1,10 +1,10 @@
 // Authored visitor-interface translations. User content and submitted values are not translated.
 export const siteCopy = {
-  "Join the JMH Professional Network | Jenin Media House": {
-    "en": "Join the JMH Professional Network | Jenin Media House",
-    "fr": "Rejoindre le réseau professionnel JMH | Jenin Media House",
-    "ar": "انضم إلى شبكة JMH المهنية | Jenin Media House",
-    "es": "Únete a la red profesional JMH | Jenin Media House"
+  "Join the Marocora Professional Network": {
+    "en": "Join the Marocora Professional Network",
+    "fr": "Rejoindre le réseau professionnel Marocora | Marocora",
+    "ar": "انضم إلى شبكة Marocora المهنية | Marocora",
+    "es": "Únete a la red profesional Marocora | Marocora"
   },
   "← Back to Home": {
     "en": "← Back to Home",
@@ -12,11 +12,11 @@ export const siteCopy = {
     "ar": "← العودة للرئيسية",
     "es": "← Volver al inicio"
   },
-  "Join the JMH Professional Network": {
-    "en": "Join the JMH Professional Network",
-    "fr": "Rejoignez le réseau professionnel JMH",
-    "ar": "انضم إلى شبكة JMH المهنية",
-    "es": "Únete a la red profesional JMH"
+  "Join the Marocora Professional Network": {
+    "en": "Join the Marocora Professional Network",
+    "fr": "Rejoignez le réseau professionnel Marocora",
+    "ar": "انضم إلى شبكة Marocora المهنية",
+    "es": "Únete a la red profesional Marocora"
   },
   "Are you a Moroccan professional, independent service provider, teacher, creative, consultant, or specialist?": {
     "en": "Are you a Moroccan professional, independent service provider, teacher, creative, consultant, or specialist?",
@@ -36,11 +36,11 @@ export const siteCopy = {
     "ar": "طلب الانضمام للشبكة المهنية",
     "es": "Solicitud para la red profesional"
   },
-  "Please complete the form below to apply to join the JMH Professional Network.": {
-    "en": "Please complete the form below to apply to join the JMH Professional Network.",
-    "fr": "Remplissez le formulaire pour rejoindre le réseau professionnel JMH.",
-    "ar": "أكمل النموذج للانضمام إلى شبكة JMH المهنية.",
-    "es": "Completa el formulario para solicitar tu incorporación a la red profesional JMH."
+  "Please complete the form below to apply to join the Marocora Professional Network.": {
+    "en": "Please complete the form below to apply to join the Marocora Professional Network.",
+    "fr": "Remplissez le formulaire pour rejoindre le réseau professionnel Marocora.",
+    "ar": "أكمل النموذج للانضمام إلى شبكة Marocora المهنية.",
+    "es": "Completa el formulario para solicitar tu incorporación a la red profesional Marocora."
   },
   "Full Name": {
     "en": "Full Name",
@@ -324,17 +324,17 @@ export const siteCopy = {
     "ar": "البريد الإلكتروني",
     "es": "Correo electrónico"
   },
-  "May JMH Publish Your Professional Profile on Our Website?": {
-    "en": "May JMH Publish Your Professional Profile on Our Website?",
-    "fr": "JMH peut-il publier votre profil professionnel sur notre site ?",
-    "ar": "هل تسمح لـ JMH بنشر ملفك المهني على موقعنا؟",
-    "es": "¿Puede JMH publicar tu perfil profesional en nuestro sitio?"
+  "May Marocora Publish Your Professional Profile on Our Website?": {
+    "en": "May Marocora Publish Your Professional Profile on Our Website?",
+    "fr": "Marocora peut-il publier votre profil professionnel sur notre site ?",
+    "ar": "هل تسمح لـ Marocora بنشر ملفك المهني على موقعنا؟",
+    "es": "¿Puede Marocora publicar tu perfil profesional en nuestro sitio?"
   },
-  "I confirm that the information provided in this application is accurate and understand that JMH may review my information before approving my professional profile.": {
-    "en": "I confirm that the information provided in this application is accurate and understand that JMH may review my information before approving my professional profile.",
-    "fr": "Je confirme l’exactitude des informations et comprends que JMH peut les examiner avant d’approuver mon profil.",
-    "ar": "أؤكد صحة المعلومات وأفهم أن JMH قد تراجعها قبل اعتماد ملفي المهني.",
-    "es": "Confirmo que los datos son correctos y entiendo que JMH puede revisarlos antes de aprobar mi perfil profesional."
+  "I confirm that the information provided in this application is accurate and understand that Marocora may review my information before approving my professional profile.": {
+    "en": "I confirm that the information provided in this application is accurate and understand that Marocora may review my information before approving my professional profile.",
+    "fr": "Je confirme l’exactitude des informations et comprends que Marocora peut les examiner avant d’approuver mon profil.",
+    "ar": "أؤكد صحة المعلومات وأفهم أن Marocora قد تراجعها قبل اعتماد ملفي المهني.",
+    "es": "Confirmo que los datos son correctos y entiendo que Marocora puede revisarlos antes de aprobar mi perfil profesional."
   },
   "Submit Application": {
     "en": "Submit Application",
@@ -1242,11 +1242,11 @@ export const siteCopy = {
     "ar": "إرسال الطلب لا يضمن القبول في شبكة ماروكورا. قد تتم مراجعة المؤهلات والخبرة والمعلومات الأخرى قبل اعتماد الملف.",
     "es": "Enviar una solicitud no garantiza la admisión en la red Marocora. Podemos revisar las cualificaciones, la experiencia y otros datos antes de aprobar el perfil."
   },
-  "Lesson Request Received | Jenin Media House": {
-    "en": "Lesson Request Received | Jenin Media House",
-    "fr": "Demande de cours reçue | Jenin Media House",
-    "ar": "تم استلام طلب الدرس | Jenin Media House",
-    "es": "Solicitud de clase recibida | Jenin Media House"
+  "Lesson Request Received | Marocora": {
+    "en": "Lesson Request Received | Marocora",
+    "fr": "Demande de cours reçue | Marocora",
+    "ar": "تم استلام طلب الدرس | Marocora",
+    "es": "Solicitud de clase recibida | Marocora"
   },
   "Lesson Request Received": {
     "en": "Lesson Request Received",
@@ -1254,35 +1254,35 @@ export const siteCopy = {
     "ar": "تم استلام طلب الدرس",
     "es": "Solicitud de clase recibida"
   },
-  "Thank you for submitting your lesson request through the JMH Professional Network. We have received your information and will follow up regarding teacher availability, scheduling and lesson details.": {
-    "en": "Thank you for submitting your lesson request through the JMH Professional Network. We have received your information and will follow up regarding teacher availability, scheduling and lesson details.",
-    "fr": "Merci pour votre demande de cours via le réseau JMH. Nous avons reçu vos informations et vous contacterons au sujet des disponibilités, horaires et détails du cours.",
-    "ar": "شكراً لطلب الدرس عبر شبكة JMH المهنية. استلمنا معلوماتك وسنتواصل معك بشأن توفر المدرس والمواعيد وتفاصيل الدرس.",
-    "es": "Gracias por solicitar una clase a través de la red JMH. Hemos recibido tus datos y te contactaremos sobre la disponibilidad, los horarios y los detalles de la clase."
+  "Thank you for submitting your lesson request through the Marocora Professional Network. We have received your information and will follow up regarding teacher availability, scheduling and lesson details.": {
+    "en": "Thank you for submitting your lesson request through the Marocora Professional Network. We have received your information and will follow up regarding teacher availability, scheduling and lesson details.",
+    "fr": "Merci pour votre demande de cours via le réseau Marocora. Nous avons reçu vos informations et vous contacterons au sujet des disponibilités, horaires et détails du cours.",
+    "ar": "شكراً لطلب الدرس عبر شبكة Marocora المهنية. استلمنا معلوماتك وسنتواصل معك بشأن توفر المدرس والمواعيد وتفاصيل الدرس.",
+    "es": "Gracias por solicitar una clase a través de la red Marocora. Hemos recibido tus datos y te contactaremos sobre la disponibilidad, los horarios y los detalles de la clase."
   },
-  "Return to Jenin Media House": {
-    "en": "Return to Jenin Media House",
-    "fr": "Retour à Jenin Media House",
-    "ar": "العودة إلى Jenin Media House",
-    "es": "Volver a Jenin Media House"
+  "Return to Marocora": {
+    "en": "Return to Marocora",
+    "fr": "Retour à Marocora",
+    "ar": "العودة إلى Marocora",
+    "es": "Volver a Marocora"
   },
-  "JMH Professional Network · Jenin Media House": {
-    "en": "JMH Professional Network · Jenin Media House",
-    "fr": "Réseau professionnel JMH · Jenin Media House",
-    "ar": "شبكة JMH المهنية · Jenin Media House",
-    "es": "Red profesional JMH · Jenin Media House"
+  "Marocora Professional Network": {
+    "en": "Marocora Professional Network",
+    "fr": "Réseau professionnel Marocora · Marocora",
+    "ar": "شبكة Marocora المهنية · Marocora",
+    "es": "Red profesional Marocora · Marocora"
   },
-  "Contact Jenin Media House": {
-    "en": "Contact Jenin Media House",
-    "fr": "Contacter Jenin Media House",
-    "ar": "التواصل مع Jenin Media House",
-    "es": "Contactar con Jenin Media House"
+  "Contact Marocora": {
+    "en": "Contact Marocora",
+    "fr": "Contacter Marocora",
+    "ar": "التواصل مع Marocora",
+    "es": "Contactar con Marocora"
   },
-  "Have a question about JMH services, the Professional Network, translation, consulting, or working with one of our providers? Send us a message below.": {
-    "en": "Have a question about JMH services, the Professional Network, translation, consulting, or working with one of our providers? Send us a message below.",
+  "Have a question about Marocora services, the Professional Network, translation, consulting, or working with one of our providers? Send us a message below.": {
+    "en": "Have a question about Marocora services, the Professional Network, translation, consulting, or working with one of our providers? Send us a message below.",
     "fr": "Une question sur nos services, le réseau professionnel, la traduction, le conseil ou nos prestataires ? Envoyez-nous un message.",
-    "ar": "هل لديك سؤال عن خدمات JMH أو الشبكة المهنية أو الترجمة أو الاستشارات أو أحد مقدمي الخدمات؟ أرسل لنا رسالة.",
-    "es": "¿Tienes dudas sobre los servicios de JMH, la red profesional, la traducción, la consultoría o nuestros proveedores? Envíanos un mensaje."
+    "ar": "هل لديك سؤال عن خدمات Marocora أو الشبكة المهنية أو الترجمة أو الاستشارات أو أحد مقدمي الخدمات؟ أرسل لنا رسالة.",
+    "es": "¿Tienes dudas sobre los servicios de Marocora, la red profesional, la traducción, la consultoría o nuestros proveedores? Envíanos un mensaje."
   },
   "What Can We Help You With?": {
     "en": "What Can We Help You With?",
@@ -1350,17 +1350,17 @@ export const siteCopy = {
     "ar": "الدار البيضاء - النواصر، المغرب",
     "es": "Casablanca - Nouaceur, Marruecos"
   },
-  "Email: join@jeninmediahouse.com": {
-    "en": "Email: join@jeninmediahouse.com",
-    "fr": "E-mail : join@jeninmediahouse.com",
-    "ar": "البريد الإلكتروني: join@jeninmediahouse.com",
-    "es": "Correo: join@jeninmediahouse.com"
+  "Email: admin@marocora.com": {
+    "en": "Email: admin@marocora.com",
+    "fr": "E-mail : admin@marocora.com",
+    "ar": "البريد الإلكتروني: admin@marocora.com",
+    "es": "Correo: admin@marocora.com"
   },
-  "© 2026 Jenin Media House": {
-    "en": "© 2026 Jenin Media House",
-    "fr": "© 2026 Jenin Media House",
-    "ar": "© 2026 Jenin Media House",
-    "es": "© 2026 Jenin Media House"
+  "© 2026 Marocora": {
+    "en": "© 2026 Marocora",
+    "fr": "© 2026 Marocora",
+    "ar": "© 2026 Marocora",
+    "es": "© 2026 Marocora"
   },
   "Book an Online Lesson | Marocora": {
     "en": "Request an Online Lesson | Marocora",
@@ -1482,11 +1482,11 @@ export const siteCopy = {
     "ar": "الدفع غير متاح",
     "es": "Pago no disponible"
   },
-  "Message Received | Jenin Media House": {
-    "en": "Message Received | Jenin Media House",
-    "fr": "Message reçu | Jenin Media House",
-    "ar": "تم استلام الرسالة | Jenin Media House",
-    "es": "Mensaje recibido | Jenin Media House"
+  "Message Received | Marocora": {
+    "en": "Message Received | Marocora",
+    "fr": "Message reçu | Marocora",
+    "ar": "تم استلام الرسالة | Marocora",
+    "es": "Mensaje recibido | Marocora"
   },
   "Message Received": {
     "en": "Message Received",
@@ -1494,11 +1494,11 @@ export const siteCopy = {
     "ar": "تم استلام الرسالة",
     "es": "Mensaje recibido"
   },
-  "Thank you for contacting Jenin Media House. We have successfully received your message and will review your inquiry as soon as possible.": {
-    "en": "Thank you for contacting Jenin Media House. We have successfully received your message and will review your inquiry as soon as possible.",
-    "fr": "Merci d’avoir contacté Jenin Media House. Votre message a été reçu et sera examiné dès que possible.",
-    "ar": "شكراً للتواصل مع Jenin Media House. تم استلام رسالتك وسنراجع استفسارك في أقرب وقت ممكن.",
-    "es": "Gracias por contactar con Jenin Media House. Hemos recibido tu mensaje y revisaremos tu consulta lo antes posible."
+  "Thank you for contacting Marocora. We have successfully received your message and will review your inquiry as soon as possible.": {
+    "en": "Thank you for contacting Marocora. We have successfully received your message and will review your inquiry as soon as possible.",
+    "fr": "Merci d’avoir contacté Marocora. Votre message a été reçu et sera examiné dès que possible.",
+    "ar": "شكراً للتواصل مع Marocora. تم استلام رسالتك وسنراجع استفسارك في أقرب وقت ممكن.",
+    "es": "Gracias por contactar con Marocora. Hemos recibido tu mensaje y revisaremos tu consulta lo antes posible."
   },
   "Send Another Message": {
     "en": "Send Another Message",
@@ -1506,11 +1506,11 @@ export const siteCopy = {
     "ar": "إرسال رسالة أخرى",
     "es": "Enviar otro mensaje"
   },
-  "Jenin Media House · Casablanca–Nouaceur, Morocco": {
-    "en": "Jenin Media House · Casablanca–Nouaceur, Morocco",
-    "fr": "Jenin Media House · Casablanca - Nouaceur, Maroc",
-    "ar": "Jenin Media House · الدار البيضاء - النواصر، المغرب",
-    "es": "Jenin Media House · Casablanca - Nouaceur, Marruecos"
+  "Marocora · Casablanca–Nouaceur, Morocco": {
+    "en": "Marocora · Casablanca–Nouaceur, Morocco",
+    "fr": "Marocora · Casablanca - Nouaceur, Maroc",
+    "ar": "Marocora · الدار البيضاء - النواصر، المغرب",
+    "es": "Marocora · Casablanca - Nouaceur, Marruecos"
   },
   "Translator Application Received | Marocora Professional Network": {
     "en": "Translator Application Received | Marocora Professional Network",
@@ -1980,11 +1980,11 @@ export const siteCopy = {
     "ar": "تصفح مترجمين آخرين",
     "es": "Ver otros traductores"
   },
-  "Application Received | Jenin Media House": {
-    "en": "Application Received | Jenin Media House",
-    "fr": "Candidature reçue | Jenin Media House",
-    "ar": "تم استلام الطلب | Jenin Media House",
-    "es": "Solicitud recibida | Jenin Media House"
+  "Application Received | Marocora": {
+    "en": "Application Received | Marocora",
+    "fr": "Candidature reçue | Marocora",
+    "ar": "تم استلام الطلب | Marocora",
+    "es": "Solicitud recibida | Marocora"
   },
   "Application Received": {
     "en": "Application Received",
@@ -1992,11 +1992,11 @@ export const siteCopy = {
     "ar": "تم استلام الطلب",
     "es": "Solicitud recibida"
   },
-  "Thank you for applying to join the JMH Professional Network.": {
-    "en": "Thank you for applying to join the JMH Professional Network.",
-    "fr": "Merci pour votre candidature au réseau professionnel JMH.",
-    "ar": "شكراً لطلب الانضمام إلى شبكة JMH المهنية.",
-    "es": "Gracias por solicitar incorporarte a la red profesional JMH."
+  "Thank you for applying to join the Marocora Professional Network.": {
+    "en": "Thank you for applying to join the Marocora Professional Network.",
+    "fr": "Merci pour votre candidature au réseau professionnel Marocora.",
+    "ar": "شكراً لطلب الانضمام إلى شبكة Marocora المهنية.",
+    "es": "Gracias por solicitar incorporarte a la red profesional Marocora."
   },
   "We have successfully received your application. Our team will review your information and contact you if additional information is required.": {
     "en": "We have successfully received your application. Our team will review your information and contact you if additional information is required.",
@@ -2028,11 +2028,11 @@ export const siteCopy = {
     "ar": "تصفح مهنيين لغويين آخرين",
     "es": "Ver otros profesionales de idiomas"
   },
-  "Marocora Professional Network | Jenin Media House": {
-    "en": "Marocora Professional Network | Jenin Media House",
-    "fr": "Réseau professionnel Marocora | Jenin Media House",
-    "ar": "شبكة Marocora المهنية | Jenin Media House",
-    "es": "Red profesional Marocora | Jenin Media House"
+  "Marocora Professional Network": {
+    "en": "Marocora Professional Network",
+    "fr": "Réseau professionnel Marocora | Marocora",
+    "ar": "شبكة Marocora المهنية | Marocora",
+    "es": "Red profesional Marocora | Marocora"
   },
   "Marocora Professional Network": {
     "en": "Marocora Professional Network",
@@ -2184,17 +2184,17 @@ export const siteCopy = {
     "ar": "تقدم للانضمام",
     "es": "Solicitar incorporación"
   },
-  "© 2026 Jenin Media House · Casablanca–Nouaceur, Morocco": {
-    "en": "© 2026 Jenin Media House · Casablanca–Nouaceur, Morocco",
-    "fr": "© 2026 Jenin Media House · Casablanca - Nouaceur, Maroc",
-    "ar": "© 2026 Jenin Media House · الدار البيضاء - النواصر، المغرب",
-    "es": "© 2026 Jenin Media House · Casablanca - Nouaceur, Marruecos"
+  "© 2026 Marocora · Casablanca–Nouaceur, Morocco": {
+    "en": "© 2026 Marocora · Casablanca–Nouaceur, Morocco",
+    "fr": "© 2026 Marocora · Casablanca - Nouaceur, Maroc",
+    "ar": "© 2026 Marocora · الدار البيضاء - النواصر، المغرب",
+    "es": "© 2026 Marocora · Casablanca - Nouaceur, Marruecos"
   },
-  "JENIN MEDIA HOUSE": {
-    "en": "JENIN MEDIA HOUSE",
-    "fr": "JENIN MEDIA HOUSE",
-    "ar": "JENIN MEDIA HOUSE",
-    "es": "JENIN MEDIA HOUSE"
+  "MAROCORA": {
+    "en": "MAROCORA",
+    "fr": "MAROCORA",
+    "ar": "MAROCORA",
+    "es": "MAROCORA"
   },
   "https://example.com": {
     "en": "https://example.com",
@@ -2202,11 +2202,11 @@ export const siteCopy = {
     "ar": "https://example.com",
     "es": "https://example.com"
   },
-  "Jenin Media House": {
-    "en": "Jenin Media House",
-    "fr": "Jenin Media House",
-    "ar": "Jenin Media House",
-    "es": "Jenin Media House"
+  "Marocora": {
+    "en": "Marocora",
+    "fr": "Marocora",
+    "ar": "Marocora",
+    "es": "Marocora"
   },
   "Marocora": {
     "en": "Marocora",
