@@ -1,5 +1,5 @@
 import {resolveLocale,applyLocale,localeNames,sharedCopy} from './learn/locale.mjs';
-import {siteCopy} from './site-copy.mjs';
+import {siteCopy} from './site-copy.mjs?v=20261111-brand1';
 import {homeCopy} from './home-copy.mjs';
 import {siteUI} from './site-ui-copy.mjs';
 import {extraCopy} from './site-extra-copy.mjs';
