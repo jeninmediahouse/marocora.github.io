@@ -62,12 +62,15 @@ function validateForm(form){
 window.MarocoraSite={t,ui,localURL,validateForm,get locale(){return locale;}};
 selector.addEventListener('change',()=>{locale=selector.value;render();});
 const destinations={'contact.html':'contact-thank-you.html','join.html':'thank-you.html','translator-apply.html':'translator-application-thank-you.html','lesson-request.html':'lesson-thank-you.html','translation-request.html':'translation-thank-you.html'};
+const intakeKind={'contact.html':'contact','join.html':'network','translator-apply.html':'translator','lesson-request.html':'lesson','translation-request.html':'translation'};
 const page=location.pathname.split('/').pop();
+const verification=destinations[page]?await import('./service-verification.mjs?v=20261111-verify1'):null;
 if(['translation-request.html','translator-apply.html'].includes(page))await import('./translation-service.mjs?v=20260929-translation1');
 for(const form of document.forms){
- if(!form.action.includes('formspree.io'))continue;
+ if(!intakeKind[page])continue;
  const language=document.createElement('input');language.type='hidden';language.name='interface_language';language.value=locale;form.append(language);
  if(!destinations[page])continue;
+ verification.prepareVerification(form);
  // One localized submission handler keeps fields intact on rejection or uncertain receipt.
  form.noValidate=true;const status=form.querySelector('[role=status]')||document.createElement('p');status.dataset.formStatus='';status.setAttribute('role','status');status.setAttribute('aria-live','polite');status.hidden=true;if(!status.parentNode)form.append(status);
  let busy=false,statusKey='';const show=key=>{statusKey=key;status.hidden=false;status.textContent=ui(key);};
@@ -75,8 +78,8 @@ for(const form of document.forms){
  form.addEventListener('submit',async event=>{
   event.preventDefault();if(busy)return;if(!validateForm(form)){statusKey='checkFields';return;}
   busy=true;const buttons=[...form.querySelectorAll('[type=submit]')];buttons.forEach(n=>n.disabled=true);form.setAttribute('aria-busy','true');show('sending');
-  try{const response=await fetch(form.action,{method:'POST',body:new FormData(form),headers:{Accept:'application/json'}});if(response.ok)location.assign(localURL(destinations[page]));else show('rejected');}
-  catch{show('uncertain');}finally{busy=false;buttons.forEach(n=>n.disabled=false);form.removeAttribute('aria-busy');}
+  try{const result=await verification.submitVerifiedIntake(intakeKind[page],new FormData(form),form);if(!result.pending)location.assign(localURL(destinations[page]));else{statusKey='';status.hidden=true;}}
+  catch(error){if(error.verificationPending){statusKey='';status.hidden=true;}else show('uncertain');}finally{busy=false;buttons.forEach(n=>n.disabled=false);form.removeAttribute('aria-busy');}
  });
 }
 render();observer=new MutationObserver(()=>{observer.disconnect();translate(document.documentElement);watch();});watch();
