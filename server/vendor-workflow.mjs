@@ -11,7 +11,7 @@ export function mailFields({application:a,event:e}){
  message:e.payload.message,requested_information:questions,additional_information:answers,application_url:appURL,review_application:reviewURL,
  _subject:`Marocora application: ${a.name} — ${e.kind==='submitted'?'new application':e.kind.replaceAll('_',' ')}`};
 }
-export function createVendorHandler({supabaseURL,serviceKey,mailForm,fetcher=fetch}){
+export function createVendorHandler({supabaseURL,serviceKey,mailForm,sendMail,fetcher=fetch}){
  return async request=>{
   const origin=request.headers.get('origin');
   const headers={'Access-Control-Allow-Origin':allowedOrigins.has(origin)?origin:'https://marocora.com','Vary':'Origin','Cache-Control':'no-store','Content-Type':'application/json','Access-Control-Allow-Headers':'authorization,apikey,content-type,x-client-info','Access-Control-Allow-Methods':'POST, OPTIONS'};
@@ -35,7 +35,7 @@ export function createVendorHandler({supabaseURL,serviceKey,mailForm,fetcher=fet
    }
    let result;
    // Fail before saving a decision when mail integration has not been activated.
-   if(!/^[a-z]{8}$/.test(mailForm||''))return reply(503,{error:'EMAIL_WORKFLOW_NOT_CONFIGURED'});
+   if(!sendMail&&!/^[a-z]{8}$/.test(mailForm||''))return reply(503,{error:'EMAIL_WORKFLOW_NOT_CONFIGURED'});
    if(input.action==='decide'){
     if(!uuid.test(input.commandId||'')||!uuid.test(input.id||''))return reply(400,{error:'INVALID_REQUEST'});
     result=await rpc('vendor_decide',{p_id:input.id,p_revision:input.revision,p_decision:input.decision,p_message:input.message,p_questions:input.questions||[],p_subjects:input.subjects||[],p_command:input.commandId});
@@ -54,11 +54,15 @@ export function createVendorHandler({supabaseURL,serviceKey,mailForm,fetcher=fet
     const item=await rpc('vendor_claim_mail',{p_id:result.application_id,p_user:user.id},true);if(!item)break;
     let state='uncertain';
     try{
+     if(sendMail){state=(await sendMail(item)).state;}else{
      const r=await fetcher(`https://formspree.io/f/${mailForm}`,{method:'POST',headers:{Accept:'application/json','Content-Type':'application/json'},body:JSON.stringify(mailFields(item)),signal:AbortSignal.timeout(15000)});
      const data=await r.json();if(r.ok&&!data.errors&&data.ok!==false)state='sent';else if(r.status>=400&&r.status<500)state='failed';
+     }
     }catch{}
     await rpc('vendor_finish_mail',{p_event:item.event.id,p_delivery:state},true);if(state!=='sent')pending=true;
    }
+   const health=await rpc('vendor_mail_health',{p_id:result.application_id,p_user:user.id},true);
+   if(health?.needs_attention)pending=true;
    return reply(pending?202:200,{...result,email:pending?'needs_attention':'processed'});
   }catch(error){
    const message=error.message||'';

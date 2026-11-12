@@ -32,3 +32,12 @@ test('application HTML escapes submitted content, questions and replies',()=>{
  assert.deepEqual(requestedQuestions(' Licence details?\n\nService area?'),[{id:'q1',label:'Licence details?'},{id:'q2',label:'Service area?'}]);
  assert.throws(()=>mailFields({application:{},event:{kind:'forged'}}),/INVALID_EVENT/);
 });
+
+test('authenticated mail transport is used without a public submission endpoint',async()=>{
+ let claimed=false,mail;const h=createVendorHandler({supabaseURL:'https://db.test',serviceKey:'secret',sendMail:async item=>{mail=item;return {state:'sent'};},fetcher:async url=>{if(url.endsWith('/user'))return json(user);if(url.endsWith('vendor_decide'))return json({application_id:id});if(url.endsWith('vendor_claim_mail')){if(claimed)return json(null);claimed=true;return json({application:{id,email:user.email},event:{id:commandId,kind:'approved',payload:{message:'Welcome'}}});}assert.ok(!url.includes('formspree'));return json(null);}});
+ const r=await h(request({action:'decide',id,commandId}));assert.equal(r.status,200);assert.equal(mail.application.email,user.email);
+});
+test('an idempotent retry reports an existing failed mail instead of false success',async()=>{
+ const h=createVendorHandler({supabaseURL:'https://db.test',serviceKey:'secret',mailForm:'abcdefgh',fetcher:async url=>{if(url.endsWith('/user'))return json(user);if(url.endsWith('vendor_decide'))return json({application_id:id});if(url.endsWith('vendor_mail_health'))return json({needs_attention:true});return json(null);}});
+ const r=await h(request({action:'decide',id,commandId}));assert.equal(r.status,202);assert.equal((await r.json()).email,'needs_attention');
+});

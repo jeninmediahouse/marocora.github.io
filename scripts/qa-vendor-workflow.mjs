@@ -11,7 +11,7 @@ create function auth.role() returns text language sql stable as $$select current
 grant usage on schema public,auth to anon,authenticated,service_role;
 grant execute on function auth.uid(),auth.role() to anon,authenticated,service_role;
 insert into auth.users(id,email,email_confirmed_at) values('${staff}','staff@example.test',now()),('${owner}','owner@example.test',now()),('${other}','other@example.test',now());`);
-for(const file of ['learning_instructor_drafts.sql','learning_staff_review.sql','service_intake.sql','vendor_workflow.sql'])await db.exec(readFileSync(new URL('../supabase/'+file,import.meta.url),'utf8'));
+for(const file of ['learning_instructor_drafts.sql','learning_staff_review.sql','service_intake.sql','vendor_workflow.sql','vendor_workflow_delivery.sql'])await db.exec(readFileSync(new URL('../supabase/'+file,import.meta.url),'utf8'));
 await db.exec(`insert into public.learning_review_staff(user_id) values('${staff}');insert into public.service_intakes(id,user_id,email,email_verified_at,kind,fields,request_hash) values('20000000-0000-4000-8000-000000000001','${owner}','owner@example.test',now(),'network','{"full-name":"Driver Fixture","category":"transportation","email":"owner@example.test"}',repeat('a',64));`);
 const id='20000000-0000-4000-8000-000000000001';let checks=0;
 async function as(uid,role='authenticated'){await db.exec(`reset role;select set_config('request.jwt.claim.sub','${uid}',false);select set_config('request.jwt.claim.role','${role}',false);set role ${role};`);}
