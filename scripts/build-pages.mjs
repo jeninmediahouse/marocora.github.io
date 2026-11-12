@@ -28,4 +28,4 @@ await build({ entryPoints: [join(learning, 'staff-review.mjs')], outfile: join(o
 console.log(`Pages artifact ready: ${output}`);
 
 for (const entry of ["app", "account", "schedule"]) await build({entryPoints:[join(learning,`${entry}.mjs`)],outfile:join(output,"learn",`${entry}.mjs`),bundle:true,format:"esm",target:"es2022",minify:true});
-for(const entry of ['service-verification','service-account','service-review'])await build({entryPoints:[join(root,`${entry}.mjs`)],outfile:join(output,`${entry}.mjs`),bundle:true,format:'esm',target:'es2022',minify:true});
+for(const entry of ['service-verification','service-account','service-review','vendor-review','application'])await build({entryPoints:[join(root,`${entry}.mjs`)],outfile:join(output,`${entry}.mjs`),bundle:true,format:'esm',target:'es2022',minify:true});
