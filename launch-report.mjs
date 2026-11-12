@@ -22,5 +22,12 @@ document.querySelector('#export').onclick=()=>{
  const csv='snapshot_utc,scope,status,count\r\n'+Object.keys(labels).map(k=>`${snapshot.at},production_vendor_applications,${k},${snapshot.counts[k]}`).join('\r\n')+'\r\n';
  const url=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'})),link=document.createElement('a');link.href=url;link.download=`marocora-vendor-launch-${snapshot.at.slice(0,10)}.csv`;link.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
 };
-instructorStore.auth.onAuthStateChange(event=>{if(event==='SIGNED_OUT'||event==='SIGNED_IN'){requestVersion++;clear();gate.hidden=false;status.textContent='Refresh to verify reviewer access.';document.querySelector('#refresh').disabled=false;}});
+instructorStore.auth.onAuthStateChange(event=>{
+ if(event==='SIGNED_OUT'||event==='SIGNED_IN'){
+  requestVersion++;clear();document.querySelector('#refresh').disabled=false;
+  gate.hidden=event==='SIGNED_IN';status.textContent=event==='SIGNED_IN'?'Checking reviewer access…':'This report requires an authorised reviewer account.';
+  // Run outside the auth callback so an existing session loads automatically.
+  if(event==='SIGNED_IN')setTimeout(load,0);
+ }
+});
 await load();
