@@ -1,0 +1,13 @@
+Marocora — Customer intake
+Received: {{_time}}
+
+Open the saved request:
+https://marocora.com/service-review.html#{{verification_receipt}}
+
+Confirm the verified record in Marocora before acting. An email alone does not establish identity or confirm a booking.
+
+{{#_fields}}
+{{_name}}: {{_value}}
+{{/_fields}}
+
+Manage notification subscription: {{_unsubscribe}}

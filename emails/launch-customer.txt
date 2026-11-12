@@ -1,0 +1,9 @@
+Marocora — Request received
+
+{{ autoresponse_message }}
+
+Please keep this email. Reply to clarify your request rather than submitting it again.
+Contact: admin@marocora.com
+https://marocora.com/
+
+A service or booking is confirmed separately.

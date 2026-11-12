@@ -2,7 +2,7 @@ import {resolveLocale,applyLocale,localeNames,sharedCopy} from './learn/locale.m
 import {siteCopy} from './site-copy.mjs?v=20261111-brand1';
 import {homeCopy} from './home-copy.mjs';
 import {siteUI} from './site-ui-copy.mjs';
-import {extraCopy} from './site-extra-copy.mjs';
+import {extraCopy} from './site-extra-copy.mjs?v=20261112-launch1';
 import {translationCopy} from './translation-copy.mjs?v=20260930-tanya1';
 
 const copy={...homeCopy,...siteCopy,...extraCopy,...translationCopy}, originals=new WeakMap(), attributes=new WeakMap();
