@@ -11,3 +11,8 @@ test('provider authentication and idempotency stay on the server and do not appe
 test('provider rejections and ambiguous responses are reported without leaking credentials or claiming delivery',async()=>{
  for(const [status,state] of [[403,'failed'],[429,'uncertain'],[409,'uncertain'],[500,'uncertain']]){const t=createResendTransport({apiKey:'private',fetcher:async()=>new Response(JSON.stringify({message:'internal private detail'}),{status})});assert.deepEqual(await t(item),{state});}
 });
+
+test('test decisions are clearly marked for both recipients without changing canonical links',()=>{
+ const [applicant,admin]=vendorEmailBatch({...item,application:{...item.application,is_test:true}});
+ for(const mail of [applicant,admin]){assert.match(mail.subject,/^\[TEST\] /);assert.match(mail.html,/TEST DATA/);assert.match(mail.text,/^\[TEST\] /);}
+});

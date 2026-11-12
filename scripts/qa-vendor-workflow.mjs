@@ -64,5 +64,28 @@ const captured=(await db.query("select * from public.vendor_application_events w
 assert.equal(captured.length,1);assert.equal(captured[0].kind,'submitted');assert.equal(captured[0].delivery,'pending');checks++;
 assert.equal((await db.query("select is_test from public.vendor_applications where id='20000000-0000-4000-8000-000000000009'")).rows[0].is_test,true);checks++;
 
+// Test fixtures remain excluded through approval, replies and attempted flag removal.
+await db.exec(readFileSync(new URL('../supabase/vendor_workflow_test_fixtures.sql',import.meta.url),'utf8'));
+await db.exec(`update auth.users set email='admin+vendorqa@marocora.com' where id='${other}';
+update public.vendor_applications set email='admin+vendorqa@marocora.com' where id='20000000-0000-4000-8000-000000000009';
+insert into public.vendor_applications(id,source,source_key,user_id,email,name,category,fields,is_test)
+values('20000000-0000-4000-8000-000000000010','translator','permanent-fixture','${other}','admin+vendorqa@marocora.com','VENDOR-QA-Tanya','translation','{}',true);
+insert into public.vendor_test_fixtures(application_id,delivery_email,reason) values('20000000-0000-4000-8000-000000000010','admin+vendorqa@marocora.com','Owned test fixture');`);
+const fixture='20000000-0000-4000-8000-000000000010';
+await as(staff);
+const beforeSummary=(await db.query('select public.vendor_production_summary()')).rows[0].vendor_production_summary;
+const beforeFixture=(await db.query('select public.vendor_review_queue($1)',[fixture])).rows[0].vendor_review_queue[0];
+assert.equal(beforeFixture.test_workflow,true);checks++;
+await db.query("select public.vendor_decide($1,1,'approved','TEST approval only','[]','[]',gen_random_uuid())",[fixture]);checks++;
+assert.deepEqual((await db.query('select public.vendor_production_summary()')).rows[0].vendor_production_summary,beforeSummary);checks++;
+await fails(`select public.vendor_decide('20000000-0000-4000-8000-000000000009',1,'approved','Must stay blocked','[]','[]',gen_random_uuid())`,/QA_APPROVAL_BLOCKED/);
+await db.exec('reset role');await db.query('update public.vendor_applications set is_test=false where id=$1',[fixture]);
+assert.equal((await db.query('select is_test from public.vendor_applications where id=$1',[fixture])).rows[0].is_test,true);checks++;
+await fails(`delete from public.vendor_applications where id='${fixture}'`,/PERMANENT_TEST_FIXTURE/);
+await fails(`delete from public.vendor_test_fixtures where application_id='${fixture}'`,/PERMANENT_TEST_FIXTURE/);
+await fails(`update public.vendor_applications set email='someone@example.test' where id='${fixture}'`,/TEST_FIXTURE_IDENTITY_REQUIRED/);
+await as(other);await fails('select public.vendor_production_summary()',/STAFF_REQUIRED/);
+await fails('select * from public.vendor_test_fixtures',/permission denied/);
+
 console.log(`PASS ${checks} database assertions: owner isolation, staff guards, validation, state transitions, idempotency, history and mail claims.`);
 await db.close();
