@@ -55,5 +55,14 @@ const review=(await db.query('select public.learning_staff_review_queue()')).row
 await db.exec('reset role');await db.exec(`insert into public.learning_review_exclusions(user_id,reason) values('${owner}','fixture')`);
 await as(staff);await fails(`select public.vendor_decide('${a.id}',${a.revision},'approved','Again','[]','[{"category":"Languages","subject":"English","decision":"approved"}]',gen_random_uuid())`,/QA_APPROVAL_DENIED/);
 
+await db.exec('reset role');
+const previousEvents=(await db.query('select count(*)::int as n from public.vendor_application_events')).rows[0].n;
+await db.exec(readFileSync(new URL('../supabase/vendor_workflow_intake_notifications.sql',import.meta.url),'utf8'));
+assert.equal((await db.query('select count(*)::int as n from public.vendor_application_events')).rows[0].n,previousEvents);checks++;
+await db.exec(`insert into public.service_intakes(id,user_id,email,email_verified_at,kind,fields,request_hash) values('20000000-0000-4000-8000-000000000009','${other}','other@example.test',now(),'network','{"full-name":"VENDOR-QA-notification","category":"transportation"}',repeat('b',64));`);
+const captured=(await db.query("select * from public.vendor_application_events where application_id='20000000-0000-4000-8000-000000000009'")).rows;
+assert.equal(captured.length,1);assert.equal(captured[0].kind,'submitted');assert.equal(captured[0].delivery,'pending');checks++;
+assert.equal((await db.query("select is_test from public.vendor_applications where id='20000000-0000-4000-8000-000000000009'")).rows[0].is_test,true);checks++;
+
 console.log(`PASS ${checks} database assertions: owner isolation, staff guards, validation, state transitions, idempotency, history and mail claims.`);
 await db.close();

@@ -61,8 +61,15 @@ export function createIntakeHandler({supabaseURL,serviceKey,fetcher=fetch,crypto
     const data=await r.json();if(!r.ok)throw new Error(data.message||'STORAGE_UNAVAILABLE');return data;
    }
    const record=await rpc('service_intake_reserve',{p_id:clean.requestId,p_user:user.id,p_kind:clean.kind,p_fields:clean.fields,p_hash:hash});
-   if(!record.dispatch)return reply(record.delivery==='delivered'?200:202,{receipt:clean.requestId,delivery:record.delivery,verified:true});
    const kind=intakeKinds[clean.kind];
+   async function notifyVendor(){
+    if(kind.role!=='vendor')return undefined;
+    try{
+     const r=await fetcher(`${supabaseURL}/functions/v1/vendor-workflow`,{method:'POST',headers:{apikey:serviceKey,Authorization:bearer,Origin:'https://marocora.com','Content-Type':'application/json'},body:JSON.stringify({action:'deliver',id:clean.requestId}),signal:AbortSignal.timeout(45000)});
+     const result=await r.json();return r.ok&&result.email==='processed'?'processed':'needs_attention';
+    }catch{return 'needs_attention';}
+   }
+   if(!record.dispatch){const vendor_notification=await notifyVendor();return reply(record.delivery==='delivered'&&vendor_notification!=='needs_attention'?200:202,{receipt:clean.requestId,delivery:record.delivery,verified:true,vendor_notification});}
    const body={...clean.fields,_subject:kind.subject,verification_status:'Email verified — confirm receipt in the Marocora service review queue',verification_receipt:clean.requestId,verification_record:`https://marocora.com/${kind.role==='vendor'?'vendor-review':'service-review'}.html#${clean.requestId}`,email_verified_at:record.verified_at};
    if(kind.role==='vendor')body.review_application=`https://marocora.com/vendor-review.html#${clean.requestId}`;
    if(clean.kind==='introduction'){const p=new URLSearchParams({receipt:clean.requestId,reference:clean.fields['booking-reference']||clean.requestId,teacher:clean.fields.teacher||'',time:clean.fields['requested-time']||'',name:clean.fields['student-name']||'',email:user.email});body['admin-decision-link']=`https://marocora.com/lesson-decision.html?${p}`;}
@@ -75,7 +82,8 @@ export function createIntakeHandler({supabaseURL,serviceKey,fetcher=fetch,crypto
     else if(response.status>=400&&response.status<500)delivery='rejected';
    }catch{/* The durable verification record remains available to staff. */}
    await rpc('service_intake_delivery',{p_id:clean.requestId,p_user:user.id,p_delivery:delivery});
-   return reply(delivery==='delivered'?200:202,{receipt:clean.requestId,delivery,verified:true});
+   const vendor_notification=await notifyVendor();
+   return reply(delivery==='delivered'&&vendor_notification!=='needs_attention'?200:202,{receipt:clean.requestId,delivery,verified:true,vendor_notification});
   }catch(error){
    const message=error.message||'';
    const known=['EMAIL_VERIFICATION_REQUIRED','EMAIL_MISMATCH','INVALID_REQUEST','INVALID_FIELDS','NAME_REQUIRED','MESSAGE_REQUIRED','REQUEST_TOO_LARGE','REQUEST_CONFLICT','REQUEST_LIMIT'];

@@ -57,3 +57,20 @@ test('malformed JSON, oversized payloads and backend failure do not leak interna
  const h=harness();const huge=input();huge.fields.message='x'.repeat(51000);assert.equal((await h.handler(req(huge))).status,413);
  const broken=createIntakeHandler({supabaseURL:'https://test',serviceKey:'do-not-leak',fetcher:async()=>{throw new Error('do-not-leak');}});const response=await broken(req());assert.equal(response.status,503);assert.ok(!(await response.text()).includes('do-not-leak'));
 });
+
+
+test('verified vendor intakes request canonical mail separately from Formspree spam handling',async()=>{
+ let reserved=false,archives=0;const notifications=[];
+ const p={kind:'network',requestId:id,fields:{email:user.email,'full-name':'Controlled vendor'}};
+ const h=createIntakeHandler({supabaseURL:'https://db.test',serviceKey:'server-secret',fetcher:async(url,o)=>{
+  if(url.endsWith('/auth/v1/user'))return json(user);
+  if(url.endsWith('/service_intake_reserve')){const dispatch=!reserved;reserved=true;return json({dispatch,delivery:'delivered',verified_at:user.email_confirmed_at});}
+  if(url.startsWith('https://formspree')){archives++;return json({ok:true});}
+  if(url.endsWith('/service_intake_delivery'))return json(true);
+  if(url.endsWith('/functions/v1/vendor-workflow')){notifications.push(o);return json({email:'processed'});}
+  throw Error('Unexpected request');
+ }});
+ for(let n=0;n<2;n++){const r=await h(req(p));assert.equal(r.status,200);assert.equal((await r.json()).vendor_notification,'processed');}
+ assert.equal(archives,1);assert.equal(notifications.length,2);
+ for(const o of notifications){assert.equal(o.headers.Authorization,'Bearer owner-token');assert.equal(o.headers.Origin,'https://marocora.com');assert.deepEqual(JSON.parse(o.body),{action:'deliver',id});assert.ok(!o.body.includes('server-secret'));}
+});
