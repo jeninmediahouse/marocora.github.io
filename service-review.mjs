@@ -13,7 +13,9 @@ async function load(){
  const {data,error}=await instructorStore.rpc('service_intake_review_queue');
  if(error){status.textContent=t.staff;return;}
  document.querySelector('#auth').hidden=true;
- const id=location.hash.slice(1);const rows=/^[0-9a-f-]{36}$/i.test(id)?data.filter(r=>r.id===id):data;
+ const vendor=data.find(r=>['translator','network'].includes(r.kind)&&r.id===location.hash.slice(1));if(vendor){location.replace(`vendor-review.html#${vendor.id}`);return;}
+ const vendorLink=document.createElement('p');const a=document.createElement('a');a.href='vendor-review.html';a.textContent='Open all vendor applications — teachers, translators, drivers and other professionals';vendorLink.append(a);queue.append(vendorLink);
+ const id=location.hash.slice(1);const clients=data.filter(r=>!['translator','network'].includes(r.kind));const rows=/^[0-9a-f-]{36}$/i.test(id)?clients.filter(r=>r.id===id):clients;
  if(!rows.length){status.textContent=t.empty;return;}
  for(const r of rows){
   const card=document.createElement('article');card.append(element('h2',`${r.kind} · ${r.id}`),element('p',`${r.email} · ${new Date(r.created_at).toLocaleString(lang)}`),element('p',`${t.verified} ${r.email_verified_at}`),element('p',`${t.delivery}: ${r.delivery} · ${t.work}: ${r.work_status}`));

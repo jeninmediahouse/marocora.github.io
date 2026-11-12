@@ -63,7 +63,8 @@ export function createIntakeHandler({supabaseURL,serviceKey,fetcher=fetch,crypto
    const record=await rpc('service_intake_reserve',{p_id:clean.requestId,p_user:user.id,p_kind:clean.kind,p_fields:clean.fields,p_hash:hash});
    if(!record.dispatch)return reply(record.delivery==='delivered'?200:202,{receipt:clean.requestId,delivery:record.delivery,verified:true});
    const kind=intakeKinds[clean.kind];
-   const body={...clean.fields,_subject:kind.subject,verification_status:'Email verified — confirm receipt in the Marocora service review queue',verification_receipt:clean.requestId,verification_record:`https://marocora.com/service-review.html#${clean.requestId}`,email_verified_at:record.verified_at};
+   const body={...clean.fields,_subject:kind.subject,verification_status:'Email verified — confirm receipt in the Marocora service review queue',verification_receipt:clean.requestId,verification_record:`https://marocora.com/${kind.role==='vendor'?'vendor-review':'service-review'}.html#${clean.requestId}`,email_verified_at:record.verified_at};
+   if(kind.role==='vendor')body.review_application=`https://marocora.com/vendor-review.html#${clean.requestId}`;
    if(clean.kind==='introduction'){const p=new URLSearchParams({receipt:clean.requestId,reference:clean.fields['booking-reference']||clean.requestId,teacher:clean.fields.teacher||'',time:clean.fields['requested-time']||'',name:clean.fields['student-name']||'',email:user.email});body['admin-decision-link']=`https://marocora.com/lesson-decision.html?${p}`;}
    let delivery='uncertain';
    try{

@@ -41,9 +41,9 @@ export async function saveInstructorDraft(userId, data, exists) {
 }
 
 export async function submitInstructorDraft() {
-  const { data, error } = await instructorStore.rpc('submit_learning_instructor_draft');
-  if (error) throw error;
-  return data;
+  const {workflow} = await import('../vendor-client.mjs');
+  const result = await workflow({action:'submit_teacher'});
+  return result;
 }
 
 export async function signOutInstructor() {
