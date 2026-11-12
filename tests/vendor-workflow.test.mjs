@@ -41,3 +41,20 @@ test('an idempotent retry reports an existing failed mail instead of false succe
  const h=createVendorHandler({supabaseURL:'https://db.test',serviceKey:'secret',mailForm:'abcdefgh',fetcher:async url=>{if(url.endsWith('/user'))return json(user);if(url.endsWith('vendor_decide'))return json({application_id:id});if(url.endsWith('vendor_mail_health'))return json({needs_attention:true});return json(null);}});
  const r=await h(request({action:'decide',id,commandId}));assert.equal(r.status,202);assert.equal((await r.json()).email,'needs_attention');
 });
+
+
+test('empty successful RPC acknowledgements do not turn a saved decision and sent mail into an error',async()=>{
+ for(const status of [200,204]){
+  let claimed=false,sends=0,finishes=0;
+  const h=createVendorHandler({supabaseURL:'https://db.test',serviceKey:'secret',sendMail:async()=>{sends++;return {state:'sent'};},fetcher:async url=>{
+   if(url.endsWith('/user'))return json(user);
+   if(url.endsWith('vendor_decide'))return json({application_id:id});
+   if(url.endsWith('vendor_claim_mail')){if(claimed)return json(null);claimed=true;return json({application:{id,email:user.email},event:{id:commandId,kind:'approved',payload:{message:'Test'}}});}
+   if(url.endsWith('vendor_finish_mail')){finishes++;return new Response(null,{status});}
+   if(url.endsWith('vendor_mail_health'))return json({needs_attention:false});
+   throw Error('Unexpected request');
+  }});
+  const r=await h(request({action:'decide',id,commandId}));assert.equal(r.status,200);assert.equal((await r.json()).email,'processed');assert.equal(sends,1);assert.equal(finishes,1);
+  const retry=await h(request({action:'decide',id,commandId}));assert.equal(retry.status,200);assert.equal(sends,1);
+ }
+});

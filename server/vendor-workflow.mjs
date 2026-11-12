@@ -21,6 +21,7 @@ export function createVendorHandler({supabaseURL,serviceKey,mailForm,sendMail,fe
   if(!allowedOrigins.has(origin))return reply(403,{error:'ORIGIN_NOT_ALLOWED'});
   const token=request.headers.get('authorization');
   if(!token?.startsWith('Bearer ')||token.length>12000)return reply(401,{error:'SIGN_IN_REQUIRED'});
+  let phase='authenticate';
   try{
    const ar=await fetcher(`${supabaseURL}/auth/v1/user`,{headers:{apikey:serviceKey,Authorization:token},signal:AbortSignal.timeout(10000)});
    if(!ar.ok)return reply(401,{error:'SIGN_IN_REQUIRED'});
@@ -30,8 +31,9 @@ export function createVendorHandler({supabaseURL,serviceKey,mailForm,sendMail,fe
    for(;;){const {done,value}=await reader.read();if(done)break;size+=value.byteLength;if(size>60000){await reader.cancel();return reply(413,{error:'REQUEST_TOO_LARGE'});}body+=decoder.decode(value,{stream:true});}body+=decoder.decode();
    const input=JSON.parse(body);
    async function rpc(name,args,server=false){
+    phase=`rpc:${name}`;
     const r=await fetcher(`${supabaseURL}/rest/v1/rpc/${name}`,{method:'POST',headers:{apikey:serviceKey,Authorization:server?`Bearer ${serviceKey}`:token,'Content-Type':'application/json'},body:JSON.stringify(args),signal:AbortSignal.timeout(15000)});
-    const result=await r.json();if(!r.ok)throw new Error(result.message||'WORKFLOW_UNAVAILABLE');return result;
+    const text=await r.text(),result=text.trim()?JSON.parse(text):null;if(!r.ok){const error=new Error(result?.message||'WORKFLOW_UNAVAILABLE');error.code=result?.code;throw error;}return result;
    }
    let result;
    // Fail before saving a decision when mail integration has not been activated.
@@ -65,6 +67,7 @@ export function createVendorHandler({supabaseURL,serviceKey,mailForm,sendMail,fe
    if(health?.needs_attention)pending=true;
    return reply(pending?202:200,{...result,email:pending?'needs_attention':'processed'});
   }catch(error){
+   console.warn('vendor-workflow failure',{phase,code:/^[A-Z0-9_]{1,32}$/.test(error.code||'')?error.code:'UNCLASSIFIED',type:error.name});
    const message=error.message||'';
    const known=['STAFF_REQUIRED','ACCESS_DENIED','APPLICATION_NOT_FOUND','STALE_REVISION','INVALID_DECISION','INVALID_QUESTIONS','QUESTIONS_REQUIRED','INVALID_ANSWERS','ANSWERS_REQUIRED','EMAIL_VERIFICATION_REQUIRED','QA_APPROVAL_BLOCKED','SELF_REVIEW_DENIED','INVALID_REVIEW','FEEDBACK_REQUIRED','NOT_SUBMITTED'];
    const code=known.find(k=>message.includes(k));return reply(code==='STAFF_REQUIRED'||code==='ACCESS_DENIED'?403:code?400:503,{error:code||'WORKFLOW_UNAVAILABLE'});

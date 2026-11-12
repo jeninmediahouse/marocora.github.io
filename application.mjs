@@ -18,4 +18,5 @@ async function load(){
   };}
  }
 }
+window.addEventListener('hashchange',()=>{root.replaceChildren();document.querySelector('#refresh').click();});
 await setupAuth({onReady:load});
