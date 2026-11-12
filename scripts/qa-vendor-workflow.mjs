@@ -30,7 +30,9 @@ assert.equal((await db.query(`select public.vendor_review_queue('${id}')`)).rows
 await fails(`select public.vendor_decide('${id}',1,'declined','No','[]','[]',gen_random_uuid())`,/STALE_REVISION/);
 await as(other);await fails(`select public.vendor_reply('${id}',2,'{"q1":"None"}',gen_random_uuid())`,/APPLICATION_NOT_FOUND/);
 await as(owner);await fails(`select public.vendor_reply('${id}',2,'{}',gen_random_uuid())`,/INVALID_ANSWERS/);
-await db.query(`select public.vendor_reply('${id}',2,'{"q1":"Five years"}',gen_random_uuid())`);checks++;
+const replyCommand='30000000-0000-4000-8000-000000000002';
+const replySQL=`select public.vendor_reply('${id}',2,'{"q1":"Five years"}','${replyCommand}')`;
+await db.query(replySQL);await db.query(replySQL);checks+=2;
 let a=(await db.query(`select public.vendor_my_applications('${id}')`)).rows[0].vendor_my_applications[0];assert.equal(a.status,'pending');assert.equal(a.message,'The requested additional information has been received. Your application is awaiting review.');assert.equal(a.history.length,2);checks++;
 await as(staff);await db.query(`select public.vendor_decide('${id}',3,'approved','Welcome','[]','[]',gen_random_uuid())`);checks++;
 await as(owner,'service_role');let claim=(await db.query(`select public.vendor_claim_mail('${id}','${owner}')`)).rows[0].vendor_claim_mail;assert.ok(claim);checks++;
