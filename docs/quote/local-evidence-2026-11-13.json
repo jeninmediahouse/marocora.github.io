@@ -1,0 +1,46 @@
+{
+  "project": "Marocora",
+  "stage": "Quote Workflow Local Implementation \u2014 Contracts and Disconnected Fixtures",
+  "date": "2026-11-13",
+  "baseline": "cc95f5a063d907a43c137fa3a29032f78e452f1d",
+  "branch": "codex/marocora-quote-workflow-local",
+  "verification": {
+    "command": "node --test --test-reporter=spec tests/quote-contracts.test.mjs",
+    "node": "v26.12.1",
+    "passed": 37,
+    "failed": 0,
+    "scope": "Pure validation and serialized in-memory synthetic transaction model",
+    "postgresql_runtime": "Not run; psql/postgres unavailable",
+    "browser": "Not run; no UI added",
+    "prior_vendor_recovery_tests": "Not repeated"
+  },
+  "local_artifacts": [
+    "server/quote/contracts.mjs",
+    "tests/fixtures/quote-store.mjs",
+    "tests/quote-contracts.test.mjs",
+    "supabase/quote_workflow.draft.sql",
+    "docs/quote/LOCAL-DRAFT.md"
+  ],
+  "preservation": {
+    "existing_tracked_files_modified": 0,
+    "live_migrations": 0,
+    "emails_sent": 0,
+    "real_applicants_changed": 0,
+    "credentials_created_or_changed": 0,
+    "browser_operations": 0,
+    "automation_changes": 0,
+    "vendor_modules_and_keys": "Unchanged",
+    "tanya_fixture_exclusions": "Unchanged",
+    "production_switches": "No changes; new defaults false",
+    "uploads_payments_work_start": "No capability added"
+  },
+  "limitations": [
+    "SQL draft not executed or runtime-verified",
+    "No production command/read functions or Edge integration",
+    "No durable database recovery proof",
+    "No UI/four-language browser verification",
+    "No mail adapter or dispatcher",
+    "No automatic intake capture, historical enrollment or reporting integration"
+  ],
+  "review_status": "LOCAL_ADDITIVE_FOUNDATION_READY_FOR_REVIEW_NOT_FOR_DEPLOYMENT"
+}
