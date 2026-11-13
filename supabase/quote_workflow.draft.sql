@@ -1,7 +1,7 @@
 -- LOCAL REVIEW DRAFT ONLY. Not referenced by a deployment or migration runner.
 -- Prerequisites: deployed service_intake, learning_launch, vendor_workflow and
 -- vendor_workflow_test_fixtures. No capture trigger, backfill, API grant or mail.
--- This transaction ALWAYS rolls back. Runtime SQL verification is still pending.
+-- This transaction ALWAYS rolls back. Verified only by tests/quote-sql/run.mjs.
 begin;
 
 create table public.quote_settings (
@@ -126,7 +126,7 @@ create table public.quote_events (
 );
 create table public.quote_commands (
  id uuid primary key, actor_id uuid not null references auth.users(id), action text not null, target_id uuid not null,
- expected_revision bigint not null check(expected_revision>0), input_hash text not null check(input_hash ~ '^[0-9a-f]{64}$'),
+ expected_revision bigint not null check(expected_revision>=0), input_hash text not null check(input_hash ~ '^[0-9a-f]{64}$'),
  result jsonb not null, event_id uuid not null references public.quote_events(id), created_at timestamptz not null default now()
 );
 create table public.quote_deliveries (
@@ -150,7 +150,7 @@ create index quote_provider_assignments on public.quote_assignments(provider_id,
 create index quote_delivery_exceptions on public.quote_deliveries(state,created_at,id);
 
 -- Generic history protection. Mutable aggregate/assignment/offer state transitions
--- additionally need controlled command functions; none are granted in this draft.
+-- additionally use the controlled functions in quote_commands.draft.sql.
 create function public.quote_append_only() returns trigger language plpgsql set search_path='' as $$
 begin raise exception 'QUOTE_IMMUTABLE_HISTORY'; end; $$;
 create function public.quote_offer_immutable() returns trigger language plpgsql set search_path='' as $$
@@ -186,9 +186,7 @@ begin
 end; $$;
 revoke all on function public.quote_append_only(),public.quote_offer_immutable(),public.quote_request_guard() from public,anon,authenticated,service_role;
 
--- No API functions yet: do NOT grant direct access as a substitute. Next stage
--- must enforce verified actors, current vendor/readiness/exclusions under locks,
--- exact policies/digests, sticky classifications, canonical enums/currency data,
--- command replay atomicity, narrow reads and notification suppression in SQL.
+-- Controlled commands/read projections are in quote_commands.draft.sql.
+-- No capture trigger, legacy intake mapping, backfill or delivery adapter exists.
 -- Do not remove ROLLBACK to deploy this draft.
 rollback;
