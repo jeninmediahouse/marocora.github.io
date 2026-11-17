@@ -1,0 +1,87 @@
+import {createServer} from 'node:http';
+import {readFile} from 'node:fs/promises';
+import {resolve,extname,relative,sep} from 'node:path';
+import {fileURLToPath} from 'node:url';
+import {productionConfig} from './config.mjs';
+import {createProductionSupabase} from './supabase.mjs';
+import {createProductionLearning} from './learning.mjs';
+import {createSpacesStore} from '../storage/spaces.mjs';
+import {cloudmersiveScanner} from '../block1/uploads.mjs';
+import {instantRoutes} from '../block1/instant-http.mjs';
+const root=fileURLToPath(new URL('../../',import.meta.url)),cookieName='__Host-marocora_session';
+const fail=(code,status=400)=>{throw Object.assign(Error(code),{status});};
+const mime={'.html':'text/html; charset=utf-8','.mjs':'text/javascript; charset=utf-8','.js':'text/javascript; charset=utf-8','.css':'text/css; charset=utf-8','.svg':'image/svg+xml','.png':'image/png','.jpg':'image/jpeg','.jpeg':'image/jpeg','.webp':'image/webp','.ico':'image/x-icon','.xml':'application/xml','.txt':'text/plain'};
+const publicFiles=new Set(['production-login.html','production-login.mjs','learning-room.html','learning-room.mjs','learning-room.css','site-language.mjs','site-language.css','site-services.mjs','site-copy.mjs','home-copy.mjs','site-ui-copy.mjs','site-extra-copy.mjs','translation-copy.mjs','learn/learning-room-session.mjs','learn/lesson-login.mjs','learn/live-learning-room.mjs','learn/mock-learning-room.mjs','learn/room-copy.mjs','learn/locale.mjs']);
+export async function startProductionServer({env=process.env,auth,storage,scanner,learning,exchangeService,handleSignals=true,log=console.log}={}){
+ const config=productionConfig(env);
+ auth??=createProductionSupabase(env);await auth.checkReady();storage??=createSpacesStore(env);scanner??=cloudmersiveScanner({env});
+ if(storage.kind!=='spaces'||scanner.mockOnly===true)fail('PRODUCTION_ADAPTER_REQUIRED',503);
+ learning??=createProductionLearning({auth,env});
+ const instant=instantRoutes({db:auth.db,storage,scanner,exchangeService,allowMockPayments:false});
+ const origins=new Map(config.origins.map(origin=>[new URL(origin).host,origin])),rates=new Map();let concurrent=0,heavyRequests=0,closing;
+ const json=(res,status,value)=>{res.writeHead(status,{'Content-Type':'application/json; charset=utf-8'});res.end(JSON.stringify(value));};
+ const server=createServer(async(req,res)=>{
+  res.setHeader('Cache-Control','no-store');res.setHeader('Referrer-Policy','no-referrer');res.setHeader('X-Content-Type-Options','nosniff');res.setHeader('X-Frame-Options','DENY');
+  res.setHeader('Permissions-Policy',env.LEARNING_VIDEO_ENABLED==='true'?'camera=(self), microphone=(self), display-capture=()':'camera=(), microphone=(), display-capture=()');
+  const live=env.LEARNING_VIDEO_ENABLED==='true'?new URL(env.LIVEKIT_URL).origin:null;
+  res.setHeader('Content-Security-Policy',`default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self' ${live?live+' '+live.replace(/^wss:/,'https:')+' https://*.livekit.cloud wss://*.livekit.cloud':''}; media-src 'self' blob:; worker-src 'self' blob:; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'self'`);
+  concurrent++;let heavy=false;
+  try{
+   if(concurrent>128)fail('SERVER_BUSY',503);
+   const origin=origins.get(req.headers.host);if(!origin)fail('HOST_DENIED',403);
+   const url=new URL(req.url,origin);if(url.origin!==origin)fail('HOST_DENIED',403);
+   if(!['GET','HEAD','POST'].includes(req.method))fail('METHOD_DENIED',405);
+   if(req.method==='POST'&&req.headers.origin!==origin)fail('ORIGIN_DENIED',403);
+   const body=async limit=>{let size=0;const chunks=[];if(Number(req.headers['content-length']||0)>limit)fail('BODY_TOO_LARGE',413);for await(const chunk of req){size+=chunk.length;if(size>limit)fail('BODY_TOO_LARGE',413);chunks.push(chunk);}return Buffer.concat(chunks);};
+   const input=async()=>{if(req.headers['content-type']!=='application/json')fail('JSON_REQUIRED',415);try{const value=JSON.parse((await body(20000)).toString('utf8'));if(!value||Array.isArray(value)||typeof value!=='object')fail('INVALID_JSON');return value;}catch(error){if(error.status)throw error;fail('INVALID_JSON');}};
+   if(url.pathname==='/health'&&req.method==='GET')return json(res,200,{status:'ok'});
+   if(url.pathname.startsWith('/api/local')||url.pathname.startsWith('/api/staging'))fail('NOT_FOUND',404);
+   const cookie=/(?:^|;\s*)__Host-marocora_session=([A-Za-z0-9_.-]+)(?:;|$)/.exec(req.headers.cookie||'');
+   const bearer=req.headers.authorization!==undefined?(/^Bearer ([A-Za-z0-9_.-]+)$/.exec(req.headers.authorization)?.[1]||''):cookie?.[1];
+   if(url.pathname==='/api/auth/login'&&req.method==='POST'){
+    const ip=config.trustProxy?req.headers['x-real-ip']||req.socket.remoteAddress:req.socket.remoteAddress,now=Date.now();
+    for(const [key,value] of rates)if(value.until<=now)rates.delete(key);
+    const rate=rates.get(ip)||{count:0,until:now+60000};if(rate.count>=10||rates.size>=5000)fail('LOGIN_RATE_LIMIT',429);rate.count++;rates.set(ip,rate);
+    const fields=await input();if(Object.keys(fields).some(key=>!['email','password'].includes(key)))fail('INVALID_SIGN_IN');
+    const session=await auth.signIn(fields.email,fields.password);
+    res.setHeader('Set-Cookie',`${cookieName}=${session.bearer}; Secure; HttpOnly; SameSite=Strict; Path=/; Max-Age=${session.maxAge}`);
+    return json(res,200,{authenticated:true});
+   }
+   if(url.pathname==='/api/auth/logout'&&req.method==='POST'){res.setHeader('Set-Cookie',`${cookieName}=; Secure; HttpOnly; SameSite=Strict; Path=/; Max-Age=0`);return json(res,200,{signedOut:true});}
+   if(url.pathname.startsWith('/api/')){
+    const session=await auth.authenticate(bearer);
+    if(url.pathname==='/api/auth/me'&&req.method==='GET')return json(res,200,{authenticated:true});
+    if(url.pathname==='/api/learning/room-config'&&req.method==='GET')return json(res,200,learning.getConfig(session));
+    const methods={'/api/learning/room-token':'issue','/api/learning/room-connect':'connect','/api/learning/room-heartbeat':'heartbeat','/api/learning/room-leave':'leave'};
+    if(req.method==='POST'&&methods[url.pathname])return json(res,200,await learning[methods[url.pathname]](session,await input()));
+    if(url.pathname.startsWith('/api/instant/')||url.pathname==='/api/me'){
+     const translation=await auth.translationSession(session.bearer);
+     if(req.method==='POST'&&(url.pathname==='/api/instant/orders'||/^\/api\/instant\/orders\/[^/]+\/complete$/.test(url.pathname))){if(heavyRequests>=2)fail('UPLOAD_BUSY',429);heavyRequests++;heavy=true;}
+     if(url.pathname==='/api/me'&&req.method==='GET')return json(res,200,{role:translation.role,email:translation.email,csrf:null,production:true,scanner:{available:scanner.available},switches:await auth.db.settings(translation)});
+     if(req.method==='POST'&&['/api/instant/orders'].includes(url.pathname)&&!scanner.available)fail('SCANNER_UNAVAILABLE',503);
+     if(await instant({req,url,session:translation,input,body,json:(status,value)=>json(res,status,value),res}))return;
+    }
+    fail('NOT_FOUND',404);
+   }
+   if(req.method!=='GET'&&req.method!=='HEAD')fail('NOT_FOUND',404);
+   const path=decodeURIComponent(url.pathname==='/'?'/production-login.html':url.pathname);
+   if(path.split('/').some(part=>part.startsWith('.')||part==='server'||part==='tests'||part==='node_modules')||path.includes('\\')||path.includes('\0'))fail('NOT_FOUND',404);
+   const aliases={'/instant-quote.html':'server/block1/ui/instant-quote.html','/translation-request.html':'server/block1/ui/instant-quote.html','/instant-quote.mjs':'server/block1/ui/instant-quote.mjs','/instant-quote.css':'server/block1/ui/instant-quote.css','/block1-local.mjs':'server/production/translation-client.mjs'};
+   let bytes;
+   try{
+    if(aliases[path])bytes=await readFile(resolve(root,aliases[path]));
+    else{if(!publicFiles.has(path.slice(1)))fail('NOT_FOUND',404);const base=resolve(root,'.pages-dist'),target=resolve(base,'.'+path);if(relative(base,target).split(sep).includes('..'))fail('NOT_FOUND',404);bytes=await readFile(target);}
+   }catch{fail('NOT_FOUND',404);}
+   if(aliases[path]?.endsWith('.html'))bytes=Buffer.from(bytes.toString().replace('STAGING · Mock payments and mock scanning. No real money is collected.','Your documents are scanned before quote processing. Payments are not available yet.'));
+   res.writeHead(200,{'Content-Type':mime[extname(path)]});res.end(req.method==='HEAD'?undefined:bytes);
+  }catch(error){req.resume();if(res.headersSent){res.destroy();return;}const code=/^[A-Z][A-Z0-9_]{0,79}$/.test(error.message||'')?error.message:'REQUEST_FAILED';json(res,Number.isInteger(error.status)&&error.status>=400&&error.status<600?error.status:500,{error:code});}
+  finally{concurrent--;if(heavy)heavyRequests--;}
+ });
+ server.requestTimeout=60000;server.headersTimeout=15000;server.keepAliveTimeout=5000;
+ const stop=()=>void close().catch(()=>{process.exitCode=1;});
+ const close=()=>closing??=(async()=>{process.removeListener('SIGINT',stop);process.removeListener('SIGTERM',stop);const done=new Promise(resolve=>server.listening?server.close(resolve):resolve());server.closeAllConnections();try{await learning.close();await done;}finally{storage.close?.();auth.db.stop?.();rates.clear();}})();
+ try{await new Promise((resolve,reject)=>{server.once('error',reject);server.listen(config.port,config.host,()=>{server.removeListener('error',reject);resolve();});});}catch(error){await close();throw error;}
+ if(handleSignals){process.once('SIGINT',stop);process.once('SIGTERM',stop);}
+ log('PRODUCTION_LISTEN '+config.host+':'+server.address().port+'; origins='+config.origins.join(','));
+ return {server,close};
+}

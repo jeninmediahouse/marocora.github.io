@@ -1,22 +1,16 @@
-// Authored visitor-interface translations. User content and submitted values are not translated.
+// Authored visitor-interface translations.
 export const siteCopy = {
   "Join the Marocora Professional Network": {
     "en": "Join the Marocora Professional Network",
-    "fr": "Rejoindre le réseau professionnel Marocora | Marocora",
-    "ar": "انضم إلى شبكة Marocora المهنية | Marocora",
-    "es": "Únete a la red profesional Marocora | Marocora"
+    "fr": "Rejoignez le réseau professionnel Marocora",
+    "ar": "انضم إلى شبكة Marocora المهنية",
+    "es": "Únete a la red profesional Marocora"
   },
   "← Back to Home": {
     "en": "← Back to Home",
     "fr": "← Retour à l’accueil",
     "ar": "← العودة للرئيسية",
     "es": "← Volver al inicio"
-  },
-  "Join the Marocora Professional Network": {
-    "en": "Join the Marocora Professional Network",
-    "fr": "Rejoignez le réseau professionnel Marocora",
-    "ar": "انضم إلى شبكة Marocora المهنية",
-    "es": "Únete a la red profesional Marocora"
   },
   "Are you a Moroccan professional, independent service provider, teacher, creative, consultant, or specialist?": {
     "en": "Are you a Moroccan professional, independent service provider, teacher, creative, consultant, or specialist?",
@@ -1056,12 +1050,6 @@ export const siteCopy = {
     "ar": "تقدم كمترجم أو مهني لغوي",
     "es": "Solicita incorporarte como traductor o profesional de idiomas"
   },
-  "Join the Marocora Professional Network and connect with clients seeking translation, interpretation and language services in Morocco and internationally.": {
-    "en": "Join the Marocora Professional Network and connect with clients seeking translation, interpretation and language services in Morocco and internationally.",
-    "fr": "Rejoignez le réseau Marocora et rencontrez des clients recherchant traduction, interprétation et services linguistiques au Maroc et à l’étranger.",
-    "ar": "انضم إلى شبكة ماروكورا وتواصل مع عملاء يبحثون عن الترجمة والخدمات اللغوية في المغرب ودولياً.",
-    "es": "Únete a la red Marocora y conecta con clientes que necesitan traducción, interpretación y servicios lingüísticos en Marruecos y otros países."
-  },
   "City / Location": {
     "en": "City / Location",
     "fr": "Ville / lieu",
@@ -1116,12 +1104,6 @@ export const siteCopy = {
     "ar": "ترجمة معتمدة / محلفة",
     "es": "Traducción certificada / jurada"
   },
-  "Interpretation": {
-    "en": "Interpretation",
-    "fr": "Interprétation",
-    "ar": "الترجمة الشفوية",
-    "es": "Interpretación"
-  },
   "Business Translation": {
     "en": "Business Translation",
     "fr": "Traduction commerciale",
@@ -1163,12 +1145,6 @@ export const siteCopy = {
     "fr": "Spécialités / domaines d’expertise",
     "ar": "التخصصات / مجالات الخبرة",
     "es": "Especialidades / áreas de experiencia"
-  },
-  "Example: legal, immigration, business, medical, technical, academic, interpretation...": {
-    "en": "Example: legal, immigration, business, medical, technical, academic, interpretation...",
-    "fr": "Exemple : droit, immigration, affaires, médecine, technique, études, interprétation…",
-    "ar": "مثلاً: القانون والهجرة والأعمال والطب والتقنية والدراسة والترجمة الشفوية…",
-    "es": "Ejemplo: derecho, inmigración, empresas, medicina, técnica, estudios, interpretación…"
   },
   "Service Availability": {
     "en": "Service Availability",
@@ -1263,14 +1239,14 @@ export const siteCopy = {
   "Return to Marocora": {
     "en": "Return to Marocora",
     "fr": "Retour à Marocora",
-    "ar": "العودة إلى Marocora",
+    "ar": "العودة إلى ماروكورا",
     "es": "Volver a Marocora"
   },
   "Marocora Professional Network": {
     "en": "Marocora Professional Network",
-    "fr": "Réseau professionnel Marocora · Marocora",
-    "ar": "شبكة Marocora المهنية · Marocora",
-    "es": "Red profesional Marocora · Marocora"
+    "fr": "Réseau professionnel Marocora",
+    "ar": "شبكة ماروكورا المهنية",
+    "es": "Red profesional Marocora"
   },
   "Contact Marocora": {
     "en": "Contact Marocora",
@@ -1536,12 +1512,6 @@ export const siteCopy = {
     "ar": "تصفح خدمات الترجمة واللغات",
     "es": "Ver servicios de traducción e idiomas"
   },
-  "Return to Marocora": {
-    "en": "Return to Marocora",
-    "fr": "Retour à Marocora",
-    "ar": "العودة إلى ماروكورا",
-    "es": "Volver a Marocora"
-  },
   "Marocora · Professional Network": {
     "en": "Marocora · Professional Network",
     "fr": "Marocora · Réseau professionnel",
@@ -1554,11 +1524,11 @@ export const siteCopy = {
     "ar": "الترجمة والخدمات اللغوية | Marocora",
     "es": "Traducción y servicios lingüísticos | Marocora"
   },
-  "Find translators, interpreters and language professionals serving individuals, businesses and international clients through the Marocora Professional Network.": {
-    "en": "Find translators, interpreters and language professionals serving individuals, businesses and international clients through the Marocora Professional Network.",
-    "fr": "Trouvez des traducteurs, interprètes et professionnels des langues pour particuliers, entreprises et clients internationaux dans le réseau Marocora.",
+  "Find translators and language professionals serving individuals, businesses and international clients through the Marocora Professional Network.": {
+    "en": "Find translators and language professionals serving individuals, businesses and international clients through the Marocora Professional Network.",
+    "fr": "Trouvez des traducteurs et professionnels des langues pour particuliers, entreprises et clients internationaux dans le réseau Marocora.",
     "ar": "ابحث عن مترجمين ومهنيين لغويين لخدمة الأفراد والشركات والعملاء الدوليين عبر شبكة ماروكورا.",
-    "es": "Encuentra traductores, intérpretes y profesionales de idiomas para particulares, empresas y clientes internacionales en la red Marocora."
+    "es": "Encuentra traductores y profesionales de idiomas para particulares, empresas y clientes internacionales en la red Marocora."
   },
   "← Back to Professional Network": {
     "en": "← Back to Professional Network",
@@ -1638,12 +1608,6 @@ export const siteCopy = {
     "ar": "الخدمات:",
     "es": "Servicios:"
   },
-  "Translation & Interpretation": {
-    "en": "Translation & Interpretation",
-    "fr": "Traduction et interprétation",
-    "ar": "الترجمة التحريرية والشفوية",
-    "es": "Traducción e interpretación"
-  },
   "Status:": {
     "en": "Status:",
     "fr": "Statut :",
@@ -1668,11 +1632,11 @@ export const siteCopy = {
     "ar": "هل أنت مترجم أو مهني لغوي؟",
     "es": "¿Eres traductor o profesional de idiomas?"
   },
-  "Marocora is building a professional network of translators, interpreters and language specialists serving clients in Morocco and internationally.": {
-    "en": "Marocora is building a professional network of translators, interpreters and language specialists serving clients in Morocco and internationally.",
-    "fr": "Marocora développe un réseau de traducteurs, interprètes et spécialistes des langues pour les clients au Maroc et à l’étranger.",
+  "Marocora is building a professional network of translators and language specialists serving clients in Morocco and internationally.": {
+    "en": "Marocora is building a professional network of translators and language specialists serving clients in Morocco and internationally.",
+    "fr": "Marocora développe un réseau de traducteurs et spécialistes des langues pour les clients au Maroc et à l’étranger.",
     "ar": "يبني ماروكورا شبكة من المترجمين والمتخصصين اللغويين لخدمة العملاء في المغرب ودولياً.",
-    "es": "Marocora está creando una red de traductores, intérpretes y especialistas de idiomas para clientes en Marruecos y otros países."
+    "es": "Marocora está creando una red de traductores y especialistas de idiomas para clientes en Marruecos y otros países."
   },
   "Apply to Join the Marocora Network": {
     "en": "Apply to Join the Marocora Network",
@@ -1800,12 +1764,6 @@ export const siteCopy = {
     "ar": "طلب خدمة ترجمة",
     "es": "Solicitar traducción"
   },
-  "Send a translation, interpretation or language-service request through the Marocora Professional Network.": {
-    "en": "Send a translation, interpretation or language-service request through the Marocora Professional Network.",
-    "fr": "Envoyez une demande de traduction, interprétation ou service linguistique via le réseau Marocora.",
-    "ar": "أرسل طلب ترجمة أو خدمة لغوية عبر شبكة ماروكورا المهنية.",
-    "es": "Envía una solicitud de traducción, interpretación o servicio lingüístico a través de la red Marocora."
-  },
   "Service Needed": {
     "en": "Service Needed",
     "fr": "Service souhaité",
@@ -1866,12 +1824,6 @@ export const siteCopy = {
     "ar": "صف طلبك",
     "es": "Describe tu solicitud"
   },
-  "Describe the document, interpretation assignment, subject matter, deadline, or any special requirements.": {
-    "en": "Describe the document, interpretation assignment, subject matter, deadline, or any special requirements.",
-    "fr": "Décrivez le document, la mission d’interprétation, le sujet, l’échéance ou toute exigence particulière.",
-    "ar": "صف الوثيقة أو مهمة الترجمة الشفوية أو الموضوع أو الموعد النهائي أو المتطلبات الخاصة.",
-    "es": "Describe el documento, el encargo de interpretación, el tema, la fecha límite o cualquier requisito especial."
-  },
   "Send Translation Request": {
     "en": "Send Translation Request",
     "fr": "Envoyer la demande de traduction",
@@ -1904,9 +1856,9 @@ export const siteCopy = {
   },
   "Arabic • English • French Translator & Interpreter": {
     "en": "Arabic • English • French Translator & Interpreter",
-    "fr": "Traducteur et interprète arabe • anglais • français",
+    "fr": "Traducteur arabe • anglais • français",
     "ar": "مترجم تحريري وشفوي للعربية • الإنجليزية • الفرنسية",
-    "es": "Traductor e intérprete de árabe • inglés • francés"
+    "es": "Traductor de árabe • inglés • francés"
   },
   "About This Professional": {
     "en": "About This Professional",
@@ -1943,12 +1895,6 @@ export const siteCopy = {
     "fr": "Options de service",
     "ar": "خيارات الخدمة",
     "es": "Opciones de servicio"
-  },
-  "Services may be provided remotely throughout Morocco and internationally. In-person interpretation may also be available in the Casablanca area depending on the assignment.": {
-    "en": "Services may be provided remotely throughout Morocco and internationally. In-person interpretation may also be available in the Casablanca area depending on the assignment.",
-    "fr": "Les services peuvent être fournis à distance au Maroc et à l’étranger. L’interprétation en personne à Casablanca dépend de la mission.",
-    "ar": "يمكن تقديم الخدمات عن بُعد في المغرب ودولياً. قد تتوفر الترجمة الشفوية الحضورية في الدار البيضاء حسب المهمة.",
-    "es": "Los servicios pueden prestarse a distancia en Marruecos y otros países. La interpretación presencial en Casablanca dependerá del encargo."
   },
   "Quote Based": {
     "en": "Quote Based",
@@ -2028,18 +1974,6 @@ export const siteCopy = {
     "ar": "تصفح مهنيين لغويين آخرين",
     "es": "Ver otros profesionales de idiomas"
   },
-  "Marocora Professional Network": {
-    "en": "Marocora Professional Network",
-    "fr": "Réseau professionnel Marocora | Marocora",
-    "ar": "شبكة Marocora المهنية | Marocora",
-    "es": "Red profesional Marocora | Marocora"
-  },
-  "Marocora Professional Network": {
-    "en": "Marocora Professional Network",
-    "fr": "Réseau professionnel Marocora",
-    "ar": "شبكة ماروكورا المهنية",
-    "es": "Red profesional Marocora"
-  },
   "Discover independent professionals, specialists, teachers, creatives and service providers serving residents, businesses and international clients throughout Morocco.": {
     "en": "Discover independent professionals, specialists, teachers, creatives and service providers serving residents, businesses and international clients throughout Morocco.",
     "fr": "Découvrez des professionnels indépendants, spécialistes, professeurs, créatifs et prestataires pour résidents, entreprises et clients internationaux au Maroc.",
@@ -2088,11 +2022,11 @@ export const siteCopy = {
     "ar": "تقدم إلى شبكة ماروكورا للتدريس وتواصل مع طلاب في المغرب وحول العالم.",
     "es": "Solicita incorporarte a la red docente Marocora y conecta con estudiantes de Marruecos y otros países."
   },
-  "Translators, interpreters and language professionals serving individuals and businesses.": {
-    "en": "Translators, interpreters and language professionals serving individuals and businesses.",
-    "fr": "Traducteurs, interprètes et professionnels des langues pour particuliers et entreprises.",
+  "Translators and language professionals serving individuals and businesses.": {
+    "en": "Translators and language professionals serving individuals and businesses.",
+    "fr": "Traducteurs et professionnels des langues pour particuliers et entreprises.",
     "ar": "مترجمون ومهنيون لغويون لخدمة الأفراد والشركات.",
-    "es": "Traductores, intérpretes y profesionales de idiomas para particulares y empresas."
+    "es": "Traductores y profesionales de idiomas para particulares y empresas."
   },
   "Lawyers, accountants, consultants and other professional business services.": {
     "en": "Lawyers, accountants, consultants and other professional business services.",
@@ -2184,12 +2118,6 @@ export const siteCopy = {
     "ar": "تقدم للانضمام",
     "es": "Solicitar incorporación"
   },
-  "© 2026 Marocora · Casablanca–Nouaceur, Morocco": {
-    "en": "© 2026 Marocora · Casablanca–Nouaceur, Morocco",
-    "fr": "© 2026 Marocora · Casablanca - Nouaceur, Maroc",
-    "ar": "© 2026 Marocora · الدار البيضاء - النواصر، المغرب",
-    "es": "© 2026 Marocora · Casablanca - Nouaceur, Marruecos"
-  },
   "MAROCORA": {
     "en": "MAROCORA",
     "fr": "MAROCORA",
@@ -2201,12 +2129,6 @@ export const siteCopy = {
     "fr": "https://example.com",
     "ar": "https://example.com",
     "es": "https://example.com"
-  },
-  "Marocora": {
-    "en": "Marocora",
-    "fr": "Marocora",
-    "ar": "Marocora",
-    "es": "Marocora"
   },
   "Marocora": {
     "en": "Marocora",

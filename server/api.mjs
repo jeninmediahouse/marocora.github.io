@@ -20,7 +20,7 @@ async function readBody(request, limit = 65536) {
   return Buffer.concat(chunks);
 }
 
-export function createApiHandler({ marketplace, authenticate, verifyPaymentWebhook, origin }) {
+export function createApiHandler({ marketplace, authenticate, verifyPaymentWebhook, origin, learningRooms }) {
   if (!marketplace || typeof authenticate !== 'function' || !origin) throw new Error('API_CONFIGURATION_REQUIRED');
   const expectedOrigin = new URL(origin).origin;
   const actor = async request => {
@@ -49,15 +49,21 @@ export function createApiHandler({ marketplace, authenticate, verifyPaymentWebho
         return json(response, 200, marketplace.slots(url.searchParams.get('instructor') || ''));
       if (method === 'GET' && url.pathname === '/instructor/draft')
         return json(response, 200, { draft: marketplace.instructorDraft(await actor(request)) });
+      if(method==='GET'&&url.pathname==='/api/learning/room-config'){
+        const id=await actor(request);
+        if(!learningRooms)throw new DomainError('LEARNING_VIDEO_DISABLED',503);
+        return json(response,200,learningRooms.getConfig(id));
+      }
       if (method === 'GET' && url.pathname.startsWith('/bookings/'))
         return json(response, 200, marketplace.booking(await actor(request), decodeURIComponent(url.pathname.slice(10))));
       if (method !== 'POST') throw new DomainError('NOT_FOUND', 404);
-      if (!['/quote', '/checkout', '/reviews', '/review-replies', '/instructor/draft', '/instructor/submit'].includes(url.pathname))
+      const roomMethods={'/api/learning/room-token':'issue','/api/learning/room-connect':'connect','/api/learning/room-heartbeat':'heartbeat','/api/learning/room-leave':'leave'};
+      if (!['/quote', '/checkout', '/reviews', '/review-replies', '/instructor/draft', '/instructor/submit',...Object.keys(roomMethods)].includes(url.pathname))
         throw new DomainError('NOT_FOUND', 404);
       if (!request.headers['content-type']?.startsWith('application/json'))
         throw new DomainError('JSON_REQUIRED', 415);
       let body;
-      try { body = JSON.parse((await readBody(request)).toString('utf8')); }
+      try { body = JSON.parse((await readBody(request,roomMethods[url.pathname]?20000:65536)).toString('utf8')); }
       catch (error) {
         if (error instanceof DomainError) throw error;
         throw new DomainError('INVALID_JSON', 400);
@@ -65,6 +71,10 @@ export function createApiHandler({ marketplace, authenticate, verifyPaymentWebho
       if (!body || typeof body !== 'object' || Array.isArray(body)) throw new DomainError('INVALID_JSON', 400);
       if (url.pathname === '/quote') return json(response, 200, marketplace.quote(body));
       const id = await actor(request);
+      if(roomMethods[url.pathname]){
+        if(!learningRooms)throw new DomainError('LEARNING_VIDEO_DISABLED',503);
+        return json(response,200,await learningRooms[roomMethods[url.pathname]](id,body));
+      }
       if (url.pathname === '/instructor/draft') return json(response, 200, { draft: marketplace.saveInstructorDraft(id,body) });
       if (url.pathname === '/instructor/submit') return json(response, 200, { draft: marketplace.submitInstructorDraft(id) });
       if (url.pathname === '/checkout') return json(response, 200, await marketplace.checkout(id, body));

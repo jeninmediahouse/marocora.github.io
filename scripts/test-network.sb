@@ -1,0 +1,7 @@
+;; Applies to test Node, native code and all subprocess descendants.
+;; No internet egress, even if a JavaScript wrapper is bypassed.
+(version 1)
+(allow default)
+(deny network-outbound)
+(allow network-outbound (remote ip "localhost:*"))
+(allow network-outbound (remote unix-socket))

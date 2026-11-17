@@ -1,3 +1,4 @@
+// Authored visitor-interface translations.
 export const homeCopy = {
   "Home": {
     "en": "Home",
@@ -155,11 +156,11 @@ export const homeCopy = {
     "ar": "الترجمة والخدمات اللغوية",
     "es": "Traducción y servicios lingüísticos"
   },
-  "Connect with professional translators, interpreters, and multilingual language specialists.": {
-    "en": "Connect with professional translators, interpreters, and multilingual language specialists.",
-    "fr": "Rencontrez des traducteurs, interprètes et spécialistes multilingues.",
+  "Connect with professional translators and multilingual language specialists.": {
+    "en": "Connect with professional translators and multilingual language specialists.",
+    "fr": "Rencontrez des traducteurs et spécialistes multilingues.",
     "ar": "تواصل مع مترجمين تحريريين وفوريين ومتخصصين في اللغات.",
-    "es": "Conecta con traductores, intérpretes y especialistas multilingües."
+    "es": "Conecta con traductores y especialistas multilingües."
   },
   "Explore Language Professionals →": {
     "en": "Explore Language Professionals →",

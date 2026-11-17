@@ -1,2 +1,4 @@
 allowBuilds:
   esbuild: true
+minimumReleaseAgeExclude:
+  - '@allratestoday/bank-al-maghrib-exchange-rate@1.3.31'

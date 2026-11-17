@@ -7,12 +7,27 @@
     "node": ">=24"
   },
   "scripts": {
-    "test": "node --test tests/*.test.mjs",
+    "test": "node scripts/test-local.mjs",
     "preview": "node scripts/build-pages.mjs && node server/preview.mjs",
-    "build:pages": "node scripts/build-pages.mjs"
+    "build:pages": "node scripts/build-pages.mjs",
+    "preinstall": "node scripts/check-package-manager.mjs",
+    "learning:video:mock": "node server/start-learning-room.mjs",
+    "build:learning-room": "node scripts/build-learning-room.mjs",
+    "learning:video:live": "pnpm run build:learning-room && node --env-file=.env server/start-learning-live.mjs",
+    "learning:video:lan": "pnpm run build:learning-room && node --env-file=.env server/start-learning-lan.mjs",
+    "test:lan": "pnpm run learning:video:lan",
+    "build:production": "pnpm run build:pages && pnpm run build:learning-room",
+    "start:production": "node --env-file=.env server/start-production.mjs"
   },
   "dependencies": {
+    "@allratestoday/bank-al-maghrib-exchange-rate": "1.3.31",
+    "@aws-sdk/client-s3": "3.1170.0",
     "@supabase/supabase-js": "^2.117.2",
-    "esbuild": "~0.25.12"
+    "@transkripid/document-ocr": "0.14.0",
+    "cloudmersive-virus-api-client": "^1.4.0",
+    "esbuild": "~0.25.12",
+    "livekit-client": "2.24.1",
+    "livekit-server-sdk": "2.19.3",
+    "pdf-lib": "1.17.1"
   }
 }

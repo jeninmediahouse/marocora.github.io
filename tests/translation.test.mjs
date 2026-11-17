@@ -25,5 +25,7 @@ test('real quote requests have no sample assignment and service choices agree ac
  assert.doesNotMatch(directory,/class="translator-card"|data-search-index|href="translator-sample/);
  for(const service of translationServices){assert.ok(request.includes(service));assert.ok(application.includes(service));}
  assert.match(application,/name="pricing-method"/);assert.match(application,/name="rate-currency"/);assert.match(application,/name="rate-unit"/);
- assert.doesNotMatch(request,/<input[^>]+type="file"/);
+ assert.match(request,/<section id="block1-upload" hidden>/);
+ assert.match(request,/<input id="block1-document" type="file"[^>]* disabled>/);
+ assert.doesNotMatch(request,/<script[^>]+src="block1-request/);
 });

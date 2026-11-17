@@ -64,12 +64,12 @@ Object.assign(extraCopy,{
     "ar": "يرجى الاحتفاظ برسالة التأكيد. لا حاجة إلى إرسال الطلب نفسه مرة أخرى.",
     "es": "Conserva el correo de confirmación. No es necesario volver a enviar la misma solicitud."
   },
-  "Thank you. Your translation or language-service requirements have been received for review.": {
-    "en": "Thank you. Your translation or language-service requirements have been received for review.",
-    "fr": "Merci. Votre demande de traduction ou de service linguistique a été reçue pour examen.",
-    "ar": "شكرًا لك. استلمنا متطلبات الترجمة أو الخدمة اللغوية لمراجعتها.",
-    "es": "Gracias. Hemos recibido tu solicitud de traducción o servicio lingüístico para revisarla."
-  },
+  "Your translation request is saved. No work is scheduled and no payment is due. We will contact you about the next step.": {
+    "en": "Your translation request is saved. No work is scheduled and no payment is due. We will contact you about the next step.",
+    "fr": "Votre demande de traduction est enregistrée. Aucun travail n’est programmé et aucun paiement n’est dû. Nous vous contacterons pour la suite.",
+    "ar": "تم حفظ طلب الترجمة الخاص بك. لم تتم جدولة أي عمل ولا توجد دفعة مستحقة. سنتواصل معك بشأن الخطوة التالية.",
+    "es": "Tu solicitud de traducción está guardada. No se ha programado ningún trabajo ni debes realizar ningún pago. Nos pondremos en contacto contigo sobre el siguiente paso."
+},
   "Provider availability, scope, price and turnaround still need to be agreed.": {
     "en": "Provider availability, scope, price and turnaround still need to be agreed.",
     "fr": "La disponibilité du prestataire, le périmètre, le prix et le délai restent à convenir.",
@@ -129,3 +129,6 @@ Object.assign(extraCopy,{
 Object.assign(extraCopy,{'M':{en:'M',fr:'M',ar:'M',es:'M'}});
 
 Object.assign(extraCopy,{'admin@marocora.com':{en:'admin@marocora.com',fr:'admin@marocora.com',ar:'admin@marocora.com',es:'admin@marocora.com'}});
+
+import {roomCopy} from './learn/room-copy.mjs';
+Object.assign(extraCopy,roomCopy);

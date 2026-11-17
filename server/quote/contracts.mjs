@@ -41,12 +41,13 @@ export function money(value, {budget=false}={}) {
 }
 export function scope(value) {
  record(value,['service','source','target','description','budget','interpretation','certified']);
- requireThat(translationServices.includes(value.service),'INVALID_SERVICE');
+ requireThat(translationServices.includes(value.service)||value.service==='Sworn Translation (Morocco)'||value.service==='Interpretation','INVALID_SERVICE');
  const source=text(value.source,100),target=text(value.target,100);
  const norm=s=>s.normalize('NFKC').toLowerCase();
  requireThat(norm(source)!==norm(target) && ![source,target].some(s=>norm(s)==='other'),'INVALID_LANGUAGE_PAIR');
  const result={service:value.service,source,target,description:text(value.description)};
  if(value.budget!==undefined) {const {minor,currency}=money(value.budget,{budget:true});result.budget={minor,currency};}
+ // Historical scope decoding only; active intake/instant routes reject this retired service.
  if(value.service==='Interpretation') {
   const i=record(value.interpretation,['mode','location','startsAt','timeZone','durationMinutes']);
   requireThat(['remote','in_person'].includes(i.mode));
@@ -55,7 +56,12 @@ export function scope(value) {
   try {new Intl.DateTimeFormat('en',{timeZone}).format(0);} catch {throw new Error('INVALID_TIME_ZONE');}
   result.interpretation={mode:i.mode,location:text(i.location,500),startsAt:instant(i.startsAt),timeZone,durationMinutes:integer(i.durationMinutes,1,1440)};
  } else requireThat(value.interpretation===undefined);
- if(value.service==='Certified / Sworn Translation') {
+ if(value.service==='Sworn Translation (Morocco)') {
+  const c=record(value.certified,['receivingAuthority','jurisdiction','requirements','country','missingInstructions']);
+  requireThat(c.country==='Morocco'&&c.jurisdiction==='Morocco','MOROCCO_ONLY');
+  requireThat(typeof c.missingInstructions==='boolean','INVALID_INSTRUCTIONS');
+  result.certified={receivingAuthority:text(c.receivingAuthority,500),jurisdiction:'Morocco',country:'Morocco',requirements:text(c.requirements,2000),missingInstructions:c.missingInstructions};
+ } else if(value.service==='Certified / Sworn Translation') {
   const c=record(value.certified,['receivingAuthority','jurisdiction','requirements']);
   result.certified={receivingAuthority:text(c.receivingAuthority,500),jurisdiction:text(c.jurisdiction,200),requirements:text(c.requirements,2000)};
  } else requireThat(value.certified===undefined);

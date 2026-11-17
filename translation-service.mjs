@@ -13,9 +13,6 @@ if(form){
   if(field('source-language')){
    const pair=languagePairError(value('source-language'),value('target-language'),value('source-other'),value('target-other'));if(pair)setError(pair.field,pair.message);
    if(!value('message').trim())setError('message','Enter a brief description of your requirements.');
-   if(value('interpretation-mode')==='In Person'&&!value('meeting-location').trim())setError('meeting-location','Enter the meeting location for in-person interpretation.');
-   if(!field('appointment').disabled&&value('appointment')&&!value('timezone').trim())setError('timezone','Specify the time zone for your preferred appointment.');
-   if(!field('timezone').disabled&&value('timezone')){try{new Intl.DateTimeFormat('en',{timeZone:value('timezone')});}catch{setError('timezone','Enter a recognised IANA time zone, such as Africa/Casablanca.');}}
    if(!field('receiving-authority').disabled&&!value('receiving-authority').trim())setError('receiving-authority','Provide the receiving organisation or country.');
    const money=moneyError(value('budget'),value('quote-currency'));if(money)setError(money.field==='amount'?'budget':'quote-currency',money.message);
   }else{
@@ -28,9 +25,9 @@ if(form){
   const request=!!field('source-language');
   if(request){
    for(const direction of ['source','target']){const other=value(direction+'-language')==='Other';show('[data-language-other='+direction+']',other);required(direction+'-other',other);}
-   const interpretation=value('service')==='Interpretation',certified=value('service')==='Certified / Sworn Translation';
-   show('[data-interpretation]',interpretation);show('[data-certified]',certified);show('[data-written]',!interpretation);show('[data-meeting-location]',interpretation&&value('interpretation-mode')==='In Person');
-   required('interpretation-mode',interpretation);required('receiving-authority',certified);required('meeting-location',interpretation&&value('interpretation-mode')==='In Person');required('timezone',interpretation&&!!value('appointment'));
+   const certified=value('service')==='Certified / Sworn Translation';
+   show('[data-certified]',certified);show('[data-written]',true);
+   required('receiving-authority',certified);
   }else{
    const fixed=value('pricing-method')==='Starting Rate',registered=value('sworn-status')==='Yes';
    show('[data-starting-rate]',fixed);show('[data-registration]',registered);

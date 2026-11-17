@@ -1,4 +1,4 @@
-// Authored translation marketplace interface; provider/customer content stays unchanged.
+// Authored visitor-interface translations.
 export const translationCopy = {
   "Request a Translation Quote": {
     "en": "Request a Translation Quote",
@@ -12,11 +12,11 @@ export const translationCopy = {
     "ar": "تقدم كمقدم خدمات ترجمة",
     "es": "Solicitar incorporación como proveedor de traducción"
   },
-  "Independent translators set their own prices and currencies. Send your requirements so a suitable provider can prepare a quote.": {
-    "en": "Independent translators set their own prices and currencies. Send your requirements so a suitable provider can prepare a quote.",
-    "fr": "Les traducteurs indépendants fixent leurs tarifs et devises. Envoyez vos besoins pour permettre à un prestataire adapté de préparer un devis.",
-    "ar": "يحدد المترجمون المستقلون أسعارهم وعملاتهم. أرسل احتياجاتك ليتمكن مقدم خدمة مناسب من إعداد عرض سعر.",
-    "es": "Los traductores independientes fijan sus precios y monedas. Envía tus necesidades para que un proveedor adecuado prepare un presupuesto."
+  "Send a translation inquiry. Provider availability and a quote are not guaranteed. We will contact you about the next step.": {
+    "en": "Send a translation inquiry. Provider availability and a quote are not guaranteed. We will contact you about the next step.",
+    "fr": "Envoyez une demande de traduction. La disponibilité d’un prestataire et l’obtention d’un devis ne sont pas garanties. Nous vous contacterons pour la suite.",
+    "ar": "أرسل استفسارًا عن الترجمة. لا نضمن توفر مقدم خدمة أو الحصول على عرض سعر. سنتواصل معك بشأن الخطوة التالية.",
+    "es": "Envía una consulta de traducción. No se garantiza la disponibilidad de un proveedor ni un presupuesto. Nos pondremos en contacto contigo sobre el siguiente paso."
   },
   "Choose the Service You Need": {
     "en": "Choose the Service You Need",
@@ -35,12 +35,6 @@ export const translationCopy = {
     "fr": "Précisez l’organisme destinataire et ses exigences déclarées.",
     "ar": "حدد الجهة المستلمة ومتطلباتها المعلنة.",
     "es": "Indica el organismo receptor y sus requisitos declarados."
-  },
-  "Remote or in-person spoken-language support.": {
-    "en": "Remote or in-person spoken-language support.",
-    "fr": "Interprétation à distance ou en personne.",
-    "ar": "ترجمة شفوية عن بعد أو حضورية.",
-    "es": "Interpretación a distancia o presencial."
   },
   "Company communications and business materials.": {
     "en": "Company communications and business materials.",
@@ -107,18 +101,6 @@ export const translationCopy = {
     "fr": "Nombre approximatif de mots",
     "ar": "العدد التقريبي للكلمات",
     "es": "Número aproximado de palabras"
-  },
-  "Interpretation Details": {
-    "en": "Interpretation Details",
-    "fr": "Informations d’interprétation",
-    "ar": "تفاصيل الترجمة الشفوية",
-    "es": "Detalles de interpretación"
-  },
-  "Interpretation Mode": {
-    "en": "Interpretation Mode",
-    "fr": "Mode d’interprétation",
-    "ar": "طريقة الترجمة الشفوية",
-    "es": "Modalidad de interpretación"
   },
   "Remote": {
     "en": "Remote",
@@ -360,12 +342,6 @@ export const translationCopy = {
     "ar": "أدخل منطقة زمنية معروفة بصيغة IANA مثل Africa/Casablanca.",
     "es": "Indica una zona horaria IANA reconocida, como Africa/Casablanca."
   },
-  "Enter the meeting location for in-person interpretation.": {
-    "en": "Enter the meeting location for in-person interpretation.",
-    "fr": "Indiquez le lieu du rendez-vous pour l’interprétation en personne.",
-    "ar": "أدخل مكان اللقاء للترجمة الشفوية الحضورية.",
-    "es": "Indica el lugar para la interpretación presencial."
-  },
   "Provide the receiving organisation or country.": {
     "en": "Provide the receiving organisation or country.",
     "fr": "Indiquez l’organisme ou le pays destinataire.",
@@ -408,12 +384,6 @@ export const translationCopy = {
     "ar": "تعرّف على Tareq Naser",
     "es": "Conoce a Tareq Naser"
   },
-  "Arabic and English translation and interpretation · Casablanca": {
-    "en": "Arabic and English translation and interpretation · Casablanca",
-    "fr": "Traduction et interprétation arabe–anglais · Casablanca",
-    "ar": "ترجمة تحريرية وشفوية بين العربية والإنجليزية · الدار البيضاء",
-    "es": "Traducción e interpretación árabe–inglés · Casablanca"
-  },
   "Non-sworn written translation: 200 MAD per page.": {
     "en": "Non-sworn written translation: 200 MAD per page.",
     "fr": "Traduction écrite non assermentée : 200 MAD par page.",
@@ -449,15 +419,155 @@ export const translationCopy = {
     "fr": "200 MAD",
     "ar": "200 MAD",
     "es": "200 MAD"
+  },
+  "Featured Translators": {
+    "en": "Featured Translators",
+    "ar": "مترجمون مختارون",
+    "fr": "Traducteurs à découvrir",
+    "es": "Traductores destacados"
+  },
+  "Meet Tanya Naser": {
+    "en": "Meet Tanya Naser",
+    "ar": "تعرّف على Tanya Naser",
+    "fr": "Découvrez Tanya Naser",
+    "es": "Conoce a Tanya Naser"
+  },
+  "Arabic and English document translation · Raleigh, North Carolina": {
+    "en": "Arabic and English document translation · Raleigh, North Carolina",
+    "ar": "ترجمة وثائق بين العربية والإنجليزية · رالي، كارولاينا الشمالية",
+    "fr": "Traduction de documents arabe–anglais · Raleigh, Caroline du Nord",
+    "es": "Traducción de documentos árabe–inglés · Raleigh, Carolina del Norte"
+  },
+  "Remote document translation · custom quotes": {
+    "en": "Remote document translation · custom quotes",
+    "ar": "ترجمة وثائق عن بُعد · عروض أسعار مخصصة",
+    "fr": "Traduction de documents à distance · devis personnalisés",
+    "es": "Traducción de documentos a distancia · presupuestos personalizados"
+  },
+  "View Tanya Naser's profile": {
+    "en": "View Tanya Naser's profile",
+    "ar": "عرض ملف Tanya Naser",
+    "fr": "Voir le profil de Tanya Naser",
+    "es": "Ver el perfil de Tanya Naser"
+  },
+  "Tanya Naser · Marocora Translator Profile": {
+    "en": "Tanya Naser · Marocora Translator Profile",
+    "ar": "Tanya Naser · ملف مترجمة في ماروكورا",
+    "fr": "Tanya Naser · Profil de traductrice Marocora",
+    "es": "Tanya Naser · Perfil de traductora en Marocora"
+  },
+  "Tanya Naser": {
+    "en": "Tanya Naser",
+    "ar": "Tanya Naser",
+    "fr": "Tanya Naser",
+    "es": "Tanya Naser"
+  },
+  "Document for regular translation": {
+    "en": "Document for regular translation",
+    "fr": "Document pour une traduction non assermentée",
+    "ar": "مستند للترجمة غير المحلّفة",
+    "es": "Documento para traducción no jurada"
+  },
+  "Local uploads: TXT, PDF, DOCX, JPG and PNG; up to 10 MB (10,000,000 bytes) per file. Files remain quarantined until a clean antivirus scan. If no scanner is installed, staff can review the status but nobody can download the file. Clean files are private to the staff owner and the accepted assigned translator.": {
+    "en": "Local uploads: TXT, PDF, DOCX, JPG and PNG; up to 10 MB (10,000,000 bytes) per file. Files remain quarantined until a clean antivirus scan. If no scanner is installed, staff can review the status but nobody can download the file. Clean files are private to the staff owner and the accepted assigned translator.",
+    "fr": "Téléversements locaux : TXT, PDF, DOCX, JPG et PNG ; jusqu’à 10 Mo (10 000 000 octets) par fichier. Les fichiers restent en quarantaine jusqu’à une analyse antivirus sans détection. Sans antivirus installé, le responsable peut consulter leur état, mais personne ne peut les télécharger. Seuls le responsable et le traducteur affecté ayant accepté la mission peuvent accéder aux fichiers validés.",
+    "ar": "الرفع المحلي: ملفات TXT وPDF وDOCX وJPG وPNG بحد أقصى 10 ميغابايت (10,000,000 بايت) لكل ملف. تبقى الملفات في الحجر حتى اجتياز فحص مكافحة الفيروسات. إذا لم يُثبّت برنامج فحص، يستطيع الموظف مراجعة الحالة لكن لا يمكن لأحد تنزيل الملف. الملفات المجتازة متاحة فقط للموظف المسؤول والمترجم المعيّن الذي قبل المهمة.",
+    "es": "Archivos locales: TXT, PDF, DOCX, JPG y PNG; hasta 10 MB (10.000.000 bytes) por archivo. Permanecen en cuarentena hasta superar un análisis antivirus. Si no hay antivirus instalado, el responsable puede revisar el estado, pero nadie puede descargarlos. Solo el responsable y el traductor asignado que haya aceptado el encargo pueden acceder a los archivos aprobados."
+  },
+  "Tanya Naser — Test profile": {
+    "en": "Tanya Naser — Test profile",
+    "ar": "Tanya Naser — ملف تجريبي",
+    "fr": "Tanya Naser — Profil de test",
+    "es": "Tanya Naser — Perfil de prueba"
+  },
+  "Test profile — unavailable for customer requests. This profile cannot receive assignments or provide a quote through Marocora.": {
+    "en": "Test profile — unavailable for customer requests. This profile cannot receive assignments or provide a quote through Marocora.",
+    "ar": "ملف تجريبي غير متاح لطلبات العملاء. لا يمكن لهذا الملف تلقي مهام أو تقديم عرض سعر عبر ماروكورا.",
+    "fr": "Profil de test — indisponible pour les demandes des clients. Ce profil ne peut recevoir de missions ni fournir de devis par l’intermédiaire de Marocora.",
+    "es": "Perfil de prueba — no disponible para solicitudes de clientes. Este perfil no puede recibir encargos ni ofrecer presupuestos a través de Marocora."
+  },
+  "Get a translation quote for your document through the Marocora Professional Network.": {
+    "en": "Get a translation quote for your document through the Marocora Professional Network.",
+    "fr": "Obtenez un devis de traduction pour votre document via le réseau professionnel Marocora.",
+    "ar": "احصل على عرض سعر لترجمة مستندك عبر شبكة Marocora المهنية.",
+    "es": "Obtén un presupuesto de traducción para tu documento a través de la red profesional Marocora."
+  },
+  "Chinese (Mandarin)": {
+    "en": "Chinese (Mandarin)",
+    "fr": "Chinois (mandarin)",
+    "ar": "الصينية (الماندرين)",
+    "es": "Chino (mandarín)"
+  },
+  "German": {
+    "en": "German",
+    "fr": "Allemand",
+    "ar": "الألمانية",
+    "es": "Alemán"
+  },
+  "Portuguese": {
+    "en": "Portuguese",
+    "fr": "Portugais",
+    "ar": "البرتغالية",
+    "es": "Portugués"
+  },
+  "Russian": {
+    "en": "Russian",
+    "fr": "Russe",
+    "ar": "الروسية",
+    "es": "Ruso"
+  },
+  "Turkish": {
+    "en": "Turkish",
+    "fr": "Turc",
+    "ar": "التركية",
+    "es": "Turco"
+  },
+  "Free 250-word sample": {
+    "en": "Free 250-word sample",
+    "fr": "Échantillon gratuit de 250 mots",
+    "ar": "عينة مجانية من 250 كلمة",
+    "es": "Muestra gratuita de 250 palabras"
+  },
+  "Join the Marocora Professional Network and connect with clients seeking translation and language services in Morocco and internationally.": {
+    "en": "Join the Marocora Professional Network and connect with clients seeking translation and language services in Morocco and internationally.",
+    "fr": "Rejoignez le réseau professionnel Marocora et trouvez des clients recherchant des services de traduction et de langues au Maroc et à l’international.",
+    "ar": "انضم إلى شبكة Marocora المهنية وتواصل مع العملاء الباحثين عن خدمات الترجمة واللغات في المغرب وخارجه.",
+    "es": "Únete a la red profesional Marocora y conecta con clientes que buscan servicios de traducción e idiomas en Marruecos y en el extranjero."
+  },
+  "Services may be provided remotely throughout Morocco and internationally.": {
+    "en": "Services may be provided remotely throughout Morocco and internationally.",
+    "fr": "Les services peuvent être fournis à distance au Maroc et à l’international.",
+    "ar": "يمكن تقديم الخدمات عن بُعد في أنحاء المغرب وخارجه.",
+    "es": "Los servicios pueden prestarse a distancia en todo Marruecos y en el extranjero."
+  },
+  "Translation": {
+    "en": "Translation",
+    "fr": "Traduction",
+    "ar": "الترجمة",
+    "es": "Traducción"
+  },
+  "0.70 MAD": {
+    "en": "0.70 MAD",
+    "fr": "0.70 MAD",
+    "ar": "0.70 MAD",
+    "es": "0.70 MAD"
+  },
+  "Arabic and English translation · Casablanca": {
+    "en": "Arabic and English translation · Casablanca",
+    "fr": "Traduction arabe et anglais · Casablanca",
+    "ar": "ترجمة العربية والإنجليزية · الدار البيضاء",
+    "es": "Traducción árabe e inglés · Casablanca"
+  },
+  "Translation from 0.70 MAD per word. Minimum 150 MAD before VAT.": {
+    "en": "Translation from 0.70 MAD per word. Minimum 150 MAD before VAT.",
+    "fr": "Traduction à partir de 0,70 MAD par mot. Minimum de 150 MAD hors TVA.",
+    "ar": "ترجمة ابتداءً من 0.70 درهم للكلمة. الحد الأدنى 150 درهمًا قبل الضريبة.",
+    "es": "Traducción desde 0,70 MAD por palabra. Mínimo de 150 MAD sin IVA."
+  },
+  "Marocora is building a professional network of translators and language specialists serving clients in Morocco and internationally.": {
+    "en": "Marocora is building a professional network of translators and language specialists serving clients in Morocco and internationally.",
+    "fr": "Marocora développe un réseau professionnel de traducteurs et de spécialistes des langues pour les clients au Maroc et à l’international.",
+    "ar": "تعمل Marocora على بناء شبكة مهنية من المترجمين ومتخصصي اللغات لخدمة العملاء في المغرب وخارجه.",
+    "es": "Marocora está creando una red profesional de traductores y especialistas de idiomas para clientes en Marruecos y en el extranjero."
   }
 };
-
-Object.assign(translationCopy,{
-  "Featured Translators":{en:"Featured Translators",ar:"مترجمون مختارون",fr:"Traducteurs à découvrir",es:"Traductores destacados"},
-  "Meet Tanya Naser":{en:"Meet Tanya Naser",ar:"تعرّف على Tanya Naser",fr:"Découvrez Tanya Naser",es:"Conoce a Tanya Naser"},
-  "Arabic and English document translation · Raleigh, North Carolina":{en:"Arabic and English document translation · Raleigh, North Carolina",ar:"ترجمة وثائق بين العربية والإنجليزية · رالي، كارولاينا الشمالية",fr:"Traduction de documents arabe–anglais · Raleigh, Caroline du Nord",es:"Traducción de documentos árabe–inglés · Raleigh, Carolina del Norte"},
-  "Remote document translation · custom quotes":{en:"Remote document translation · custom quotes",ar:"ترجمة وثائق عن بُعد · عروض أسعار مخصصة",fr:"Traduction de documents à distance · devis personnalisés",es:"Traducción de documentos a distancia · presupuestos personalizados"},
-  "View Tanya Naser's profile":{en:"View Tanya Naser's profile",ar:"عرض ملف Tanya Naser",fr:"Voir le profil de Tanya Naser",es:"Ver el perfil de Tanya Naser"},
-  "Tanya Naser · Marocora Translator Profile":{en:"Tanya Naser · Marocora Translator Profile",ar:"Tanya Naser · ملف مترجمة في ماروكورا",fr:"Tanya Naser · Profil de traductrice Marocora",es:"Tanya Naser · Perfil de traductora en Marocora"},
-  "Tanya Naser":{en:"Tanya Naser",ar:"Tanya Naser",fr:"Tanya Naser",es:"Tanya Naser"}
-});

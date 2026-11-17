@@ -147,7 +147,7 @@
         <h1>Request a Translation Quote</h1>
 
         <p>
-            Send a translation, interpretation or language-service request
+            Get a translation quote for your document
             through the Marocora Professional Network.
         </p>
 
@@ -214,7 +214,7 @@
 
                     <option>Certified / Sworn Translation</option>
 
-                    <option>Interpretation</option>
+
 
                     <option>Business Translation</option>
 
@@ -231,22 +231,17 @@
                 <label for="source-language">From Language</label>
 
                 <select id="source-language" name="source-language" required>
-
-                    <option value="">Select language</option>
-
-                    <option>Arabic</option>
-
-                    <option>English</option>
-
-                    <option>French</option>
-
-                    <option>Darija</option>
-
-                    <option>Spanish</option>
-
-                    <option>Other</option>
-
-                </select>
+<option value="">Select language</option>
+<option>Arabic</option>
+<option>Chinese (Mandarin)</option>
+<option>English</option>
+<option>French</option>
+<option>German</option>
+<option>Portuguese</option>
+<option>Russian</option>
+<option>Spanish</option>
+<option>Turkish</option>
+</select>
 
             </div><div class="form-group" data-language-other="source" hidden><label for="source-other">Other Source Language</label><input id="source-other" name="source-other" type="text" maxlength="100"></div>
 
@@ -255,26 +250,21 @@
                 <label for="target-language">To Language</label>
 
                 <select id="target-language" name="target-language" required>
-
-                    <option value="">Select language</option>
-
-                    <option>Arabic</option>
-
-                    <option>English</option>
-
-                    <option>French</option>
-
-                    <option>Darija</option>
-
-                    <option>Spanish</option>
-
-                    <option>Other</option>
-
-                </select>
+<option value="">Select language</option>
+<option>Arabic</option>
+<option>Chinese (Mandarin)</option>
+<option>English</option>
+<option>French</option>
+<option>German</option>
+<option>Portuguese</option>
+<option>Russian</option>
+<option>Spanish</option>
+<option>Turkish</option>
+</select>
 
             </div><div class="form-group" data-language-other="target" hidden><label for="target-other">Other Target Language</label><input id="target-other" name="target-other" type="text" maxlength="100"></div>
 
-            <fieldset class="translation-details" data-interpretation hidden><legend>Interpretation Details</legend><div class="form-group" ><label for="interpretation-mode">Interpretation Mode</label><select id="interpretation-mode" name="interpretation-mode" ><option value="">Select an option</option><option value="Remote">Remote</option><option value="In Person">In Person</option></select></div><div class="form-group" ><label for="appointment">Preferred Date and Time</label><input id="appointment" name="appointment" type="datetime-local" ></div><div class="form-group" ><label for="timezone">Time Zone</label><input id="timezone" name="timezone" type="text" placeholder="Africa/Casablanca" maxlength="100"></div><div class="form-group" ><label for="duration">Estimated Duration (minutes)</label><input id="duration" name="duration" type="number" min="1" step="1"></div><div class="form-group" data-meeting-location><label for="meeting-location">Meeting Location / City</label><input id="meeting-location" name="meeting-location" type="text" maxlength="300"></div></fieldset><fieldset class="translation-details" data-certified hidden><legend>Certified / Sworn Translation</legend><div class="form-group" ><label for="receiving-authority">Receiving Organisation / Country</label><input id="receiving-authority" name="receiving-authority" type="text" maxlength="300"></div><div class="form-group" ><label for="recipient-requirements">Requirements Stated by the Recipient</label><textarea id="recipient-requirements" name="recipient-requirements" maxlength="3000"></textarea></div></fieldset><fieldset class="translation-details" data-written><legend>Document / Content Details</legend><div class="form-group">
+            <fieldset class="translation-details" data-certified hidden><legend>Certified / Sworn Translation</legend><div class="form-group" ><label for="receiving-authority">Receiving Organisation / Country</label><input id="receiving-authority" name="receiving-authority" type="text" maxlength="300"></div><div class="form-group" ><label for="recipient-requirements">Requirements Stated by the Recipient</label><textarea id="recipient-requirements" name="recipient-requirements" maxlength="3000"></textarea></div></fieldset><fieldset class="translation-details" data-written><legend>Document / Content Details</legend><div class="form-group">
 
                 <label for="deadline">Preferred Deadline</label>
 
@@ -307,12 +297,18 @@
                 <textarea
                     id="message"
                     name="message" required maxlength="5000"
-                    placeholder="Describe the document, interpretation assignment, subject matter, deadline, or any special requirements."
+                    placeholder="Describe the document, subject matter, deadline, or any special requirements."
                 ></textarea>
 
             </div>
 
             <p class="translation-note">For an initial quote, describe the content and estimated length. Share documents after the provider and sharing method are agreed.</p>
+<label class="translation-choice"><input name="free-sample" type="checkbox"> Free 250-word sample</label><section id="block1-upload" hidden>
+  <label for="block1-document">Document for regular translation</label>
+  <input id="block1-document" type="file" accept=".txt,.pdf,.docx,.jpg,.jpeg,.png" disabled>
+  <p>Local uploads: TXT, PDF, DOCX, JPG and PNG; up to 10 MB (10,000,000 bytes) per file. Files remain quarantined until a clean antivirus scan. If no scanner is installed, staff can review the status but nobody can download the file. Clean files are private to the staff owner and the accepted assigned translator.</p>
+  <p id="block15-scan-status" role="status"></p>
+</section>
 <button type="submit" class="submit-button">
                 Send Quote Request
             </button>

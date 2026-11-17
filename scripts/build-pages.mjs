@@ -1,6 +1,8 @@
 import { cpSync, existsSync, mkdirSync, readdirSync, rmSync } from 'node:fs';
 import { extname, join } from 'node:path';
 import { build } from 'esbuild';
+import {requirePnpm} from './check-package-manager.mjs';
+requirePnpm();
 
 const root = process.cwd();
 const output = join(root, '.pages-dist');
@@ -29,3 +31,5 @@ console.log(`Pages artifact ready: ${output}`);
 
 for (const entry of ["app", "account", "schedule"]) await build({entryPoints:[join(learning,`${entry}.mjs`)],outfile:join(output,"learn",`${entry}.mjs`),bundle:true,format:"esm",target:"es2022",minify:true});
 for(const entry of ['service-verification','service-account','service-review','vendor-review','application','launch-report'])await build({entryPoints:[join(root,`${entry}.mjs`)],outfile:join(output,`${entry}.mjs`),bundle:true,format:'esm',target:'es2022',minify:true});
+
+await build({entryPoints:[join(learning,'live-learning-room.mjs')],outfile:join(output,'learn','live-learning-room.mjs'),bundle:true,format:'esm',platform:'browser',target:'es2022',minify:true});

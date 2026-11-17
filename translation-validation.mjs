@@ -1,5 +1,5 @@
 import {currencies} from './learn/currencies.mjs';
-export const translationServices=['Document Translation','Certified / Sworn Translation','Interpretation','Business Translation','Website & Digital Translation','Other Language Service'];
+export const translationServices=['Document Translation','Certified / Sworn Translation','Business Translation','Website & Digital Translation','Other Language Service'];
 export function moneyError(amount,currency,{unitRate=false}={}){
  const code=String(currency||'').trim().toUpperCase(),value=String(amount??'').trim();
  if(code&&!currencies[code])return {field:'currency',message:'Choose a currency code from the list.'};

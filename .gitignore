@@ -3,6 +3,7 @@ node_modules/
 *.sqlite-shm
 *.sqlite-wal
 .env
+.env.cloudmersive
 .env.*
 !.env.example
 .test-output/
@@ -10,3 +11,26 @@ node_modules/
 
 tmp/
 output/
+
+# pnpm is the sole package manager; keep competing lockfiles out.
+package-lock.json
+npm-shrinkwrap.json
+yarn.lock
+
+.learning-room-assets/
+
+# Local operating-system files, logs, credentials, backups and generated QA output.
+.DS_Store
+*.log
+*.pid
+*.pem
+*.key
+*.p12
+*.pfx
+*.dump
+*.sql.gz
+*.bak
+.pm2/
+coverage/
+docs/**/*-evidence/
+# Synthetic fixtures in tests/fixtures/ are intentionally retained for regressions.
