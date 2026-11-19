@@ -13,17 +13,27 @@ and exposes no local/staging login endpoints. `NODE_ENV=production` and a fixed
 `APP_ORIGINS` HTTPS allowlist are required. Only loopback binding is accepted;
 Nginx terminates HTTPS and overwrites forwarded client-IP information.
 
-Sign in at `/production-login.html` or `/`. Supabase `auth.getUser` verifies each
+The public website is served at `/` and `/index.html`; sign in at
+`/production-login.html`. Supabase `auth.getUser` verifies each
 session; anonymous, unconfirmed, invalid or revoked users fail closed. Tokens
 stay in a Secure, HttpOnly, SameSite=Strict `__Host-` cookie. Business roles come
 from database RPCs, never JWT user metadata or caller-supplied IDs. Refresh-token
 rotation is not implemented here: expired sessions return to sign-in. The
 production translation browser module does not use staging sessionStorage tokens.
 
-The public HTTP surface is deliberately limited to sign-in, learning room,
-translation workspace and required built assets. Legacy synthetic dashboards,
+The production page allowlist restores the authored public homepage, directories,
+profiles, inquiry/application forms, email verification and learning catalogue.
+Public forms retain their existing Supabase email-verification and RLS-backed
+flows; CSP permits only the configured Supabase origin for those requests.
+The translation inquiry at `/translation-request.html` is public; the document
+quote/workspace is separate at `/instant-quote.html` (also
+`/translation-workspace.html`). Private workspace, review, account, schedule and
+lesson HTML redirects unauthenticated or expired sessions to the separate login
+page, preserving the destination. API role, booking and file authorization still
+runs independently on every request. Legacy synthetic booking/payment pages,
 server/test source, `.env` and the old hardcoded learning client configuration
-are not served. GET `/health` is a process liveness check, not proof that all
+are not served. Original profile scripts receive exact CSP hashes rather than
+enabling unrestricted inline JavaScript. GET `/health` is a process liveness check, not proof that all
 external dependencies are healthy. Unknown Hosts and mismatched POST Origins
 are denied. There is no wildcard CORS or forwarded-origin bypass.
 

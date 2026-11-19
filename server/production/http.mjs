@@ -2,18 +2,21 @@ import {createServer} from 'node:http';
 import {readFile} from 'node:fs/promises';
 import {resolve,extname,relative,sep} from 'node:path';
 import {fileURLToPath} from 'node:url';
+import {createHash} from 'node:crypto';
 import {productionConfig} from './config.mjs';
 import {createProductionSupabase} from './supabase.mjs';
 import {createProductionLearning} from './learning.mjs';
 import {createSpacesStore} from '../storage/spaces.mjs';
 import {cloudmersiveScanner} from '../block1/uploads.mjs';
 import {instantRoutes} from '../block1/instant-http.mjs';
+import {publicPages,privatePages,browserAssets,productionAliases,websitePath,loginLocation} from './site.mjs';
 const root=fileURLToPath(new URL('../../',import.meta.url)),cookieName='__Host-marocora_session';
 const fail=(code,status=400)=>{throw Object.assign(Error(code),{status});};
 const mime={'.html':'text/html; charset=utf-8','.mjs':'text/javascript; charset=utf-8','.js':'text/javascript; charset=utf-8','.css':'text/css; charset=utf-8','.svg':'image/svg+xml','.png':'image/png','.jpg':'image/jpeg','.jpeg':'image/jpeg','.webp':'image/webp','.ico':'image/x-icon','.xml':'application/xml','.txt':'text/plain'};
-const publicFiles=new Set(['production-login.html','production-login.mjs','learning-room.html','learning-room.mjs','learning-room.css','site-language.mjs','site-language.css','site-services.mjs','site-copy.mjs','home-copy.mjs','site-ui-copy.mjs','site-extra-copy.mjs','translation-copy.mjs','learn/learning-room-session.mjs','learn/lesson-login.mjs','learn/live-learning-room.mjs','learn/mock-learning-room.mjs','learn/room-copy.mjs','learn/locale.mjs']);
 export async function startProductionServer({env=process.env,auth,storage,scanner,learning,exchangeService,handleSignals=true,log=console.log}={}){
  const config=productionConfig(env);
+ const publicService=env.SUPABASE_URL?new URL(env.SUPABASE_URL).origin:'';
+ const policy=(live,hashes=[])=>`default-src 'self'; script-src 'self' ${hashes.join(' ')}; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self' ${publicService} ${live?live+' '+live.replace(/^wss:/,'https:')+' https://*.livekit.cloud wss://*.livekit.cloud':''}; media-src 'self' blob:; worker-src 'self' blob:; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'self' ${publicService}`;
  auth??=createProductionSupabase(env);await auth.checkReady();storage??=createSpacesStore(env);scanner??=cloudmersiveScanner({env});
  if(storage.kind!=='spaces'||scanner.mockOnly===true)fail('PRODUCTION_ADAPTER_REQUIRED',503);
  learning??=createProductionLearning({auth,env});
@@ -24,7 +27,7 @@ export async function startProductionServer({env=process.env,auth,storage,scanne
   res.setHeader('Cache-Control','no-store');res.setHeader('Referrer-Policy','no-referrer');res.setHeader('X-Content-Type-Options','nosniff');res.setHeader('X-Frame-Options','DENY');
   res.setHeader('Permissions-Policy',env.LEARNING_VIDEO_ENABLED==='true'?'camera=(self), microphone=(self), display-capture=()':'camera=(), microphone=(), display-capture=()');
   const live=env.LEARNING_VIDEO_ENABLED==='true'?new URL(env.LIVEKIT_URL).origin:null;
-  res.setHeader('Content-Security-Policy',`default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self' ${live?live+' '+live.replace(/^wss:/,'https:')+' https://*.livekit.cloud wss://*.livekit.cloud':''}; media-src 'self' blob:; worker-src 'self' blob:; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'self'`);
+  res.setHeader('Content-Security-Policy',policy(live));
   concurrent++;let heavy=false;
   try{
    if(concurrent>128)fail('SERVER_BUSY',503);
@@ -64,16 +67,25 @@ export async function startProductionServer({env=process.env,auth,storage,scanne
     fail('NOT_FOUND',404);
    }
    if(req.method!=='GET'&&req.method!=='HEAD')fail('NOT_FOUND',404);
-   const path=decodeURIComponent(url.pathname==='/'?'/production-login.html':url.pathname);
+   if(url.pathname==='/learn'){res.writeHead(302,{Location:'/learn/'+url.search});return res.end();}
+   const path=websitePath(decodeURIComponent(url.pathname));
    if(path.split('/').some(part=>part.startsWith('.')||part==='server'||part==='tests'||part==='node_modules')||path.includes('\\')||path.includes('\0'))fail('NOT_FOUND',404);
-   const aliases={'/instant-quote.html':'server/block1/ui/instant-quote.html','/translation-request.html':'server/block1/ui/instant-quote.html','/instant-quote.mjs':'server/block1/ui/instant-quote.mjs','/instant-quote.css':'server/block1/ui/instant-quote.css','/block1-local.mjs':'server/production/translation-client.mjs'};
+   const name=path.slice(1),aliases=productionAliases;
+   if(privatePages.has(name)){
+    try{await auth.authenticate(bearer);}
+    catch(error){if(error.status!==401)throw error;res.writeHead(302,{Location:loginLocation(path,url.search)});return res.end();}
+   }
    let bytes;
    try{
     if(aliases[path])bytes=await readFile(resolve(root,aliases[path]));
-    else{if(!publicFiles.has(path.slice(1)))fail('NOT_FOUND',404);const base=resolve(root,'.pages-dist'),target=resolve(base,'.'+path);if(relative(base,target).split(sep).includes('..'))fail('NOT_FOUND',404);bytes=await readFile(target);}
+    else{if(!publicPages.has(name)&&!privatePages.has(name)&&!browserAssets.has(name))fail('NOT_FOUND',404);const base=resolve(root,'.pages-dist'),target=resolve(base,'.'+path);if(relative(base,target).split(sep).includes('..'))fail('NOT_FOUND',404);bytes=await readFile(target);}
    }catch{fail('NOT_FOUND',404);}
    if(aliases[path]?.endsWith('.html'))bytes=Buffer.from(bytes.toString().replace('STAGING · Mock payments and mock scanning. No real money is collected.','Your documents are scanned before quote processing. Payments are not available yet.'));
-   res.writeHead(200,{'Content-Type':mime[extname(path)]});res.end(req.method==='HEAD'?undefined:bytes);
+   if(extname(path)==='.html'){
+    const hashes=[...bytes.toString().matchAll(/<script\b[^>]*>([\s\S]*?)<\/script\s*>/gi)].filter(match=>match[1].trim()).map(match=>"'sha256-"+createHash('sha256').update(match[1]).digest('base64')+"'");
+    res.setHeader('Content-Security-Policy',policy(live,hashes));
+   }
+   res.writeHead(200,{'Content-Type':mime[extname(path).toLowerCase()]});res.end(req.method==='HEAD'?undefined:bytes);
   }catch(error){req.resume();if(res.headersSent){res.destroy();return;}const code=/^[A-Z][A-Z0-9_]{0,79}$/.test(error.message||'')?error.message:'REQUEST_FAILED';json(res,Number.isInteger(error.status)&&error.status>=400&&error.status<600?error.status:500,{error:code});}
   finally{concurrent--;if(heavy)heavyRequests--;}
  });

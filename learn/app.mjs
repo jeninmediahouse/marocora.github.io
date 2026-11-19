@@ -158,7 +158,11 @@ let translating=false;
 async function renderPage(){heading();if(params.get('instructor'))await profile(params.get('instructor'));else if(params.get('view')==='checkout')await checkout();else if(params.get('view')==='confirmation')await confirmation();else browse();translateHeader(locale);}
 document.querySelector('#locale').onchange=async event=>{if(translating){event.target.value=locale;return;}translating=true;const fields=captureFields(app);locale=changeLocale(event.target.value,params);try{await renderPage();restoreFields(app,fields);if(document.querySelector('#search-form'))refreshBrowse();else if(document.querySelector('#offering'))document.querySelector('#offering').dispatchEvent(new Event('change'));}finally{translating=false;}};
 heading();
-if (config.learningLaunchOpen) { try { catalog=await publicCatalog();student=await currentUser();if(student){const dash=await studentDashboard();favorites=dash.favorites||[];}}catch{app.innerHTML=`<h1>${t('problem')}</h1><a class="button" href="${url({})}">${t('retry')}</a>`;throw new Error('Catalog unavailable');} }
+if (config.learningLaunchOpen) { try { catalog=await publicCatalog();student=await currentUser();if(student){const dash=await studentDashboard();favorites=dash.favorites||[];}}catch{
+ const help={en:'Request help finding a teacher',fr:'Demander de l’aide pour trouver un professeur',ar:'طلب المساعدة للعثور على مدرس',es:'Solicitar ayuda para encontrar un profesor'};
+ app.innerHTML=`<h1>${t('problem')}</h1><div class="actions"><a class="button" href="../lesson-request.html?lang=${locale}">${help[locale]}</a><a class="button secondary" href="${url({})}">${t('retry')}</a></div>`;
+ throw new Error('Catalog unavailable');
+} }
 else if (config.apiBase) { try { catalog = await api.catalog(); } catch { app.innerHTML = `<h1>${t('problem')}</h1>`; throw new Error('Catalog unavailable'); } }
 await renderPage();
 

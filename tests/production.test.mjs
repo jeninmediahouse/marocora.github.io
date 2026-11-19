@@ -12,6 +12,7 @@ import {instantRoutes} from '../server/block1/instant-http.mjs';
 import {createProductionSupabase} from '../server/production/supabase.mjs';
 import {productionConfig} from '../server/production/config.mjs';
 import {startProductionServer} from '../server/production/http.mjs';
+import {publicPages,privatePages} from '../server/production/site.mjs';
 import {createProductionLearning} from '../server/production/learning.mjs';
 import {createLiveKitAdapter} from '../server/livekit-adapter.mjs';
 import {openLocalDatabase,L} from '../server/block1/database.mjs';
@@ -82,7 +83,42 @@ test('Production Supabase auth requires remote confirmed non-anonymous users and
  await assert.rejects(f.auth.authenticate('forged'),/AUTH_REQUIRED/);
 });
 const localRequest=(port,path,{method='GET',headers={},body}={})=>new Promise((resolve,reject)=>{
- const req=httpRequest('http://127.0.0.1:'+port+path,{method,headers:{Host:'app.example.invalid',...headers}},res=>{let text='';res.on('data',c=>text+=c);res.on('end',()=>resolve({status:res.statusCode,headers:res.headers,json:()=>JSON.parse(text)}));res.on('error',reject);});req.on('error',reject);req.end(body);
+  const req=httpRequest('http://127.0.0.1:'+port+path,{method,headers:{Host:'app.example.invalid',...headers}},res=>{let text='';res.on('data',c=>text+=c);res.on('end',()=>resolve({status:res.statusCode,headers:res.headers,text,json:()=>JSON.parse(text)}));res.on('error',reject);});req.on('error',reject);req.end(body);
+});
+test('Production restores public website and assets while gating every private page and retaining API authorization',async t=>{
+ const f=supabaseFixture(),app=await startProductionServer({env:f.env,auth:f.auth,storage:memorySpaces().store,scanner:{available:true},handleSignals:false,log:()=>{}});
+ t.after(()=>app.close());const port=app.server.address().port;
+ const home=await localRequest(port,'/?lang=fr');assert.equal(home.status,200);assert.match(home.text,/Services for Life in Morocco/);assert.ok(!home.text.includes('id="production-login"'));assert.match(home.text,/href="production-login.html"/);
+ for(const name of publicPages){
+  const response=await localRequest(port,'/'+name);assert.equal(response.status,200,name);
+  for(const match of response.text.matchAll(/<(?:script|link)\b[^>]*(?:src|href)=["']([^"']+)["']/g)){
+   const resource=new URL(match[1],'https://app.example.invalid/'+name);
+   if(resource.origin==='https://app.example.invalid')assert.equal((await localRequest(port,resource.pathname+resource.search)).status,200,name+' -> '+resource.pathname);
+  }
+ }
+ assert.equal((await localRequest(port,'/learn/?lang=fr')).status,200);
+ assert.equal((await localRequest(port,'/learn?lang=fr')).headers.location,'/learn/?lang=fr');
+ const inquiry=await localRequest(port,'/translation-request.html');assert.match(inquiry.text,/id="translation-request-form"/);assert.ok(!inquiry.text.includes('My workspace'));
+ const image=await localRequest(port,'/GOPR1269.JPG');assert.equal(image.status,200);assert.equal(image.headers['content-type'],'image/jpeg');
+ const profile=await localRequest(port,'/translator-tareq-naser.html');assert.match(profile.headers['content-security-policy'],/sha256-/);assert.ok(!profile.headers['content-security-policy'].split(';')[1].includes('unsafe-inline'));
+ assert.ok(home.headers['content-security-policy'].includes('https://supabase.example.invalid'));
+ assert.equal(f.calls.filter(call=>call.path==='/auth/v1/user').length,0);
+ for(const name of privatePages){
+  for(const method of ['GET','HEAD']){
+   const response=await localRequest(port,'/'+name+'?lang=fr',{method});assert.equal(response.status,302,name);
+   const login=new URL(response.headers.location,'https://app.example.invalid');assert.equal(login.pathname,'/production-login.html');assert.equal(login.searchParams.get('next'),'/'+name+'?lang=fr');
+  }
+ }
+ for(const name of ['.env','server/production/site.mjs','docs/deployment/PRODUCTION-BOOTSTRAP.md','learn/config.mjs','learn/instructor-store.mjs','learn/learning-store.mjs','booking-data.js','payment.html'])assert.equal((await localRequest(port,'/'+name)).status,404,name);
+ for(const path of ['/api/me','/api/instant/config','/api/learning/room-config'])assert.equal((await localRequest(port,path)).status,401,path);
+ const headers={Origin:'https://app.example.invalid','Content-Type':'application/json'};
+ const login=await localRequest(port,'/api/auth/login',{method:'POST',headers,body:JSON.stringify({email:'synthetic@production.invalid',password:'SYNTHETIC_PASSWORD'})});
+ const cookie=login.headers['set-cookie'][0].split(';')[0];
+ for(const name of privatePages)assert.equal((await localRequest(port,'/'+name,{headers:{Cookie:cookie}})).status,200,name);
+ f.setUser(null);
+ assert.equal((await localRequest(port,'/learning-room.html',{headers:{Cookie:cookie}})).status,302);
+ assert.equal((await localRequest(port,'/instant-quote.html',{headers:{Cookie:cookie}})).status,302);
+ assert.equal((await localRequest(port,'/api/learning/room-config',{headers:{Cookie:cookie}})).status,401);
 });
 test('Production HTTP has fixed origins, real auth cookies, no synthetic login and no mock payment or secret exposure',async t=>{
  const f=supabaseFixture(),storage=memorySpaces().store,app=await startProductionServer({env:f.env,auth:f.auth,storage,scanner:{available:true,scanBytes:async()=>({status:'clean'})},handleSignals:false,log:()=>{}});t.after(()=>app.close());const port=app.server.address().port;

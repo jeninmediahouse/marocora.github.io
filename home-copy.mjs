@@ -1,5 +1,6 @@
 // Authored visitor-interface translations.
 export const homeCopy = {
+  "Sign in": {"en":"Sign in","fr":"Se connecter","ar":"تسجيل الدخول","es":"Iniciar sesión"},
   "Home": {
     "en": "Home",
     "fr": "Accueil",
