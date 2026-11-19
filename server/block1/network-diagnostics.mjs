@@ -39,7 +39,12 @@ export function createSupabaseTransport(config,{fetcher=fetch,logger=console.err
   const url=new URL(typeof input==='string'||input instanceof URL?input:input.url);
   if(url.origin!==config.url)throw Object.assign(Error('STAGING_REMOTE_ORIGIN_DENIED'),{status:503});
   const signal=options.signal?AbortSignal.any([options.signal,AbortSignal.timeout(timeoutMs)]):AbortSignal.timeout(timeoutMs);
-  try{return await fetcher(input,{...options,redirect:'error',signal});}
+  const headers=new Headers(options.headers??(input instanceof Request?input.headers:undefined));
+  const apiKey=headers.get('apikey');
+  // The SDK may default Authorization to its API key. Opaque keys are not JWTs;
+  // remove only that redundant value, never the signed-in user's session JWT.
+  if(/^sb_(publishable|secret)_/.test(apiKey||'')&&headers.get('authorization')==='Bearer '+apiKey)headers.delete('authorization');
+  try{return await fetcher(input,{...options,headers,redirect:'error',signal});}
   catch(error){
    const secrets=[config.anon,config.service,url.hostname];
    for(const value of new Headers(options.headers).values())secrets.push(value);

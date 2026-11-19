@@ -2,6 +2,7 @@ import {loadEnvFile} from 'node:process';
 import {existsSync} from 'node:fs';
 import {fileURLToPath} from 'node:url';
 import {createSupabaseTransport,safeError,networkHint} from '../server/block1/network-diagnostics.mjs';
+import {supabaseKeyPair} from '../server/supabase-api-keys.mjs';
 export const dummyToken='synthetic.payload.signature';
 export const dummyActor='11111111-1111-4111-8111-111111111111';
 export function authEnvironment({mock=false}={}){
@@ -11,6 +12,11 @@ export function authEnvironment({mock=false}={}){
  return process.env;
 }
 export function authConfig(env){
+ if(Object.hasOwn(env,'SUPABASE_PUBLISHABLE_KEY')||Object.hasOwn(env,'SUPABASE_SECRET_KEY')||env.SUPABASE_REQUIRE_MODERN_KEYS==='true'){
+  const keys=supabaseKeyPair(env);let url;try{url=new URL(env.SUPABASE_URL);}catch{throw Error('INVALID_SUPABASE_URL');}
+  if(url.protocol!=='https:'||url.username||url.password||url.pathname!=='/'||url.search||url.hash)throw Error('INVALID_SUPABASE_URL');
+  return {url:url.origin,...keys};
+ }
  if(!env.SUPABASE_URL||!env.SUPABASE_ANON_KEY)throw Error('SUPABASE_URL_AND_ANON_KEY_REQUIRED');
  let url;try{url=new URL(env.SUPABASE_URL);}catch{throw Error('INVALID_SUPABASE_URL');}
  if(url.protocol!=='https:'||url.username||url.password||url.pathname!=='/'||url.search||url.hash)throw Error('INVALID_SUPABASE_URL');
@@ -43,6 +49,6 @@ export async function probeAuth(config,{fetcher=fetch,logger=console.log}={}){
  if(!response.ok)throw Object.assign(Error('AUTH_SETTINGS_HTTP_ERROR'),{status:response.status});
 }
 export function reportFailure(error,env={},logger=console.error){
- const detail=safeError(error,[env.SUPABASE_ANON_KEY,env.SUPABASE_SERVICE_ROLE_KEY,env.STAGING_AUTH_TEST_EMAIL,env.STAGING_AUTH_TEST_PASSWORD]);
+ const detail=safeError(error,[env.SUPABASE_PUBLISHABLE_KEY,env.SUPABASE_SECRET_KEY,env.SUPABASE_ANON_KEY,env.SUPABASE_SERVICE_ROLE_KEY,env.STAGING_AUTH_TEST_EMAIL,env.STAGING_AUTH_TEST_PASSWORD]);
  logger('AUTH_TEST_FAILED '+JSON.stringify({error:detail,hint:networkHint(detail)}));
 }

@@ -1,5 +1,6 @@
 import { instructorStore } from './learn/instructor-store.mjs';
 import { config } from './learn/config.mjs';
+import {publicSupabaseUserHeaders} from './learn/supabase-public.mjs';
 
 export const verificationCopy={
  en:{title:'Verify your email before sending',note:'Clients and providers must verify their email before Marocora starts work or reviews an application. A secure email link creates or signs you into your Marocora account. No password or phone verification is required.',send:'Send verification email',sent:'Check your inbox and spam folder. Open the secure link, then return to this form and send your request. Your details remain in this tab.',verified:'Email verified. You can now send this request.',wrong:'Verify the email address entered in this form, or use the address already verified in your account.',error:'We could not send the verification email. Check the address and try again later.',limit:'Too many requests. Please wait before trying again.',pending:'Your verified request is recorded. Email notification delivery is pending; do not send another copy.',receipt:'Request reference',callback:'Your email is verified',callbackNote:'Return to your original form tab and send your request. Verification alone does not submit a form, approve a provider or confirm a booking.',invalid:'The verification link is invalid or expired. Return to your form and request a new email.',back:'Return to the service form',signin:'Check verification',review:'Verified service requests',staff:'Sign in with your authorised staff account to view the private queue.',refresh:'Refresh',start:'Start review / work',close:'Close request',empty:'No verified service requests yet.',delivery:'Notification delivery',work:'Work status',policy:'Only requests recorded in this private queue have server-confirmed email verification. Text or a verification flag in a Formspree email is not proof.'},
@@ -57,7 +58,7 @@ export async function submitVerifiedIntake(kind,formData,container){
  const serialized=JSON.stringify({kind,fields});let cached=requestIds.get(container);
  if(!cached||cached.serialized!==serialized){cached={serialized,id:crypto.randomUUID()};requestIds.set(container,cached);}
  const {data:{session}}=await instructorStore.auth.getSession();
- const response=await fetch(`${config.supabaseURL}/functions/v1/service-intake`,{method:'POST',headers:{'Content-Type':'application/json',apikey:config.supabasePublishableKey,Authorization:`Bearer ${session.access_token}`},body:JSON.stringify({requestId:cached.id,kind,fields})});
+ const response=await fetch(`${config.supabaseURL}/functions/v1/service-intake`,{method:'POST',headers:publicSupabaseUserHeaders(config,session),body:JSON.stringify({requestId:cached.id,kind,fields})});
  let result;try{result=await response.json();}catch{throw new Error('INTAKE_UNAVAILABLE');}
  if(!response.ok||!result.verified){const e=new Error(result.error||'INTAKE_UNAVAILABLE');if(result.error==='EMAIL_MISMATCH'||result.error==='EMAIL_VERIFICATION_REQUIRED'){e.verificationPending=true;addPanel(container).show('wrong');}throw e;}
  if(result.delivery!=='delivered'){

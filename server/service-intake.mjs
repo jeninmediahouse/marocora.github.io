@@ -1,4 +1,5 @@
 // Runs only on the server. Never trust email/status fields sent by a browser.
+import {supabaseRequestHeaders} from './supabase-api-keys.mjs';
 export const intakeKinds = Object.freeze({
  contact:{form:'xbgojgrj',subject:'New Marocora Contact Message',role:'client',name:'name'},
  translation:{form:'mdegoene',subject:'New Marocora Translation Service Request',role:'client',name:'client-name'},
@@ -41,7 +42,7 @@ export function createIntakeHandler({supabaseURL,serviceKey,fetcher=fetch,crypto
   if(request.method!=='POST')return reply(405,{error:'METHOD_NOT_ALLOWED'});
   if(!origins.has(origin))return reply(403,{error:'ORIGIN_NOT_ALLOWED'});
   const bearer=request.headers.get('authorization');
-  if(!bearer?.startsWith('Bearer ')||bearer.length>12000)return reply(401,{error:'EMAIL_VERIFICATION_REQUIRED'});
+  if(!bearer?.startsWith('Bearer ')||bearer.length>12000||bearer.startsWith('Bearer sb_'))return reply(401,{error:'EMAIL_VERIFICATION_REQUIRED'});
   if(Number(request.headers.get('content-length')||0)>50000)return reply(413,{error:'REQUEST_TOO_LARGE'});
   try{
    // getUser checks the token with Supabase Auth; decoding a JWT is insufficient.
@@ -57,7 +58,7 @@ export function createIntakeHandler({supabaseURL,serviceKey,fetcher=fetch,crypto
    const digest=await cryptoAPI.subtle.digest('SHA-256',new TextEncoder().encode(JSON.stringify(clean)));
    const hash=Array.from(new Uint8Array(digest),b=>b.toString(16).padStart(2,'0')).join('');
    async function rpc(name,args){
-    const r=await fetcher(`${supabaseURL}/rest/v1/rpc/${name}`,{method:'POST',headers:{apikey:serviceKey,Authorization:`Bearer ${serviceKey}`,'Content-Type':'application/json'},body:JSON.stringify(args),signal:AbortSignal.timeout(10000)});
+    const r=await fetcher(`${supabaseURL}/rest/v1/rpc/${name}`,{method:'POST',headers:{...supabaseRequestHeaders(serviceKey),'Content-Type':'application/json'},body:JSON.stringify(args),signal:AbortSignal.timeout(10000)});
     const data=await r.json();if(!r.ok)throw new Error(data.message||'STORAGE_UNAVAILABLE');return data;
    }
    const record=await rpc('service_intake_reserve',{p_id:clean.requestId,p_user:user.id,p_kind:clean.kind,p_fields:clean.fields,p_hash:hash});

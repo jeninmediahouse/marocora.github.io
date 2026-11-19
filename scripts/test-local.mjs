@@ -6,7 +6,7 @@ requirePnpm();
 // Regression QA outputs are generated, not release inputs. Fresh clones must
 // create their ignored output directory rather than shipping previous PDFs.
 mkdirSync(new URL('../docs/quote/instant-v3-evidence/',import.meta.url),{recursive:true,mode:0o700});
-const env=Object.fromEntries(Object.entries(process.env).filter(([key])=>!/^(SUPABASE_|CLOUDMERSIVE_|RESEND_|VENDOR_RESEND_|VENDOR_MAIL_|PG)|DATABASE_URL/.test(key)));
+const env=Object.fromEntries(Object.entries(process.env).filter(([key])=>!/^(SUPABASE_|MAROCORA_SUPABASE_|CLOUDMERSIVE_|RESEND_|VENDOR_RESEND_|VENDOR_MAIL_|PG)|DATABASE_URL/.test(key)));
 const files=readdirSync(new URL('../tests/',import.meta.url)).filter(name=>name.endsWith('.test.mjs')).sort().map(name=>'tests/'+name);
 // The OS policy also covers native dependencies and PostgreSQL descendants.
 // Refuse unsupported platforms rather than silently claiming OS isolation.

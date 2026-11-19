@@ -1,2 +1,4 @@
 import {createIntakeHandler} from '../../../server/service-intake.mjs';
-Deno.serve(createIntakeHandler({supabaseURL:Deno.env.get('SUPABASE_URL')!,serviceKey:Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!}));
+import {edgeSupabaseConfiguration} from '../../../server/supabase-api-keys.mjs';
+// Fail closed if the selected modern key is unavailable. No legacy fallback.
+Deno.serve(createIntakeHandler(edgeSupabaseConfiguration(Deno.env.get.bind(Deno.env))));

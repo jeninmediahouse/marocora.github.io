@@ -2,15 +2,17 @@ import {createClient} from '@supabase/supabase-js';
 import {resolve} from 'node:path';
 import {uuid} from '../quote/contracts.mjs';
 import {createSupabaseTransport,safeError} from './network-diagnostics.mjs';
+import {supabaseKeyPair} from '../supabase-api-keys.mjs';
 export const stagingFunction=name=>name.replace(/^block1_/,'translation_').replace(/^block15_/,'translation_scan_').replace(/^block2_/,'translation_cert_');
 const failure=(code,status=503)=>Object.assign(Error(code),{status});
 export function cloudConfiguration(env){
- const names=['SUPABASE_URL','SUPABASE_ANON_KEY','SUPABASE_SERVICE_ROLE_KEY'];
+ const names=['SUPABASE_URL','SUPABASE_ANON_KEY','SUPABASE_SERVICE_ROLE_KEY','SUPABASE_PUBLISHABLE_KEY','SUPABASE_SECRET_KEY','SUPABASE_REQUIRE_MODERN_KEYS'];
  if(!names.some(name=>env[name]))return null;
- if(names.some(name=>typeof env[name]!=='string'||!env[name].trim()))throw failure('STAGING_ENV_INCOMPLETE');
+ if(typeof env.SUPABASE_URL!=='string'||!env.SUPABASE_URL.trim())throw failure('STAGING_ENV_INCOMPLETE');
+ const keys=supabaseKeyPair(env);
  let url;try{url=new URL(env.SUPABASE_URL);}catch{throw failure('INVALID_SUPABASE_URL');}
  if(url.protocol!=='https:'||url.username||url.password||url.pathname!=='/'||url.search||url.hash)throw failure('INVALID_SUPABASE_URL');
- return {url:url.origin,anon:env.SUPABASE_ANON_KEY,service:env.SUPABASE_SERVICE_ROLE_KEY};
+ return {url:url.origin,...keys};
 }
 export function createStagingDatabase(config,{directory,fetcher=fetch,production=false}={}){
  const transport=createSupabaseTransport(config,{fetcher});

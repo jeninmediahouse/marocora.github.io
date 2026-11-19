@@ -1,10 +1,11 @@
 import {instructorStore} from './learn/instructor-store.mjs';
 import {config} from './learn/config.mjs';
+import {publicSupabaseUserHeaders} from './learn/supabase-public.mjs';
 export {instructorStore};
 export async function workflow(input){
  const {data:{session}}=await instructorStore.auth.getSession();
  if(!session)throw new Error('SIGN_IN_REQUIRED');
- const r=await fetch(`${config.supabaseURL}/functions/v1/vendor-workflow`,{method:'POST',headers:{apikey:config.supabasePublishableKey,Authorization:`Bearer ${session.access_token}`,'Content-Type':'application/json'},body:JSON.stringify(input)});
+ const r=await fetch(`${config.supabaseURL}/functions/v1/vendor-workflow`,{method:'POST',headers:publicSupabaseUserHeaders(config,session),body:JSON.stringify(input)});
  const result=await r.json();if(!r.ok)throw new Error(result.error||'WORKFLOW_UNAVAILABLE');return result;
 }
 export async function rpc(name,args={}){const {data,error}=await instructorStore.rpc(name,args);if(error)throw error;return data;}

@@ -1,4 +1,5 @@
 // Server-only vendor review and notification bridge. Browser never chooses recipients.
+import {supabaseRequestHeaders} from './supabase-api-keys.mjs';
 const allowedOrigins=new Set(['https://marocora.com','https://www.marocora.com']);
 const uuid=/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 export const eventTitles={submitted:'Your Marocora application has been received',approved:'Your Marocora application is approved',declined:'Update: your Marocora application was declined',needs_information:'More information needed for your Marocora application',information_received:'Your additional information has been received'};
@@ -20,7 +21,7 @@ export function createVendorHandler({supabaseURL,serviceKey,mailForm,sendMail,fe
   if(request.method!=='POST')return reply(405,{error:'METHOD_NOT_ALLOWED'});
   if(!allowedOrigins.has(origin))return reply(403,{error:'ORIGIN_NOT_ALLOWED'});
   const token=request.headers.get('authorization');
-  if(!token?.startsWith('Bearer ')||token.length>12000)return reply(401,{error:'SIGN_IN_REQUIRED'});
+  if(!token?.startsWith('Bearer ')||token.length>12000||token.startsWith('Bearer sb_'))return reply(401,{error:'SIGN_IN_REQUIRED'});
   let phase='authenticate';
   try{
    const ar=await fetcher(`${supabaseURL}/auth/v1/user`,{headers:{apikey:serviceKey,Authorization:token},signal:AbortSignal.timeout(10000)});
@@ -32,7 +33,7 @@ export function createVendorHandler({supabaseURL,serviceKey,mailForm,sendMail,fe
    const input=JSON.parse(body);
    async function rpc(name,args,server=false){
     phase=`rpc:${name}`;
-    const r=await fetcher(`${supabaseURL}/rest/v1/rpc/${name}`,{method:'POST',headers:{apikey:serviceKey,Authorization:server?`Bearer ${serviceKey}`:token,'Content-Type':'application/json'},body:JSON.stringify(args),signal:AbortSignal.timeout(15000)});
+    const r=await fetcher(`${supabaseURL}/rest/v1/rpc/${name}`,{method:'POST',headers:{...supabaseRequestHeaders(serviceKey,server?undefined:token),'Content-Type':'application/json'},body:JSON.stringify(args),signal:AbortSignal.timeout(15000)});
     const text=await r.text(),result=text.trim()?JSON.parse(text):null;if(!r.ok){const error=new Error(result?.message||'WORKFLOW_UNAVAILABLE');error.code=result?.code;throw error;}return result;
    }
    let result;

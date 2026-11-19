@@ -1,9 +1,12 @@
 import { createClient } from '@supabase/supabase-js';
 import { config } from './config.mjs';
+import {publicSupabaseConfiguration,publicSupabaseFetch} from './supabase-public.mjs';
 
+const publicKeys=config.instructorAuthOpen?publicSupabaseConfiguration(config):null;
 export const instructorStore = config.instructorAuthOpen && config.supabaseURL && config.supabasePublishableKey
-  ? createClient(config.supabaseURL, config.supabasePublishableKey, {
-      auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true }
+  ? createClient(publicKeys.url, publicKeys.key, {
+      auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true },
+      global: {fetch:publicSupabaseFetch()}
     }) : null;
 
 export async function currentInstructor() {
