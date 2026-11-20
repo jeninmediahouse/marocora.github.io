@@ -66,3 +66,12 @@ origin checks remain. Agent guarded channel still exits 71 before Node. Preserve
 unrelated work; fix observed failures locally without touching production,
 credentials, demand-side flows, payments or gates. Scoped local commits authorized;
 no push. The LiveKit package is not yet an executable release package.
+
+## Later backup error diagnosis
+
+Owner supplied a backup-call stack tail and later BACKUP_SQLITE_FAILED with
+inconsistent older HTTP-check stack frames. The generic subprocess code now has
+safe phase/category suffixes; no confirmed cause-based SQLite fix is claimed.
+Read HANDOFF-SQLITE-BACKUP-DIAGNOSIS-20261120.md for current scope, metadata-only
+CLI observations and the next owner guarded run. Package tests now number twelve
+authored declarations. OFF checks and production routing were not changed again.

@@ -5,6 +5,29 @@ import {join} from 'node:path';
 import {randomBytes} from 'node:crypto';
 import {fileURLToPath} from 'node:url';
 import {privateDirectory,noLinks,requireThat} from './contract.mjs';
+// Return fixed categories only. Never attach child stderr, argv, paths or input
+// to the thrown error: these diagnostics also run against private runtime state.
+export function sqliteFailureCode(result,stage){
+ requireThat(['BACKUP','INTEGRITY'].includes(stage),'BACKUP_INVALID_DIAGNOSTIC_STAGE');
+ const text=String(result.stderr||'').slice(0,8192).toLowerCase();let reason;
+ if(result.error?.code==='ETIMEDOUT')reason='TIMEOUT';
+ else if(result.error?.code==='ENOENT')reason='EXECUTABLE_NOT_FOUND';
+ else if(['EACCES','EPERM'].includes(result.error?.code))reason='PERMISSION_DENIED';
+ else if(result.error)reason='PROCESS_ERROR';
+ else if(result.signal)reason='TERMINATED';
+ else if(/unknown (?:option|command)|unrecognized (?:option|command)/.test(text))reason='UNSUPPORTED_CLI';
+ else if(/not authorized|authorization denied|not permitted|prohibited|unsafe/.test(text))reason='AUTHORIZATION_DENIED';
+ else if(/readonly|read-only/.test(text))reason='READ_ONLY';
+ else if(/permission denied/.test(text))reason='PERMISSION_DENIED';
+ else if(/file is not a database|file is encrypted or is not a database|database disk image is malformed|malformed database/.test(text))reason='CORRUPT';
+ else if(/database (?:is )?(?:locked|busy)/.test(text))reason='BUSY';
+ else if(/disk (?:or database )?full|no space left/.test(text))reason='DISK_FULL';
+ else if(/disk i\/o|input\/output error/.test(text))reason='IO_FAILED';
+ else if(/unable to open|cannot open|no such file/.test(text))reason='OPEN_FAILED';
+ else if(/wal|shm|locking protocol/.test(text))reason='WAL_OR_LOCK';
+ else reason='UNCLASSIFIED';
+ return 'BACKUP_SQLITE_FAILED_'+stage+'_'+reason;
+}
 export function backup({dataDir,backupDir,sqlite='/usr/bin/sqlite3'}){
  process.umask(0o077);
  // Fixed source basename; CLI never accepts arbitrary SQL or a credential path.
@@ -18,13 +41,13 @@ export function backup({dataDir,backupDir,sqlite='/usr/bin/sqlite3'}){
  const id='snapshot-'+new Date().toISOString().replace(/[:.]/g,'-')+'-'+randomBytes(8).toString('hex');
  const temp=join(backupDir,'.pending-'+id),final=join(backupDir,id);mkdirSync(temp,{mode:0o700});
  const target=join(temp,'sessions.sqlite');
- const run=(path,input)=>{const r=spawnSync(sqlite,['-init','/dev/null','-batch','-bail','-readonly',path],{input,encoding:'utf8',timeout:30000,maxBuffer:1024*1024,env:{PATH:'/usr/bin:/bin'}});requireThat(!r.error&&r.status===0,'BACKUP_SQLITE_FAILED');return r.stdout.trim();};
- run(source,`.timeout 5000\n.backup '${target}'\n`);
+ const run=(path,input,stage)=>{const r=spawnSync(sqlite,['-init','/dev/null','-batch','-bail','-readonly',path],{input,encoding:'utf8',timeout:30000,maxBuffer:1024*1024,env:{PATH:'/usr/bin:/bin'}});if(r.error||r.status!==0)throw Error(sqliteFailureCode(r,stage));return r.stdout.trim();};
+ run(source,`.timeout 5000\n.backup '${target}'\n`,'BACKUP');
  const out=lstatSync(target);requireThat(out.isFile()&&!out.isSymbolicLink()&&out.uid===process.getuid()&&(out.mode&0o777)===0o600,'BACKUP_PRIVATE_OUTPUT_REQUIRED');
- requireThat(run(target,'PRAGMA integrity_check;\n')==='ok','BACKUP_INTEGRITY_FAILED');
+ requireThat(run(target,'PRAGMA integrity_check;\n','INTEGRITY')==='ok','BACKUP_INTEGRITY_FAILED');
  renameSync(temp,final);return {status:'SQLITE_BACKUP_OK',snapshot:id,integrity:'ok'};
 }
 if(process.argv[1]&&fileURLToPath(import.meta.url)===process.argv[1]){
  try{if(process.argv.length!==4)throw Error();console.log(JSON.stringify(backup({dataDir:process.argv[2],backupDir:process.argv[3]})));}
- catch{console.error('SQLITE_BACKUP_FAILED');process.exitCode=1;}
+ catch(error){console.error(/^BACKUP_SQLITE_FAILED_(?:BACKUP|INTEGRITY)_[A-Z_]+$/.test(error.message||'')?error.message:'SQLITE_BACKUP_FAILED');process.exitCode=1;}
 }

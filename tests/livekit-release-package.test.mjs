@@ -9,7 +9,7 @@ import {DatabaseSync} from 'node:sqlite';
 import {candidate,baseline,sha256,verifyManifest,validateRuntime,attestation} from '../ops/livekit-release/contract.mjs';
 import {startVerified} from '../ops/livekit-release/launch.mjs';
 import {freeze,eligible} from '../ops/livekit-release/freeze.mjs';
-import {backup} from '../ops/livekit-release/backup.mjs';
+import {backup,sqliteFailureCode} from '../ops/livekit-release/backup.mjs';
 import {classify,healthCheck} from '../ops/livekit-release/check.mjs';
 import {startProductionServer} from '../server/production/http.mjs';
 // Fixtures are retained in private OS temp directories; never touch owner data.
@@ -61,6 +61,21 @@ test('freeze packages committed source rather than dirty worktree and archive ro
  for(const path of ['.env','.env.example','server/name.env.secret','docs/foo-evidence/output.json','private.key','../escape'])assert.equal(eligible(path),false);
 });
 function stateFixture(){const root=temp(),dataDir=join(root,'data'),backupDir=join(root,'backups');mkdirSync(dataDir,{mode:0o700});mkdirSync(backupDir,{mode:0o700});mkdirSync(join(dataDir,'learning-room-state'),{mode:0o700});const source=join(dataDir,'learning-room-state/sessions.sqlite'),db=new DatabaseSync(source);chmodSync(source,0o600);db.exec("PRAGMA journal_mode=WAL; CREATE TABLE synthetic_state(value TEXT); INSERT INTO synthetic_state VALUES ('SYNTHETIC_RESERVED_MINUTES');");return {dataDir,backupDir,source,db};}
+test('backup diagnostics identify subprocess stage and fixed reason without exposing child output',()=>{
+ const cases=[
+  [{error:{code:'ETIMEDOUT'},stderr:'SYNTHETIC_PRIVATE_OUTPUT'},'BACKUP','TIMEOUT'],
+  [{error:{code:'ENOENT'}},'BACKUP','EXECUTABLE_NOT_FOUND'],
+  [{stderr:'Error: unknown option: -SYNTHETIC_UNSUPPORTED'},'BACKUP','UNSUPPORTED_CLI'],
+  [{stderr:'attempt to write a readonly database'},'BACKUP','READ_ONLY'],
+  [{stderr:'unable to open database /synthetic/private/path SYNTHETIC_SECRET_DO_NOT_PRINT'},'BACKUP','OPEN_FAILED'],
+  [{stderr:'database is locked'},'BACKUP','BUSY'],
+  [{stderr:'file is not a database'},'INTEGRITY','CORRUPT'],
+  [{signal:'SIGTERM'},'INTEGRITY','TERMINATED'],
+  [{stderr:'SYNTHETIC_UNRECOGNIZED_PRIVATE_OUTPUT'},'INTEGRITY','UNCLASSIFIED']
+ ];
+ for(const [result,stage,reason] of cases)assert.equal(sqliteFailureCode(result,stage),'BACKUP_SQLITE_FAILED_'+stage+'_'+reason);
+ assert.throws(()=>sqliteFailureCode({},'SYNTHETIC_UNTRUSTED_STAGE'),/BACKUP_INVALID_DIAGNOSTIC_STAGE/);
+});
 test('sqlite3 online backup includes committed WAL state and restores privately without changing source',()=>{
  const f=stateFixture();try{const result=backup(f);assert.equal(result.status,'SQLITE_BACKUP_OK');const target=join(f.backupDir,result.snapshot,'sessions.sqlite');assert.equal(statSync(target).mode&0o777,0o600);const restored=new DatabaseSync(target,{readOnly:true});try{assert.equal(restored.prepare('SELECT value FROM synthetic_state').get().value,'SYNTHETIC_RESERVED_MINUTES');assert.equal(f.db.prepare('SELECT count(*) AS n FROM synthetic_state').get().n,1);}finally{restored.close();}}finally{f.db.close();}
 });
