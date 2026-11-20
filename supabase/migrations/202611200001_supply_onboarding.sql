@@ -197,7 +197,8 @@ BEGIN
  IF NOT FOUND OR NOT public.supply_verified(p_actor) THEN RAISE EXCEPTION 'SUPPLY_APPLICATION_NOT_FOUND'; END IF;
  IF jsonb_typeof(p_envelope) IS DISTINCT FROM 'object' OR p_envelope->>'v' IS DISTINCT FROM '1' OR (SELECT count(*) FROM jsonb_object_keys(p_envelope))<>4
  OR coalesce(p_envelope->>'nonce','') !~ '^[A-Za-z0-9+/]{16}$' OR coalesce(p_envelope->>'tag','') !~ '^[A-Za-z0-9+/]{22}==$'
- OR coalesce(p_envelope->>'ciphertext','') !~ '^[A-Za-z0-9+/=]{16,8192}$' OR coalesce(p_last_four,'') !~ '^[A-Z0-9]{4}$' THEN RAISE EXCEPTION 'SUPPLY_INVALID_PAYOUT'; END IF;
+ OR length(coalesce(p_envelope->>'ciphertext','')) NOT BETWEEN 16 AND 8192
+ OR coalesce(p_envelope->>'ciphertext','') !~ '^[A-Za-z0-9+/=]+$' OR coalesce(p_last_four,'') !~ '^[A-Z0-9]{4}$' THEN RAISE EXCEPTION 'SUPPLY_INVALID_PAYOUT'; END IF;
  INSERT INTO public.supply_payouts(application_id,envelope,iban_last_four) VALUES(p_id,p_envelope,p_last_four)
  ON CONFLICT(application_id) DO UPDATE SET envelope=excluded.envelope,iban_last_four=excluded.iban_last_four,updated_at=now();
  RETURN jsonb_build_object('status','pending','configured',true,'lastFour',p_last_four);

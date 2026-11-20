@@ -93,6 +93,15 @@ test('supply migration and review flow on isolated PostgreSQL (no TCP or managed
    assert.equal(rpc('','supply_save_payout',p,'service_role').status,'pending');
    denied(()=>rpc('','supply_save_payout',{...p,p_actor:ids.other},'service_role'),'SUPPLY_APPLICATION_NOT_FOUND');
    const stored=sql('SELECT envelope FROM public.supply_payouts');assert.equal(stored.includes('WEST'),false);assert.equal(JSON.stringify(rpc(ids.owner,'supply_my_applications')).includes(envelope.ciphertext),false);
+   // Synthetic opaque values exercise database envelope limits; real banking
+   // envelopes are produced by the authenticated encryption adapter above.
+   for(const ciphertext of ['', 'A'.repeat(15), 'A'.repeat(8193), 'A'.repeat(15)+'!']){
+    denied(()=>rpc('','supply_save_payout',{...p,p_envelope:{...envelope,ciphertext}},'service_role'),'SUPPLY_INVALID_PAYOUT');
+    assert.deepEqual(JSON.parse(sql('SELECT envelope FROM public.supply_payouts')),envelope);
+   }
+   for(const length of [16,8192])assert.equal(rpc('','supply_save_payout',{...p,p_envelope:{...envelope,ciphertext:'A'.repeat(length)}},'service_role').status,'pending');
+   rpc('','supply_save_payout',p,'service_role');
+
   });
   await t.test('current verification, exclusion and consent rules suppress public profiles',()=>{
    const id=applications.teacher.id;sql(`UPDATE auth.users SET email_confirmed_at=NULL WHERE id=${L(ids.owner)}`);assert.deepEqual(rpc('','supply_public_profiles',{p_id:id},'anon'),[]);sql(`UPDATE auth.users SET email_confirmed_at=now() WHERE id=${L(ids.owner)}`);

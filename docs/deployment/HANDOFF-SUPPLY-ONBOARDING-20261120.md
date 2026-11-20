@@ -152,3 +152,22 @@ assertions ran here. Status remains NOT VERIFIED. Owner must rerun pnpm test and
 provide exact final counts and any failures. Build inputs were unchanged, so
 no build rerun was needed. Follow-up commit is local only; no push or production
 action. Earlier failure reports remain historical evidence, not passing results.
+
+## Payout regex bound fixed — latest status
+
+Owner reported `invalid regular expression: invalid repetition count(s)` in
+supply_save_payout. The ciphertext pattern used {16,8192}, exceeding PostgreSQL's
+bounded repetition range. Replaced it with an explicit length BETWEEN 16 AND 8192
+check and a separate allowed-character regex with +. This preserves the original
+length and character restrictions; no SQL, role or validation guard was bypassed.
+Reviewed the migration's remaining bounded repetitions; their maximums are 22
+or smaller. Existing payout regression now covers both accepted length endpoints,
+empty/short/oversized/invalid-character rejections and unchanged storage after
+rejection, then restores the synthetic encrypted fixture. Test declaration count
+remains 17. SQL checks are still in the unapplied local draft.
+
+Syntax and whitespace checks PASS. Guarded focused execution still fails BEFORE
+Node with sandbox_apply exit 71, so these checks have not run in the agent channel.
+Owner should run pnpm test and supply complete failure details and final totals.
+Do not mark PASSED. The local follow-up commit contains only the regex correction,
+regression additions and these records; no push, deployment or provider action.
