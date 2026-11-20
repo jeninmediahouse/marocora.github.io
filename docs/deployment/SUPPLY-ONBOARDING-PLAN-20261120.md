@@ -1,5 +1,18 @@
 # Marocora — Supply-Side Onboarding
 
+
+**CURRENT STATUS — OWNER-RUN FULL SUITE PASSED, 20 November 2026:**
+328 tests, 328 passed, 0 failed/cancelled/skipped/todo; duration_ms 13743.907542.
+The shown TEST_NETWORK_GUARD and TEST_NETWORK_LOCK lines report zero external
+attempts. This is owner-run evidence, not agent-run execution. At receipt, local
+HEAD was 56e6488 and scoped feature files matched it; owner output did not print
+a source SHA. The tested worktree still includes unrelated/uncommitted work, so
+56e6488 is not a frozen identity for the entire release. No rerun was performed.
+Earlier failure/pending wording below is historical and superseded for local
+verification. Deployment/provider/production/feature activation remain unperformed.
+See HANDOFF-SUPPLY-ONBOARDING-VERIFIED-20261120.md for the concise current handoff.
+
+
 20 November 2026. Local implementation only. No migration is applied to production.
 The owner shifted priority from the unfinished LiveKit package to supply intake.
 Demand-side work and all payment/booking/video gates remain frozen.

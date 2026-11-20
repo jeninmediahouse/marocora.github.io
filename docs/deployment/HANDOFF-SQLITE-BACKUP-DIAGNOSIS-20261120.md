@@ -1,5 +1,18 @@
 # Marocora — SQLite Backup Failure Diagnosis
 
+
+**CURRENT STATUS — OWNER-RUN FULL SUITE PASSED, 20 November 2026:**
+328 tests, 328 passed, 0 failed/cancelled/skipped/todo; duration_ms 13743.907542.
+The shown TEST_NETWORK_GUARD and TEST_NETWORK_LOCK lines report zero external
+attempts. This is owner-run evidence, not agent-run execution. At receipt, local
+HEAD was 56e6488 and scoped feature files matched it; owner output did not print
+a source SHA. The tested worktree still includes unrelated/uncommitted work, so
+56e6488 is not a frozen identity for the entire release. No rerun was performed.
+Earlier failure/pending wording below is historical and superseded for local
+verification. Deployment/provider/production/feature activation remain unperformed.
+See HANDOFF-SUPPLY-ONBOARDING-VERIFIED-20261120.md for the concise current handoff.
+
+
 20 November 2026, Africa/Casablanca. Current task: identify the owner-run SQLite
 backup subprocess failure without weakening safeguards or exposing raw output.
 NOT VERIFIED. The underlying backup failure is still unresolved.
@@ -132,7 +145,7 @@ Now final read-only verification requires both journal_mode=delete and
 integrity_check=ok after reopening. Any remaining WAL or rollback-journal pathname
 prevents publication with BACKUP_SNAPSHOT_JOURNAL_PRESENT. Only the verified
 sessions.sqlite is moved into a new private .ready directory, then that directory
-is atomically renamed to the public snapshot identity. Orphan SHM is retained in
+is atomically renamed to the final private snapshot directory. Orphan SHM is retained in
 private .pending staging; nothing is deleted or silently pruned. Do not restore
 from .pending/.ready directories. Retention remains future owner-reviewed work.
 Source opening remains readonly; source journal, ownership and modes unchanged.
