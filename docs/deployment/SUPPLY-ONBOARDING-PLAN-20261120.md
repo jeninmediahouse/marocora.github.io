@@ -174,3 +174,21 @@ The migration is still an unapplied local draft, so the correction is made in it
 original source; tests provision a fresh disposable cluster. Do not run it against
 production or bypass its existing-object guard. The scoped follow-up local commit
 contains this fix, regression check and records only; no push or production action.
+
+## PostgreSQL boolean serialization fixed — latest status
+
+Owner supplied `SyntaxError: Unexpected end of JSON input` in value()/rpc(),
+when checking supply_admin_access() after staff revocation. The test helper
+selected RPC results directly: psql emits booleans as t/f, which are not JSON.
+It now selects to_jsonb(public.RPC(...)); direct profile-validator checks also
+serialize their boolean outputs. No blank-output fallback, false substitution,
+production access-rule change or exception suppression was added.
+
+Added a regression checking actual admin true/non-admin false RPC values plus
+both boolean literals. Current supply test declarations: 17 (four top-level,
+thirteen nested). Syntax and scoped whitespace checks PASS. The guarded focused
+launch still failed BEFORE Node with sandbox_apply exit 71; no new behavioral
+assertions ran here. Status remains NOT VERIFIED. Owner must rerun pnpm test and
+provide exact final counts and any failures. Build inputs were unchanged, so
+no build rerun was needed. Follow-up commit is local only; no push or production
+action. Earlier failure reports remain historical evidence, not passing results.
