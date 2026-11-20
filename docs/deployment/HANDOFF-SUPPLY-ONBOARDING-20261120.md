@@ -88,3 +88,14 @@ were preserved. Do not repeat completed worker/media investigations or claim old
 provider calls, payments, demand-side work or push. Scoped local supply commits
 are authorized. After the full suite passes, recommend local review-decision
 email/outbox work before a vetted public directory; do not start it automatically.
+
+## Latest full-suite follow-up — LiveKit checker
+
+Owner reports supply tests seem to pass; no exact supply or full-suite totals
+were supplied. The concrete remaining report is RELEASE_HTTP_CHECK_FAILED in the
+paused LiveKit package OFF-health test. See the newer
+HANDOFF-LIVEKIT-OFF-HEALTH-FIX-20261120.md for explicit-Host checker correction,
+strict regression coverage and the pending guarded rerun. Supply routing was
+reviewed and left unchanged. Do not mark supply or full-suite verification PASSED
+from this partial report. The next local commit snapshots the existing package
+helper dependencies as well; it does not freeze or deploy a complete release.
