@@ -39,7 +39,7 @@ worker, package-manager and mixed historical runbook changes.
   status/edit/review/credential/payout panels, zero earnings, consented public page.
 - production-login.mjs adds supply destinations; professionals.html adds supply
   registration link. Existing demand pages/flows and eligibility remain intact.
-- tests/supply-onboarding.test.mjs: 15 authored declarations including isolated
+- tests/supply-onboarding.test.mjs: 16 authored declarations including isolated
   PostgreSQL schema/review checks and synthetic HTTP/auth/scan/encryption cases.
 
 New approval does not populate teaching publications, translation allowlists,
@@ -109,3 +109,28 @@ local supply snapshot commit was explicitly authorized and contains this handoff
 resolve its identity with git log rather than assuming all working-tree work is
 committed. Next recommended implementation after tests pass: local transactional
 email outbox/notification tests; public directory follows vetted supply.
+
+## SQL name collision fixed — latest verification status
+
+Owner reported PostgreSQL ambiguity in supply_valid_profile(text,jsonb):
+`It could refer to either a PL/pgSQL variable or a table column`, in the
+vehicleTypes membership query. The declared JSON loop variable x collided with
+the set-returning query's x column alias; the specialties query had the same
+collision. Both branches are now explicit: profile_item is the loop variable,
+vehicles.value and specialties.value are qualified query columns. The shared
+string-array helper also uses qualified elements.value references. No conflict
+setting, validation rule, grant, RLS policy or migration guard was weakened.
+
+Added one disposable-PostgreSQL regression check exercising valid teacher,
+translator and transport profiles, plus invalid schedules/specialties/vehicles.
+Current authored supply declarations: 16 (four top-level plus twelve nested).
+Test-file syntax and scoped whitespace checks PASS. Guarded focused launch still
+fails BEFORE Node with `sandbox-exec: sandbox_apply: Operation not permitted`,
+exit 71. No runtime pass or exact full-suite totals have been observed. This
+supersedes the earlier assumption that only the HTTP fixture needed correction.
+Status remains NOT VERIFIED / OWNER GUARDED RERUN REQUIRED: `pnpm test`.
+
+The migration is still an unapplied local draft, so the correction is made in its
+original source; tests provision a fresh disposable cluster. Do not run it against
+production or bypass its existing-object guard. The scoped follow-up local commit
+contains this fix, regression check and records only; no push or production action.

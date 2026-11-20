@@ -41,6 +41,14 @@ test('supply migration and review flow on isolated PostgreSQL (no TCP or managed
   const migration=readFileSync(new URL('supabase/migrations/202611200001_supply_onboarding.sql',root),'utf8');
   await t.test('new migration applies once, enables RLS, and refuses repeat application',()=>{sql(migration);assert.equal(sql("SELECT count(*) FROM pg_class WHERE relnamespace='public'::regnamespace AND relname LIKE 'supply_%' AND relkind='r' AND relrowsecurity"),'7');denied(()=>sql(migration),'SUPPLY_OBJECTS_ALREADY_EXIST');});
   sql(`INSERT INTO auth.users(id,email,email_confirmed_at) VALUES ${Object.entries(ids).map(([k,id])=>`(${L(id)},${L(k+'@fixture.invalid')},${k==='unverified'?'NULL':'now()'})`).join(',')}; INSERT INTO public.learning_review_staff VALUES(${L(ids.staff)});INSERT INTO public.learning_review_exclusions VALUES(${L(ids.excluded)},'Synthetic exclusion');`);
+  await t.test('profile validator resolves loop variables and query columns for all vendor types',()=>{
+   for(const [type,profile] of Object.entries({teacher,translator,transport}))assert.equal(value(`SELECT public.supply_valid_profile(${L(type)},${J(profile)})`),true,type);
+   for(const [type,profile] of [
+    ['translator',{...translator,specialties:['Unsupported']}],
+    ['transport',{...transport,vehicleTypes:['motorcycle']}],
+    ['teacher',{...teacher,availability:[{day:1,start:'12:00',end:'09:00'}]}]
+   ])assert.equal(value(`SELECT public.supply_valid_profile(${L(type)},${J(profile)})`),false,type);
+  });
   await t.test('each vendor type registers pending_review with distinct profile data and no public listing',()=>{
    for(const [type,profile] of Object.entries({teacher,translator,transport})){const app=rpc(ids.owner,'supply_save_application',{p_type:type,p_profile:profile});applications[type]=app;assert.equal(app.status,'pending_review');assert.equal(app.revision,1);assert.deepEqual(app.profile,profile);assert.deepEqual(app.earnings,{minor:0,currency:'USD'});assert.equal(app.payout.status,'pending');}
    assert.equal(rpc(ids.owner,'supply_my_applications').length,3);assert.deepEqual(rpc('', 'supply_public_profiles',{},'anon'),[]);
