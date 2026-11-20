@@ -211,3 +211,29 @@ Node with sandbox_apply exit 71, so these checks have not run in the agent chann
 Owner should run pnpm test and supply complete failure details and final totals.
 Do not mark PASSED. The local follow-up commit contains only the regex correction,
 regression additions and these records; no push, deployment or provider action.
+
+## Supply localization completed — latest status
+
+Owner reported site-language.test.mjs rejecting professionals.html for missing
+“Apply as a supply partner”. Added an authored 176-entry English/French/Arabic/
+Spanish supply catalogue, merged through existing extraCopy. The four new supply
+pages now load the existing site-language script and stylesheet. Added the new
+catalogue module to the production browser-asset allowlist. The existing language
+coverage test and its exclusions/assertions were not changed.
+
+Included static labels, page titles, hints, weekdays, statuses and dynamic/error
+messages. Dynamic authored labels remain separate from submitted values; names,
+biographies, regions, language names, review feedback, bank last-four and numeric
+values use data-user-content. Application option labels update on locale changes
+without translating owner-provided names. Canonical submitted option/checkbox
+values are preserved. Added RTL select/notice styling.
+
+Agent observed production build PASS, exit 0. Seven changed/new JS modules passed
+syntax checking and scoped tracked whitespace checks passed. A static source
+inventory found coverage for all authored text in the four new HTML pages, and
+all 176 catalogue entries have four nonempty language values. This is static
+inspection, not a guarded test or browser runtime pass. Guarded site-language plus
+supply tests again failed before Node: sandbox_apply exit 71. Owner must run
+pnpm test and report all failures/final counts. Status remains NOT VERIFIED.
+No SQL/auth/payment/provider change, deployment or push. The follow-up commit is
+local only. Earlier errors and fixes remain historical evidence above.

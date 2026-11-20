@@ -132,3 +132,6 @@ Object.assign(extraCopy,{'admin@marocora.com':{en:'admin@marocora.com',fr:'admin
 
 import {roomCopy} from './learn/room-copy.mjs';
 Object.assign(extraCopy,roomCopy);
+
+import {supplyCopy} from './supply-copy.mjs';
+Object.assign(extraCopy,supplyCopy);

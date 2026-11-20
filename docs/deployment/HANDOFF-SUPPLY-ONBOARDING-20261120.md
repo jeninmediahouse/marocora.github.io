@@ -1,173 +1,90 @@
-# Marocora — Supply Onboarding Verification
+# Marocora — Supply Localization Verification
 
-20 November 2026, Africa/Casablanca. Active priority: supply-side foundation.
-Owner explicitly shifted focus away from the unfinished LiveKit local package.
-Implementation is local. The owner has now authorized a scoped local supply
-commit; the commit containing this update is an implementation snapshot with
-verification pending. No push or production/migration/credential/provider/
-payment/worker action occurred. Unrelated work remains uncommitted.
+20 November 2026, Africa/Casablanca. Active work: local supply-side onboarding
+verification. NOT VERIFIED; owner-run full-suite totals still pending. Payments,
+demand-side additions, bookings/video and workers remain frozen.
 
-## Read first
+## Controlling sources and repository
 
-1. AGENTS.md and this handoff.
-2. SUPPLY-ONBOARDING-PLAN-20261120.md (schema, routes, privacy, exact verification).
-3. HANDOFF-LIVEKIT-PACKAGE-PAUSED-20261120.md for preserved unfinished drafts.
-4. EXECUTION-RUNBOOK-20261119.md: newest status notes precede historical commands.
+Read AGENTS.md, this handoff, SUPPLY-ONBOARDING-PLAN-20261120.md and the newest
+EXECUTION-RUNBOOK-20261119.md notes. The plan retains detailed chronological
+failure/fix evidence; this handoff replaces its formerly duplicated history.
 
 Repo: /Users/tareqnaser/Documents/ChatGPT/Marocora Site building/output/marocora-quote-workflow-local.
-Branch main; recorded base HEAD 346be721e626a6dfab425985213490dc7e3d6d3e.
-Preserve all pre-existing modified/untracked files. The latest owner directive additionally authorizes a scoped local supply
-milestone commit, but no push. Scope: new supply files and their production/login/
-professional-page integration plus this handoff/plan. Exclude unrelated LiveKit,
-worker, package-manager and mixed historical runbook changes.
+Branch main. Owner authorized scoped LOCAL supply commits, no push. The commit
+containing this handoff includes the latest localization fix; resolve its exact
+identity using git log -1. Previous supply commits:
 
-## Implemented
+- d97dad2: supply implementation snapshot and explicit-Host HTTP fixture.
+- 0d93bc8: SQL loop-variable/query-alias collision fix.
+- 59e0424: PostgreSQL boolean-to-JSON test serialization.
+- 117feb5: payout ciphertext length separated from regex.
 
-- New guarded single-transaction migration:
-  supabase/migrations/202611200001_supply_onboarding.sql.
-  Seven private RLS tables: application, three typed profiles, credentials,
-  immutable reviews, encrypted pending payouts. Narrow verified-owner/admin RPCs;
-  strict profile validation; public projection omits private/consent data.
-- server/supply/http.mjs: owner/review/public routes, clean-scan-only private
-  uploads and protected downloads; authenticated banking endpoint.
-- server/supply/payout.mjs: AES-256-GCM, random nonce, owner/application associated
-  data, checksum/format checks and last-four output. No real key read/generated.
-- Existing server/production/{http,site,supabase}.mjs integration; adminPages
-  protected separately so existing private-page assertions retain their semantics.
-- supply-{register,dashboard,review,profile}.html and corresponding browser JS;
-  supply-client.mjs and supply.css. Responsive forms, weekly teacher availability,
-  status/edit/review/credential/payout panels, zero earnings, consented public page.
-- production-login.mjs adds supply destinations; professionals.html adds supply
-  registration link. Existing demand pages/flows and eligibility remain intact.
-- tests/supply-onboarding.test.mjs: 17 authored declarations including isolated
-  PostgreSQL schema/review checks and synthetic HTTP/auth/scan/encryption cases.
+Unrelated owner work, LiveKit recovery/package drafts, worker changes, package
+manifest changes and mixed historical runbook edits remain outside these commits.
+Preserve all of them. The unfinished LiveKit package is separately recorded in
+HANDOFF-LIVEKIT-PACKAGE-PAUSED-20261120.md. No production action, deployment,
+credential read, real provider request, migration application or push occurred.
 
-New approval does not populate teaching publications, translation allowlists,
-bookings, memberships, payments or jobs. Existing teacher/vendor intake is not
-replaced or imported. Future consolidation is a separate decision.
+## Implemented identities
 
-## Latest owner-run failure and fixture fix
+- supabase/migrations/202611200001_supply_onboarding.sql: unapplied guarded
+  draft, seven private RLS tables, typed profiles, versioned admin reviews,
+  clean private credentials, encrypted pending payouts and consented public RPC.
+- server/supply/{http,payout}.mjs; production HTTP/Supabase/site integration.
+  Approval does not enable commercial accounts, teaching publications or bookings.
+- supply-{register,dashboard,review,profile}.html and corresponding JS;
+  supply-client.mjs, supply.css. Protected owner/admin routes and read-only
+  approved public profile. Professional-page signup link and login destinations.
+- tests/supply-onboarding.test.mjs: 17 authored declarations (four top-level,
+  thirteen nested); isolated PostgreSQL plus synthetic HTTP/Auth/scanner/crypto.
+- Latest fix: supply-copy.mjs (176 authored four-language entries), imported into
+  site-extra-copy.mjs, served through production site allowlist. Four supply pages
+  load existing site-language assets. User-provided values are marked user content;
+  labels remain translatable, submitted values remain canonical. RTL styling added.
 
-Owner pasted a concrete failure: supply HTTP test at the first dashboard redirect
-assertion, `403 !== 302`. The same message also included an unfilled terminal
-placeholder and generic “all tests passed” wording. Those do not establish a pass.
-No suite totals or later successful run were supplied. NOT VERIFIED / RERUN REQUIRED.
+## Failure history — none establishes a pass
 
-Source-based diagnosis: fetch may replace the explicit synthetic Host with the
-loopback authority, hitting HOST_DENIED before the intended authentication test.
-The test now uses node:http.request, matching production.test.mjs, preserving all
-original expectations and adding a foreign-Host 403 HOST_DENIED assertion.
-Production behavior/guards were not changed in this fix. Syntax passed. The
-post-fix guarded focused launch again failed BEFORE Node with sandbox_apply exit
-71; no post-fix assertions ran here. Owner has been asked for `pnpm test` results.
-The full-suite and PostgreSQL proof remain pending. The prior build still applies
-because this fix changed only the test fixture and documentation.
+1. Owner HTTP failure 403 versus 302: fetch Host behavior suspected; test fixture
+   now uses node:http.request and retains explicit foreign-Host denial.
+2. Owner ambiguous x in SQL: renamed profile_item and qualified array columns.
+3. Owner JSON.parse failure: psql boolean t/f now serialized with to_jsonb in tests.
+4. Owner unsupported regex repetition {16,8192}: explicit length plus character
+   checks, same restrictions, boundary/rejection coverage added.
+5. Latest owner language coverage failure: missing new partner CTA translation.
+   Added full supply catalogue and wired all four new pages, without changing tests.
 
-## Earlier verification observed (before owner failure report)
+Full details and exact failures remain in SUPPLY-ONBOARDING-PLAN-20261120.md.
+Repeated old snippets and generic “all passed” wording were not treated as proof.
+The earlier 298/298 is owner-run evidence for the earlier recovery state only.
 
-- Production build PASS (exit 0), after final UI/navigation edits.
-- Syntax PASS for all 12 onboarding JS files; scoped diff whitespace PASS.
-- Four HTML pages: unique IDs and valid explicit label targets (static check).
-- New behavioral tests: ZERO executed. Guarded supply test launch failed BEFORE
-  Node: `sandbox-exec: sandbox_apply: Operation not permitted`, exit 71.
-- Earlier new LiveKit package test launch and escalated retry had the same error.
-  Guards were never weakened; no alternate unguarded execution occurred.
-- Prior owner-run 298/298 belongs to the preceding recovery state only. Do not
-  claim the current suite passes until the owner supplies current results.
-- No PostgreSQL migration proof or browser QA yet. The migration remains a review
-  draft; a successful build does not validate SQL/runtime behavior.
-- Usage checked at this stage: 9% of the reported weekly window used, ordinary
-  usage allowed. No forced chat switch is needed while verification is unfinished.
+## Latest verification observed
 
-## Outstanding work
+- Agent production build PASS, exit 0 after localization changes.
+- Syntax PASS for seven changed/new localization JS modules; scoped whitespace PASS.
+- Static source inventory: all authored text in four supply HTML sources covered;
+  all 176 catalogue entries have en/fr/ar/es values.
+- Guarded site-language and supply launch FAILED BEFORE NODE: sandbox-exec:
+  sandbox_apply: Operation not permitted, exit 71. Zero assertions ran here.
+  Previous escalated attempt failed identically; do not repeat without a reason.
+- No guarded runtime pass, complete PostgreSQL proof or browser QA is claimed.
+  Network guards, OS profile, package-manager check and language tests unchanged.
+- Last usage check: 9% weekly use, ordinary usage allowed. No forced chat switch
+  while verification is unfinished.
 
-The owner has been asked to run, in the repository:
+## Next task and starter prompt
 
-    pnpm run build:production && pnpm test
+Owner-run command in the repository: pnpm test. Build is current; rebuild only if
+build inputs change. Request all failure blocks and exact final totals, not only
+one cropped error. Fix observed failures locally; update records only when evidence
+supports them. Never run an unguarded fallback or touch managed databases.
 
-Await POST-FIX results and exact summary; retain the supplied failed run in history. The standard runner includes both new
-supply tests and paused package tests. Fix observed failures, rebuild only for
-changed build inputs, and rerun necessary guarded checks. Never bypass OS or JS
-network guards, package-manager pinning or denied environment-file access.
-
-Before any real collection/rollout: owner review of migration and restore path,
-confirmed disposable-PostgreSQL proof/CI, approved auth redirect configuration,
-current admin membership, private storage/scanning and owner-managed payout-key
-custody/retention. These are future gates, not authorized production steps.
-
-## Starter prompt
-
-Marocora — Supply Onboarding Verification. Read AGENTS.md, this handoff and
-SUPPLY-ONBOARDING-PLAN-20261120.md. Review owner output for the guarded full suite.
-Build and static checks passed. The owner-run HTTP test failed with 403 versus
-302; the explicit-Host fixture fix awaits a guarded rerun. The agent channel still
-fails before Node due sandbox_apply exit 71. Do not mark the milestone PASSED. Do not repeat old media/worker investigations
-or treat prior 298 passes as current. Fix new onboarding test failures locally,
-preserve unfinished LiveKit drafts and all unrelated work. No demand-side work,
-payments, production access, secrets, migration application or push. A scoped
-local supply snapshot commit was explicitly authorized and contains this handoff;
-resolve its identity with git log rather than assuming all working-tree work is
-committed. Next recommended implementation after tests pass: local transactional
-email outbox/notification tests; public directory follows vetted supply.
-
-## SQL name collision fixed — latest verification status
-
-Owner reported PostgreSQL ambiguity in supply_valid_profile(text,jsonb):
-`It could refer to either a PL/pgSQL variable or a table column`, in the
-vehicleTypes membership query. The declared JSON loop variable x collided with
-the set-returning query's x column alias; the specialties query had the same
-collision. Both branches are now explicit: profile_item is the loop variable,
-vehicles.value and specialties.value are qualified query columns. The shared
-string-array helper also uses qualified elements.value references. No conflict
-setting, validation rule, grant, RLS policy or migration guard was weakened.
-
-Added one disposable-PostgreSQL regression check exercising valid teacher,
-translator and transport profiles, plus invalid schedules/specialties/vehicles.
-Current authored supply declarations: 16 (four top-level plus twelve nested).
-Test-file syntax and scoped whitespace checks PASS. Guarded focused launch still
-fails BEFORE Node with `sandbox-exec: sandbox_apply: Operation not permitted`,
-exit 71. No runtime pass or exact full-suite totals have been observed. This
-supersedes the earlier assumption that only the HTTP fixture needed correction.
-Status remains NOT VERIFIED / OWNER GUARDED RERUN REQUIRED: `pnpm test`.
-
-The migration is still an unapplied local draft, so the correction is made in its
-original source; tests provision a fresh disposable cluster. Do not run it against
-production or bypass its existing-object guard. The scoped follow-up local commit
-contains this fix, regression check and records only; no push or production action.
-
-## PostgreSQL boolean serialization fixed — latest status
-
-Owner supplied `SyntaxError: Unexpected end of JSON input` in value()/rpc(),
-when checking supply_admin_access() after staff revocation. The test helper
-selected RPC results directly: psql emits booleans as t/f, which are not JSON.
-It now selects to_jsonb(public.RPC(...)); direct profile-validator checks also
-serialize their boolean outputs. No blank-output fallback, false substitution,
-production access-rule change or exception suppression was added.
-
-Added a regression checking actual admin true/non-admin false RPC values plus
-both boolean literals. Current supply test declarations: 17 (four top-level,
-thirteen nested). Syntax and scoped whitespace checks PASS. The guarded focused
-launch still failed BEFORE Node with sandbox_apply exit 71; no new behavioral
-assertions ran here. Status remains NOT VERIFIED. Owner must rerun pnpm test and
-provide exact final counts and any failures. Build inputs were unchanged, so
-no build rerun was needed. Follow-up commit is local only; no push or production
-action. Earlier failure reports remain historical evidence, not passing results.
-
-## Payout regex bound fixed — latest status
-
-Owner reported `invalid regular expression: invalid repetition count(s)` in
-supply_save_payout. The ciphertext pattern used {16,8192}, exceeding PostgreSQL's
-bounded repetition range. Replaced it with an explicit length BETWEEN 16 AND 8192
-check and a separate allowed-character regex with +. This preserves the original
-length and character restrictions; no SQL, role or validation guard was bypassed.
-Reviewed the migration's remaining bounded repetitions; their maximums are 22
-or smaller. Existing payout regression now covers both accepted length endpoints,
-empty/short/oversized/invalid-character rejections and unchanged storage after
-rejection, then restores the synthetic encrypted fixture. Test declaration count
-remains 17. SQL checks are still in the unapplied local draft.
-
-Syntax and whitespace checks PASS. Guarded focused execution still fails BEFORE
-Node with sandbox_apply exit 71, so these checks have not run in the agent channel.
-Owner should run pnpm test and supply complete failure details and final totals.
-Do not mark PASSED. The local follow-up commit contains only the regex correction,
-regression additions and these records; no push, deployment or provider action.
+Marocora — Supply Localization Verification. Read AGENTS.md, this handoff and the
+supply plan. Review current owner pnpm test output for the latest local commit.
+Build/static checks pass; guarded test channel still fails before Node (exit 71).
+Localization now covers the new CTA and all supply pages; existing language tests
+were preserved. Do not repeat completed worker/media investigations or claim old
+298 passes verify new work. Preserve all unrelated work. No production, secrets,
+provider calls, payments, demand-side work or push. Scoped local supply commits
+are authorized. After the full suite passes, recommend local review-decision
+email/outbox work before a vetted public directory; do not start it automatically.
