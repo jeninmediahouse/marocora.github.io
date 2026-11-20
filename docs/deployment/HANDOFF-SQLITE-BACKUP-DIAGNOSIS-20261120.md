@@ -69,3 +69,47 @@ category, implement the narrow cause-based correction locally, preserve readonly
 privacy/integrity/OS/JS/package-manager guards, and obtain guarded verification.
 No production, secrets, provider calls, deployment, activation, demand-side work
 or push. The larger LiveKit release package remains unfinished.
+
+## Owner-run full summary and snapshot-journal correction — CURRENT
+
+Owner supplied the complete summary: tests 327, pass 326, fail 1, cancelled 0,
+skipped 0, todo 0, duration_ms 12605.252083. The only listed failing test is the
+online WAL backup test, with BACKUP_SQLITE_FAILED_INTEGRITY_OPEN_FAILED. The shown
+mail/worker output includes both network guards reporting zero external attempts.
+This supersedes the missing/mixed-error evidence above. It proves the backup
+command and private output validation completed, then the read-only integrity
+subprocess could not open the new snapshot. Source-based diagnosis: opening the
+new WAL-mode copy can require journal/shared-memory initialization. This is not
+proof of a corrupt backup, and raw SQLite stderr was not requested or disclosed.
+
+The helper now opens ONLY its newly created private snapshot writable for
+PRAGMA journal_mode=DELETE, requires the response delete, then retains the
+read-only integrity_check and 0600 ownership/type checks before finalizing it.
+A path guard restricts this writable stage to the new target and excludes source.
+Source .backup still opens with -readonly. No copying of live WAL files, source
+journal change, source checkpoint, weakened guard or raw output exposure.
+SNAPSHOT was added to safe diagnostic stages; BACKUP and INTEGRITY remain distinct.
+
+Existing regression expanded to verify DELETE-mode standalone snapshot with no
+WAL/shm/journal dependencies, integrity, unchanged source WAL mode/permissions and
+later source writes not changing the snapshot. Twelve test declarations remain.
+Syntax/whitespace PASS; guarded launch still failed BEFORE Node (sandbox_apply
+exit 71); no post-fix runtime pass. No frontend/build inputs changed.
+
+Official references consulted for the source-based correction:
+- https://www.sqlite.org/wal.html#read_only_databases (read-only WAL requirements
+  and recommendation to convert an image to DELETE mode before read-only use).
+- https://www.sqlite.org/backup.html (online backup produces a logical snapshot).
+
+The complete summary plus sole backup failure supports owner-run PASS for the
+unchanged supply subset and prior OFF-check fix under the standard all-test runner;
+this is an inference from full totals/failure list, not agent-run verification or
+a list of individually supplied supply results. The overall suite remains FAILED
+until an owner post-fix pnpm test summary has zero failures. No deployment/push.
+
+Next prompt: Marocora — Final Backup Regression Verification. Read this latest
+section and owner rerun output. Snapshot-only journal normalization is implemented
+but not yet runtime verified. Preserve readonly source, private output, consistent
+backup and integrity checks. Do not repeat the resolved source-level SQL/locale/
+Host investigations without new evidence. Request exact final suite totals and
+all failing blocks; no production, credentials, provider calls, payments or push.

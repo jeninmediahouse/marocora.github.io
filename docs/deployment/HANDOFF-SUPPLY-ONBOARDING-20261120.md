@@ -99,3 +99,18 @@ strict regression coverage and the pending guarded rerun. Supply routing was
 reviewed and left unchanged. Do not mark supply or full-suite verification PASSED
 from this partial report. The next local commit snapshots the existing package
 helper dependencies as well; it does not freeze or deploy a complete release.
+
+## Owner-run supply subset passing — latest complete summary
+
+Owner supplied tests 327 / pass 326 / fail 1 / cancelled 0 / skipped 0 / todo 0,
+with only the SQLite online-backup test listed as failing. Under the standard
+runner that includes all *.test.mjs files, this supports owner-run PASS for the
+unchanged supply subset, including its disposable-PostgreSQL checks and locale
+coverage. This is inferred from complete totals/sole-failure list; individual
+supply names were not included in the excerpt. Do not call it agent-run or a
+full-suite pass. Prior tentative/missing-summary entries are historical.
+
+Current remaining work is the snapshot-only journal normalization described in
+the newest section of HANDOFF-SQLITE-BACKUP-DIAGNOSIS-20261120.md. It is implemented
+locally and awaits an owner guarded rerun. No rollout, production migration,
+payout/provider activation, payment/demand-side work or push is authorized.
