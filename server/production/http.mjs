@@ -1,3 +1,4 @@
+import {supplyRoutes} from '../supply/http.mjs';
 import {createServer} from 'node:http';
 import {readFile} from 'node:fs/promises';
 import {resolve,extname,relative,sep} from 'node:path';
@@ -9,7 +10,7 @@ import {createProductionLearning} from './learning.mjs';
 import {createSpacesStore} from '../storage/spaces.mjs';
 import {cloudmersiveScanner} from '../block1/uploads.mjs';
 import {instantRoutes} from '../block1/instant-http.mjs';
-import {publicPages,privatePages,browserAssets,productionAliases,websitePath,loginLocation} from './site.mjs';
+import {publicPages,privatePages,adminPages,browserAssets,productionAliases,websitePath,loginLocation} from './site.mjs';
 const root=fileURLToPath(new URL('../../',import.meta.url)),cookieName='__Host-marocora_session';
 const fail=(code,status=400)=>{throw Object.assign(Error(code),{status});};
 const mime={'.html':'text/html; charset=utf-8','.mjs':'text/javascript; charset=utf-8','.js':'text/javascript; charset=utf-8','.css':'text/css; charset=utf-8','.svg':'image/svg+xml','.png':'image/png','.jpg':'image/jpeg','.jpeg':'image/jpeg','.webp':'image/webp','.ico':'image/x-icon','.xml':'application/xml','.txt':'text/plain'};
@@ -20,6 +21,7 @@ export async function startProductionServer({env=process.env,auth,storage,scanne
  auth??=createProductionSupabase(env);await auth.checkReady();storage??=createSpacesStore(env);scanner??=cloudmersiveScanner({env});
  if(storage.kind!=='spaces'||scanner.mockOnly===true)fail('PRODUCTION_ADAPTER_REQUIRED',503);
  learning??=createProductionLearning({auth,env});
+ const supply=supplyRoutes({auth,storage,scanner,env});
  const instant=instantRoutes({db:auth.db,storage,scanner,exchangeService,allowMockPayments:false});
  const origins=new Map(config.origins.map(origin=>[new URL(origin).host,origin])),rates=new Map();let concurrent=0,heavyRequests=0,closing;
  const json=(res,status,value)=>{res.writeHead(status,{'Content-Type':'application/json; charset=utf-8'});res.end(JSON.stringify(value));};
@@ -41,6 +43,17 @@ export async function startProductionServer({env=process.env,auth,storage,scanne
    if(url.pathname.startsWith('/api/local')||url.pathname.startsWith('/api/staging'))fail('NOT_FOUND',404);
    const cookie=/(?:^|;\s*)__Host-marocora_session=([A-Za-z0-9_.-]+)(?:;|$)/.exec(req.headers.cookie||'');
    const bearer=req.headers.authorization!==undefined?(/^Bearer ([A-Za-z0-9_.-]+)$/.exec(req.headers.authorization)?.[1]||''):cookie?.[1];
+   if(url.pathname==='/api/supply/profiles'&&req.method==='GET'){
+    const id=url.searchParams.get('id');if(id&&!/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(id))fail('SUPPLY_INVALID_PROFILE',400);
+    return json(res,200,await auth.supplyPublic(id));
+   }
+   if(url.pathname==='/api/supply/register'&&req.method==='POST'){
+    const ip=config.trustProxy?req.headers['x-real-ip']||req.socket.remoteAddress:req.socket.remoteAddress,now=Date.now();
+    for(const [key,value] of rates)if(value.until<=now)rates.delete(key);
+    const key='supply-register:'+ip,rate=rates.get(key)||{count:0,until:now+60000};if(rate.count>=3||rates.size>=5000)fail('LOGIN_RATE_LIMIT',429);rate.count++;rates.set(key,rate);
+    const fields=await input();if(Object.keys(fields).some(key=>!['email','password'].includes(key)))fail('SUPPLY_INVALID_REGISTRATION');
+    return json(res,202,await auth.register(fields.email,fields.password,origin));
+   }
    if(url.pathname==='/api/auth/login'&&req.method==='POST'){
     const ip=config.trustProxy?req.headers['x-real-ip']||req.socket.remoteAddress:req.socket.remoteAddress,now=Date.now();
     for(const [key,value] of rates)if(value.until<=now)rates.delete(key);
@@ -53,6 +66,8 @@ export async function startProductionServer({env=process.env,auth,storage,scanne
    if(url.pathname==='/api/auth/logout'&&req.method==='POST'){res.setHeader('Set-Cookie',`${cookieName}=; Secure; HttpOnly; SameSite=Strict; Path=/; Max-Age=0`);return json(res,200,{signedOut:true});}
    if(url.pathname.startsWith('/api/')){
     const session=await auth.authenticate(bearer);
+    if(req.method==='POST'&&/^\/api\/supply\/applications\/[^/]+\/credentials$/.test(url.pathname)){if(heavyRequests>=2)fail('UPLOAD_BUSY',429);heavyRequests++;heavy=true;}
+    if(await supply({req,url,session,input,body,json,res}))return;
     if(url.pathname==='/api/auth/me'&&req.method==='GET')return json(res,200,{authenticated:true});
     if(url.pathname==='/api/learning/room-config'&&req.method==='GET')return json(res,200,learning.getConfig(session));
     const methods={'/api/learning/room-token':'issue','/api/learning/room-connect':'connect','/api/learning/room-heartbeat':'heartbeat','/api/learning/room-leave':'leave'};
@@ -71,14 +86,14 @@ export async function startProductionServer({env=process.env,auth,storage,scanne
    const path=websitePath(decodeURIComponent(url.pathname));
    if(path.split('/').some(part=>part.startsWith('.')||part==='server'||part==='tests'||part==='node_modules')||path.includes('\\')||path.includes('\0'))fail('NOT_FOUND',404);
    const name=path.slice(1),aliases=productionAliases;
-   if(privatePages.has(name)){
-    try{await auth.authenticate(bearer);}
+   if(privatePages.has(name)||adminPages.has(name)){
+    try{const session=await auth.authenticate(bearer);if(adminPages.has(name)&&!await auth.supplyRpc(session,'supply_admin_access',{}))fail('SUPPLY_ADMIN_REQUIRED',403);}
     catch(error){if(error.status!==401)throw error;res.writeHead(302,{Location:loginLocation(path,url.search)});return res.end();}
    }
    let bytes;
    try{
     if(aliases[path])bytes=await readFile(resolve(root,aliases[path]));
-    else{if(!publicPages.has(name)&&!privatePages.has(name)&&!browserAssets.has(name))fail('NOT_FOUND',404);const base=resolve(root,'.pages-dist'),target=resolve(base,'.'+path);if(relative(base,target).split(sep).includes('..'))fail('NOT_FOUND',404);bytes=await readFile(target);}
+    else{if(!publicPages.has(name)&&!privatePages.has(name)&&!adminPages.has(name)&&!browserAssets.has(name))fail('NOT_FOUND',404);const base=resolve(root,'.pages-dist'),target=resolve(base,'.'+path);if(relative(base,target).split(sep).includes('..'))fail('NOT_FOUND',404);bytes=await readFile(target);}
    }catch{fail('NOT_FOUND',404);}
    if(aliases[path]?.endsWith('.html'))bytes=Buffer.from(bytes.toString().replace('STAGING · Mock payments and mock scanning. No real money is collected.','Your documents are scanned before quote processing. Payments are not available yet.'));
    if(extname(path)==='.html'){

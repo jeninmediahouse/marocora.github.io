@@ -1,6 +1,7 @@
 // Only authored website pages and their browser assets may leave the build.
 // Never serve the build directory wholesale: it also contains legacy clients.
 export const publicPages=new Set([
+ 'supply-register.html','supply-profile.html',
  'index.html','production-login.html','contact.html','contact-thank-you.html',
  'professionals.html','join.html','thank-you.html','teachers.html','teacher-sample.html',
  'teacher-apply.html','lesson-request.html','lesson-thank-you.html','translators.html',
@@ -9,11 +10,14 @@ export const publicPages=new Set([
  'translation-thank-you.html','verify-email.html','learn/index.html'
 ]);
 export const privatePages=new Set([
+ 'supply-dashboard.html',
  'learning-room.html','instant-quote.html','translation-workspace.html',
  'application.html','vendor-review.html','service-review.html','launch-report.html',
  'staff-review.html','learn/account.html','learn/schedule.html'
 ]);
+export const adminPages=new Set(['supply-review.html']);
 export const browserAssets=new Set([
+ 'supply-dashboard.mjs','supply-review.mjs','supply-register.mjs','supply-profile.mjs','supply-client.mjs','supply.css',
  'production-login.mjs','learning-room.mjs','learning-room.css','home-language.mjs',
  'site-language.mjs','site-language.css','site-services.mjs','site-copy.mjs','home-copy.mjs',
  'site-ui-copy.mjs','site-extra-copy.mjs','translation-copy.mjs','translation-service.mjs',
