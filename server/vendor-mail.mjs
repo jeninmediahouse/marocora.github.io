@@ -25,3 +25,21 @@ export function createResendTransport({apiKey,from,fetcher=fetch}){
   return {state:r.status>=400&&r.status<500&&![409,429].includes(r.status)?'failed':'uncertain'};
  };
 }
+
+// Supply messages deliberately accept only a minimal stored-event projection.
+// The legacy renderer/transport remains unchanged; no supply provider is configured.
+export function supplyEmailBatch({application:a,event:e}){
+ const uuid=/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+ const copy={
+  submitted:['Your Marocora profile has been received','Your profile was submitted for review.'],
+  approved:['Your Marocora profile review is complete','This profile revision was approved. Public visibility depends on your current profile and publication consent.'],
+  rejected:['Your Marocora profile needs changes','This profile revision was rejected. Sign in to read the feedback and update your profile.']
+ };
+ if(!a||!e||!uuid.test(a.id||'')||!uuid.test(e.id||'')||!Number.isSafeInteger(e.revision)||e.revision<1
+  ||!Object.hasOwn(copy,e.kind)||typeof a.email!=='string'||a.email.length>320||!/^[^\s<>@,;]+@[^\s<>@,;]+$/.test(a.email))throw Error('SUPPLY_MAIL_INVALID_EVENT');
+ const [title,message]=copy[e.kind],url='https://marocora.com/supply-dashboard.html';
+ const reference=`Reference: ${a.id} · revision ${e.revision}`;
+ const text=`Hello,\n\n${message}\n\nSign in to your profile dashboard: ${url}\nThe dashboard shows your current status.\n\n${reference}`;
+ const html=`<div style="${style}"><p style="font-size:26px;font-weight:bold;color:#12644f">Marocora</p><h1>${escape(title)}</h1><p>${escape(message)}</p><p>${button(url,'View my profile dashboard')}</p><p>The dashboard shows your current status.</p><p style="font-size:13px;color:#64756e">${escape(reference)}</p></div>`;
+ return [{from:'Marocora <no-reply@auth.marocora.com>',to:[a.email],subject:title,text,html}];
+}

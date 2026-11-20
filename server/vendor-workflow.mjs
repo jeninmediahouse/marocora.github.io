@@ -1,5 +1,6 @@
 // Server-only vendor review and notification bridge. Browser never chooses recipients.
 import {supabaseRequestHeaders} from './supabase-api-keys.mjs';
+import {supplyEmailBatch} from './vendor-mail.mjs';
 const allowedOrigins=new Set(['https://marocora.com','https://www.marocora.com']);
 const uuid=/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 export const eventTitles={submitted:'Your Marocora application has been received',approved:'Your Marocora application is approved',declined:'Update: your Marocora application was declined',needs_information:'More information needed for your Marocora application',information_received:'Your additional information has been received'};
@@ -73,5 +74,34 @@ export function createVendorHandler({supabaseURL,serviceKey,mailForm,sendMail,fe
    const known=['STAFF_REQUIRED','ACCESS_DENIED','APPLICATION_NOT_FOUND','STALE_REVISION','INVALID_DECISION','INVALID_QUESTIONS','QUESTIONS_REQUIRED','INVALID_ANSWERS','ANSWERS_REQUIRED','EMAIL_VERIFICATION_REQUIRED','QA_APPROVAL_BLOCKED','SELF_REVIEW_DENIED','INVALID_REVIEW','FEEDBACK_REQUIRED','NOT_SUBMITTED'];
    const code=known.find(k=>message.includes(k));return reply(code==='STAFF_REQUIRED'||code==='ACCESS_DENIED'?403:code?400:503,{error:code||'WORKFLOW_UNAVAILABLE'});
   }
+ };
+}
+
+// Prepared local supply dispatcher. No HTTP route, scheduler, environment lookup,
+// provider adapter or implicit fetch. Tests inject a disposable RPC and fake mail.
+// sendMail must report retry ONLY when it knows no message was accepted.
+export function createSupplyMailDispatcher({serviceRpc,sendMail}){
+ if(typeof serviceRpc!=='function'||typeof sendMail!=='function')throw Error('SUPPLY_MAIL_ADAPTER_REQUIRED');
+ return async({applicationId,actorId,limit=5})=>{
+  if(!uuid.test(applicationId||'')||!uuid.test(actorId||'')||!Number.isInteger(limit)||limit<1||limit>5)throw Error('SUPPLY_MAIL_INVALID_REQUEST');
+  const results=[];
+  for(let n=0;n<limit;n++){
+   const item=await serviceRpc('supply_mail_claim',{p_id:applicationId,p_actor:actorId});
+   if(!item)break;
+   if(!uuid.test(item.claimToken||'')||!uuid.test(item.event?.id||'')||item.application?.id!==applicationId
+    ||item.idempotencyKey!==`marocora-supply/${item.event.id}`)throw Error('SUPPLY_MAIL_INVALID_CLAIM');
+   let state='uncertain',messages;
+   try{messages=supplyEmailBatch(item);}catch{state='failed';}
+   if(messages){
+    try{
+     const result=await sendMail(messages,{idempotencyKey:item.idempotencyKey});
+     if(['sent','retry','failed','uncertain'].includes(result?.state))state=result.state;
+    }catch{} // A timeout/exception cannot establish that nothing was accepted.
+   }
+   const recorded=await serviceRpc('supply_mail_finish',{p_event:item.event.id,p_claim:item.claimToken,p_result:state});
+   results.push({eventId:item.event.id,state:['sent','retry','failed','uncertain'].includes(recorded)?recorded:'uncertain'});
+   if(recorded!=='sent')break;
+  }
+  return results;
  };
 }
