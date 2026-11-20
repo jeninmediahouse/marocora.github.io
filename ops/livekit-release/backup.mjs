@@ -55,11 +55,20 @@ export function backup({dataDir,backupDir,sqlite='/usr/bin/sqlite3'}){
  // on reopen. Normalize ONLY the completed snapshot into a standalone rollback-
  // journal database before its unchanged read-only integrity verification.
  requireThat(run(target,'.timeout 5000\nPRAGMA journal_mode=DELETE;\n','SNAPSHOT')==='delete','BACKUP_SNAPSHOT_JOURNAL_FAILED');
- requireThat(run(target,'PRAGMA integrity_check;\n','INTEGRITY')==='ok','BACKUP_INTEGRITY_FAILED');
+ requireThat(run(target,'PRAGMA journal_mode;\nPRAGMA integrity_check;\n','INTEGRITY')==='delete\nok','BACKUP_INTEGRITY_FAILED');
  const verified=lstatSync(target);requireThat(verified.isFile()&&!verified.isSymbolicLink()&&verified.uid===process.getuid()&&(verified.mode&0o777)===0o600,'BACKUP_PRIVATE_OUTPUT_REQUIRED');
- renameSync(temp,final);return {status:'SQLITE_BACKUP_OK',snapshot:id,integrity:'ok'};
+ // A read-only CLI can leave an orphan SHM index even after DELETE-mode
+ // validation. Publish only the verified database; retain staging artifacts.
+ // Never discard or separate a potentially persistent WAL/rollback journal.
+ for(const suffix of ['-wal','-journal']){
+  let present=true;try{lstatSync(target+suffix);}catch(error){if(error.code==='ENOENT')present=false;else throw error;}
+  requireThat(!present,'BACKUP_SNAPSHOT_JOURNAL_PRESENT');
+ }
+ const ready=join(backupDir,'.ready-'+id);mkdirSync(ready,{mode:0o700});
+ renameSync(target,join(ready,'sessions.sqlite'));renameSync(ready,final);
+ return {status:'SQLITE_BACKUP_OK',snapshot:id,integrity:'ok'};
 }
 if(process.argv[1]&&fileURLToPath(import.meta.url)===process.argv[1]){
  try{if(process.argv.length!==4)throw Error();console.log(JSON.stringify(backup({dataDir:process.argv[2],backupDir:process.argv[3]})));}
- catch(error){const code=error?.message||'';console.error(/^BACKUP_SQLITE_FAILED_(?:BACKUP|SNAPSHOT|INTEGRITY)_[A-Z_]+$/.test(code)||code==='BACKUP_SNAPSHOT_JOURNAL_FAILED'?code:'SQLITE_BACKUP_FAILED');process.exitCode=1;}
+ catch(error){const code=error?.message||'';console.error(/^BACKUP_SQLITE_FAILED_(?:BACKUP|SNAPSHOT|INTEGRITY)_[A-Z_]+$/.test(code)||['BACKUP_SNAPSHOT_JOURNAL_FAILED','BACKUP_SNAPSHOT_JOURNAL_PRESENT'].includes(code)?code:'SQLITE_BACKUP_FAILED');process.exitCode=1;}
 }

@@ -113,3 +113,44 @@ but not yet runtime verified. Preserve readonly source, private output, consiste
 backup and integrity checks. Do not repeat the resolved source-level SQL/locale/
 Host investigations without new evidence. Request exact final suite totals and
 all failing blocks; no production, credentials, provider calls, payments or push.
+
+## Standalone publication correction — CURRENT
+
+Owner rerun: tests 327, pass 326, fail 1, cancelled/skipped/todo 0,
+duration_ms 12806.316333. The sole failure advanced past backup/normalization/
+read-only integrity checks to the test's “snapshot must be standalone” assertion.
+No complete pass is claimed. The excerpt explicitly shows supply migration,
+HTTP/auth checks passing and both network guards reporting zero attempts.
+
+Read-only metadata inspection of the retained synthetic release fixture found
+sessions.sqlite (8192 bytes, 0600) and sessions.sqlite-shm (32768 bytes, 0600),
+no WAL or rollback journal. Only known synthetic fixture directories and fixed
+SQLite basenames were inspected; no database bytes, credentials or real state read.
+The previous helper renamed the entire staging folder, publishing leftover SHM.
+
+Now final read-only verification requires both journal_mode=delete and
+integrity_check=ok after reopening. Any remaining WAL or rollback-journal pathname
+prevents publication with BACKUP_SNAPSHOT_JOURNAL_PRESENT. Only the verified
+sessions.sqlite is moved into a new private .ready directory, then that directory
+is atomically renamed to the public snapshot identity. Orphan SHM is retained in
+private .pending staging; nothing is deleted or silently pruned. Do not restore
+from .pending/.ready directories. Retention remains future owner-reviewed work.
+Source opening remains readonly; source journal, ownership and modes unchanged.
+
+The standalone assertion is preserved and names the offending suffix. Added one
+regression using a synthetic wrapper around the real SQLite CLI: leaving SHM after
+integrity must still publish only the validated main database; leaving a WAL or
+rollback journal must fail closed without publishing. The wrapper touches only
+synthetic snapshot paths, never the source. Thirteen package declarations now
+exist; this adds one test to the next full run, not a claimed passing count.
+
+Helper/test syntax and scoped whitespace PASS. Guarded focused launch still fails
+before Node with sandbox_apply exit 71, so the new behavior awaits owner pnpm test.
+No frontend/build inputs changed; prior production build remains current. No
+push, production/provider action, credential read, feature activation or guard
+weakening. Current local commit includes this narrow publication fix and evidence.
+
+Next task: Marocora — Standalone Backup Regression Verification. Read this current
+section and review owner full-suite totals/failures for the local fix. Keep all
+standalone/source/journal/integrity/privacy guards and diagnose any new failure
+from current evidence. Do not repeat earlier resolved SQL/locale/HTTP work.

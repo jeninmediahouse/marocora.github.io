@@ -114,3 +114,12 @@ Current remaining work is the snapshot-only journal normalization described in
 the newest section of HANDOFF-SQLITE-BACKUP-DIAGNOSIS-20261120.md. It is implemented
 locally and awaits an owner guarded rerun. No rollout, production migration,
 payout/provider activation, payment/demand-side work or push is authorized.
+
+## Second complete owner run — remaining backup publication failure
+
+Owner again reports 327 total / 326 pass / 1 fail / zero cancelled, skipped or todo
+and supplies explicit passing supply migration, HTTP and auth test lines. Supply
+subset remains owner-run PASS; full suite remains failed only on the backup's
+standalone-artifact assertion. The active fix publishes only the verified database
+and retains orphan SHM in private staging, refusing WAL/rollback journals. See the
+newest section of HANDOFF-SQLITE-BACKUP-DIAGNOSIS-20261120.md; await guarded rerun.

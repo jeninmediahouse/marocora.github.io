@@ -1,7 +1,7 @@
 import {createServer} from 'node:http';
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {mkdtempSync,mkdirSync,writeFileSync,readFileSync,chmodSync,symlinkSync,realpathSync,statSync,existsSync} from 'node:fs';
+import {mkdtempSync,mkdirSync,writeFileSync,readFileSync,chmodSync,symlinkSync,realpathSync,statSync,existsSync,readdirSync} from 'node:fs';
 import {tmpdir} from 'node:os';
 import {join,dirname} from 'node:path';
 import {execFileSync} from 'node:child_process';
@@ -80,7 +80,7 @@ test('backup diagnostics identify subprocess stage and fixed reason without expo
 test('sqlite3 online backup includes committed WAL state and restores privately without changing source',()=>{
  const f=stateFixture();try{
   const result=backup(f);assert.equal(result.status,'SQLITE_BACKUP_OK');const target=join(f.backupDir,result.snapshot,'sessions.sqlite');assert.equal(statSync(target).mode&0o777,0o600);
-  for(const suffix of ['-wal','-shm','-journal'])assert.equal(existsSync(target+suffix),false,'snapshot must be standalone');
+  for(const suffix of ['-wal','-shm','-journal'])assert.equal(existsSync(target+suffix),false,'snapshot must be standalone: '+suffix);
   const restored=new DatabaseSync(target,{readOnly:true});try{
    assert.equal(restored.prepare('PRAGMA journal_mode').get().journal_mode,'delete');assert.equal(restored.prepare('PRAGMA integrity_check').get().integrity_check,'ok');
    assert.equal(restored.prepare('SELECT value FROM synthetic_state').get().value,'SYNTHETIC_RESERVED_MINUTES');assert.equal(f.db.prepare('SELECT count(*) AS n FROM synthetic_state').get().n,1);
@@ -88,6 +88,39 @@ test('sqlite3 online backup includes committed WAL state and restores privately 
    f.db.exec("INSERT INTO synthetic_state VALUES ('SYNTHETIC_LATER_RESERVATION')");assert.equal(f.db.prepare('SELECT count(*) AS n FROM synthetic_state').get().n,2);assert.equal(restored.prepare('SELECT count(*) AS n FROM synthetic_state').get().n,1,'later source writes must not alter the snapshot');
   }finally{restored.close();}
  }finally{f.db.close();}
+});
+test('backup publishes a standalone verified database while retaining orphan SHM and refusing persistent journals',()=>{
+ for(const suffix of ['shm','wal','journal']){
+  const f=stateFixture(),wrapper=join(temp(),'sqlite-fixture');
+  // A synthetic CLI wrapper leaves a sidecar only AFTER the real integrity
+  // subprocess closes; the live source and its WAL are never modified.
+  writeFileSync(wrapper,`#!/bin/sh
+fixture_readonly=false
+fixture_db=''
+for fixture_arg do
+ if [ "$fixture_arg" = '-readonly' ]; then fixture_readonly=true; fi
+ fixture_db="$fixture_arg"
+done
+/usr/bin/sqlite3 "$@"
+fixture_status=$?
+if [ "$fixture_status" -ne 0 ]; then exit "$fixture_status"; fi
+case "$fixture_db" in
+ */.pending-*/sessions.sqlite)
+  if [ "$fixture_readonly" = true ]; then printf 'SYNTHETIC_STALE_SIDECAR' > "$fixture_db-${suffix}"; fi
+  ;;
+esac
+`,{mode:0o700});
+  try{
+   if(suffix==='shm'){
+    const result=backup({...f,sqlite:wrapper}),snapshot=join(f.backupDir,result.snapshot);assert.deepEqual(readdirSync(snapshot),['sessions.sqlite']);
+    const pending=readdirSync(f.backupDir).find(name=>name.startsWith('.pending-'));assert.ok(pending);assert.equal(existsSync(join(f.backupDir,pending,'sessions.sqlite-shm')),true,'orphan remains private in staging');
+    const db=new DatabaseSync(join(snapshot,'sessions.sqlite'),{readOnly:true});try{assert.equal(db.prepare('PRAGMA journal_mode').get().journal_mode,'delete');assert.equal(db.prepare('SELECT count(*) AS n FROM synthetic_state').get().n,1);}finally{db.close();}
+   }else{
+    assert.throws(()=>backup({...f,sqlite:wrapper}),/BACKUP_SNAPSHOT_JOURNAL_PRESENT/);assert.equal(readdirSync(f.backupDir).some(name=>name.startsWith('snapshot-')),false,'persistent journal must prevent publication');
+   }
+   assert.equal(f.db.prepare('PRAGMA journal_mode').get().journal_mode,'wal');
+  }finally{f.db.close();}
+ }
 });
 test('backup fails closed for absent/corrupt state, unsafe source permissions and symlink destinations',()=>{
  const f=stateFixture();f.db.close();chmodSync(f.source,0o644);assert.throws(()=>backup(f),/PRIVATE_SOURCE/);chmodSync(f.source,0o600);
