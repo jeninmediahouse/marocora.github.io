@@ -1,0 +1,78 @@
+{
+  "formatVersion": 1,
+  "purpose": "rollback-only-supply-unavailable",
+  "deploymentAuthorized": false,
+  "overlayRoot": "overlay",
+  "blockedSupplyPaths": [
+    "/supply-register.html",
+    "/supply-dashboard.html",
+    "/supply-review.html",
+    "/supply-profile.html"
+  ],
+  "publicNotice": "/professionals.html#supply-unavailable",
+  "files": [
+    {
+      "path": "production-login.mjs",
+      "sha256": "c459780c59b20c49a768fc0d1b653d0fe539405407e2e4e3a1efa6777690608a",
+      "bytes": 2010
+    },
+    {
+      "path": "professionals.html",
+      "sha256": "fa1403dbffc5f0d1216302c91b0d9ceb37e5bdeda4f1a1f7282a4d85a86284b0",
+      "bytes": 11792
+    },
+    {
+      "path": "site-extra-copy.mjs",
+      "sha256": "89e1e4606bbf4e74c5f6b5876a328a7b50b66e8a1e05814eff818d8e64772c4e",
+      "bytes": 12097
+    },
+    {
+      "path": "supply-dashboard.html",
+      "sha256": "cd3d189cf2451576a6c08998c03585933dc742ace662731d2ea32f88bb3b0b37",
+      "bytes": 2134
+    },
+    {
+      "path": "supply-profile.html",
+      "sha256": "cd3d189cf2451576a6c08998c03585933dc742ace662731d2ea32f88bb3b0b37",
+      "bytes": 2134
+    },
+    {
+      "path": "supply-register.html",
+      "sha256": "cd3d189cf2451576a6c08998c03585933dc742ace662731d2ea32f88bb3b0b37",
+      "bytes": 2134
+    },
+    {
+      "path": "supply-review.html",
+      "sha256": "cd3d189cf2451576a6c08998c03585933dc742ace662731d2ea32f88bb3b0b37",
+      "bytes": 2134
+    }
+  ],
+  "preservedSourceSha256": {
+    "supply-register.html": "25194cb676181251bf543f1b18e7edaaf0f695fcc8bae23e5fba1e2f814e2208",
+    "supply-dashboard.html": "d4a379ff0b9bd95df5ec72510505f2caa73d50d5512aec83f4d4e9706d91d6a4",
+    "supply-review.html": "a4156258b9aa2e079ab8b28a3280a76a371549e81b00063fcb19c2fe8dd3844e",
+    "supply-profile.html": "306c1605152f7fe1995646a3081eef03d67b0d9f1124457001600c3e5723d479",
+    "supply-register.mjs": "a360d4a7a9b306eb0f2ce16a835e5167965aaedb95d981360cf79fdb40eef6a1",
+    "supply-dashboard.mjs": "b2c3a5806c114850b7b4546f9f201f9d80fc34070254a2bf0ac54130e8696dca",
+    "supply-review.mjs": "29e2b207853496fa05ee16c64f92f90610c94b1adaf86ced9f46d7898a58fb6f",
+    "supply-profile.mjs": "69bb6c940fdd8b31961d15d8d44ae1a2f9d8bcd0e2e1ab2f3f3dba8bb631b0d7",
+    "professionals.html": "65933b36bbf588e1dfc37aa7fc502abc2b59ce29b0ecbf9255a2a2cba0b9f794",
+    "production-login.mjs": "6418b89d9dd4e13821a5d6e68ad8fa8653c9d4d577ccada497154f56af0045b0",
+    "site-extra-copy.mjs": "8858d4e35c15491f7b9d04cbf2d1fb654ca55b0203e092a439365e3e4ebf3db1",
+    "supply-client.mjs": "48a5d0402faad53080e09c042a965400100e4f094f6d4b4ec37270a4ec714b4e",
+    "supply-copy.mjs": "02ba87fe4ccf415ae502ef4a5e9dd9f266d30c2f7fd874d95fe4b02530976ee5",
+    "supply.css": "b06ed40a1a43878d420aa9e335507883963aa1423abef79f8d6912c6cc2737a3"
+  },
+  "sharedLocaleSource": {
+    "commit": "346be721e626a6dfab425985213490dc7e3d6d3e",
+    "path": "site-extra-copy.mjs",
+    "sha256": "89e1e4606bbf4e74c5f6b5876a328a7b50b66e8a1e05814eff818d8e64772c4e"
+  },
+  "limits": [
+    "Overlay only; not a complete site or deployment",
+    "Requires paired routing/static review",
+    "Does not suspend database RPC grants or global Auth signup",
+    "Does not disable cached scripts or in-flight requests",
+    "Does not activate rollback or change candidate selection"
+  ]
+}
