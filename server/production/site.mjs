@@ -1,6 +1,7 @@
 // Only authored website pages and their browser assets may leave the build.
 // Never serve the build directory wholesale: it also contains legacy clients.
 export const publicPages=new Set([
+ 'reset-password.html',
  'supply-register.html','supply-profile.html',
  'index.html','production-login.html','contact.html','contact-thank-you.html',
  'professionals.html','join.html','thank-you.html','teachers.html','teacher-sample.html',
@@ -17,6 +18,7 @@ export const privatePages=new Set([
 ]);
 export const adminPages=new Set(['supply-review.html']);
 export const browserAssets=new Set([
+ 'reset-password.mjs',
  'supply-copy.mjs','supply-dashboard.mjs','supply-review.mjs','supply-register.mjs','supply-profile.mjs','supply-client.mjs','supply.css',
  'production-login.mjs','learning-room.mjs','learning-room.css','home-language.mjs',
  'site-language.mjs','site-language.css','site-services.mjs','site-copy.mjs','home-copy.mjs',

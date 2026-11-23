@@ -1,5 +1,21 @@
 // Authored supply-interface translations; application values remain user content.
 export const supplyCopy = {
+  "Reset your password | Marocora": {"en":"Reset your password | Marocora","fr":"Réinitialiser votre mot de passe | Marocora","ar":"إعادة تعيين كلمة المرور | Marocora","es":"Restablecer tu contraseña | Marocora"},
+  "Reset your password": {"en":"Reset your password","fr":"Réinitialiser votre mot de passe","ar":"إعادة تعيين كلمة المرور","es":"Restablecer tu contraseña"},
+  "Forgot your password?": {"en":"Forgot your password?","fr":"Mot de passe oublié ?","ar":"هل نسيت كلمة المرور؟","es":"¿Olvidaste tu contraseña?"},
+  "New password": {"en":"New password","fr":"Nouveau mot de passe","ar":"كلمة المرور الجديدة","es":"Nueva contraseña"},
+  "Confirm new password": {"en":"Confirm new password","fr":"Confirmer le nouveau mot de passe","ar":"تأكيد كلمة المرور الجديدة","es":"Confirma la nueva contraseña"},
+  "Use 12–128 characters.": {"en":"Use 12–128 characters.","fr":"Utilisez entre 12 et 128 caractères.","ar":"استخدم من 12 إلى 128 حرفًا.","es":"Usa entre 12 y 128 caracteres."},
+  "Save new password": {"en":"Save new password","fr":"Enregistrer le nouveau mot de passe","ar":"حفظ كلمة المرور الجديدة","es":"Guardar nueva contraseña"},
+  "Return to sign in": {"en":"Return to sign in","fr":"Retour à la connexion","ar":"العودة إلى تسجيل الدخول","es":"Volver a iniciar sesión"},
+  "Enter your new password.": {"en":"Enter your new password.","fr":"Saisissez votre nouveau mot de passe.","ar":"أدخل كلمة المرور الجديدة.","es":"Introduce tu nueva contraseña."},
+  "The passwords do not match.": {"en":"The passwords do not match.","fr":"Les mots de passe ne correspondent pas.","ar":"كلمتا المرور غير متطابقتين.","es":"Las contraseñas no coinciden."},
+  "This link has expired. Request a new one.": {"en":"This link has expired. Request a new one.","fr":"Ce lien a expiré. Demandez-en un nouveau.","ar":"انتهت صلاحية هذا الرابط. اطلب رابطًا جديدًا.","es":"Este enlace ha caducado. Solicita uno nuevo."},
+  "Password changed. Sign in with your new password.": {"en":"Password changed. Sign in with your new password.","fr":"Mot de passe modifié. Connectez-vous avec votre nouveau mot de passe.","ar":"تم تغيير كلمة المرور. سجّل الدخول بكلمة المرور الجديدة.","es":"Contraseña cambiada. Inicia sesión con tu nueva contraseña."},
+  "Enter a valid email address.": {"en":"Enter a valid email address.","fr":"Saisissez une adresse e-mail valide.","ar":"أدخل عنوان بريد إلكتروني صالحًا.","es":"Introduce una dirección de correo electrónico válida."},
+  "If an account uses this address, a reset link will be sent. Check your inbox and spam folder.": {"en":"If an account uses this address, a reset link will be sent. Check your inbox and spam folder.","fr":"Si un compte utilise cette adresse, un lien de réinitialisation sera envoyé. Consultez votre boîte de réception et vos courriers indésirables.","ar":"إذا كان هناك حساب يستخدم هذا العنوان، فسيُرسل رابط لإعادة التعيين. تحقّق من صندوق الوارد والبريد غير المرغوب فيه.","es":"Si existe una cuenta con esta dirección, se enviará un enlace de restablecimiento. Revisa tu bandeja de entrada y la carpeta de correo no deseado."},
+  "Please wait before requesting another reset link.": {"en":"Please wait before requesting another reset link.","fr":"Veuillez patienter avant de demander un autre lien de réinitialisation.","ar":"يرجى الانتظار قبل طلب رابط آخر لإعادة التعيين.","es":"Espera antes de solicitar otro enlace de restablecimiento."},
+  "Unable to request a reset link. Please try again later.": {"en":"Unable to request a reset link. Please try again later.","fr":"Impossible de demander un lien de réinitialisation. Réessayez plus tard.","ar":"تعذّر طلب رابط لإعادة التعيين. حاول مجددًا لاحقًا.","es":"No se pudo solicitar un enlace de restablecimiento. Inténtalo más tarde."},
   "Apply as a supply partner": {
     "en": "Apply as a supply partner",
     "fr": "Postuler comme partenaire prestataire",

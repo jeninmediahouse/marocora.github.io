@@ -2,6 +2,7 @@ import {createClient} from '@supabase/supabase-js';
 import {cloudConfiguration,createStagingDatabase} from '../block1/supabase-database.mjs';
 import {createSupabaseTransport} from '../block1/network-diagnostics.mjs';
 import {uuid} from '../quote/contracts.mjs';
+import {createPasswordReset} from './password-reset.mjs';
 const fail=(code,status=401)=>{throw Object.assign(Error(code),{status});};
 const supplyCodes=new Set(['SUPPLY_VERIFIED_ACCOUNT_REQUIRED','SUPPLY_ADMIN_REQUIRED','SUPPLY_APPLICATION_NOT_FOUND','SUPPLY_CREDENTIAL_NOT_FOUND','SUPPLY_INVALID_PROFILE','SUPPLY_STALE_REVISION','SUPPLY_SELF_REVIEW_DENIED','SUPPLY_INVALID_DECISION','SUPPLY_PUBLICATION_BLOCKED','SUPPLY_CREDENTIAL_REVIEW_REQUIRED','SUPPLY_INVALID_CREDENTIAL','SUPPLY_CREDENTIAL_LIMIT','SUPPLY_INVALID_PAYOUT']);
 function supplyError(error){const code=supplyCodes.has(error?.message)?error.message:error?.code==='23505'?'SUPPLY_APPLICATION_EXISTS':['42883','PGRST202'].includes(error?.code)?'SUPPLY_SCHEMA_REQUIRED':'SUPPLY_REQUEST_FAILED';fail(code,code.endsWith('NOT_FOUND')?404:code.includes('ADMIN')||code.includes('VERIFIED')||code.includes('SELF_REVIEW')?403:code.includes('STALE')||code.includes('EXISTS')?409:code.includes('SCHEMA')||code.includes('REQUEST_FAILED')?503:400);}
@@ -10,8 +11,11 @@ export function createProductionSupabase(env,{fetcher=fetch}={}){
  const transport=createSupabaseTransport(config,{fetcher});
  const client=(token,key=config.anon)=>createClient(config.url,key,{auth:{persistSession:false,autoRefreshToken:false,detectSessionInUrl:false},global:{fetch:transport,...(token?{headers:{Authorization:'Bearer '+token}}:{})}});
  const auth=client(),db=createStagingDatabase(config,{directory:env.DATA_DIR||'/var/lib/marocora',fetcher,production:true});
+ const passwordReset=createPasswordReset({config,fetcher});
  return {
   db,
+  requestPasswordReset:(email,origin)=>passwordReset.requestPasswordReset(email,origin),
+  completePasswordReset:(accessToken,refreshToken,password)=>passwordReset.completePasswordReset(accessToken,refreshToken,password),
   async checkReady(){const {data,error}=await client(undefined,config.service).rpc('production_runtime_status',{});if(error||data?.version!==4||data.mockPayments!==false)fail('PRODUCTION_SCHEMA_REQUIRED',503);},
   async register(email,password,origin){
    if(typeof email!=='string'||email.length>320||!/^\S+@\S+\.\S+$/.test(email)||typeof password!=='string'||password.length<12||password.length>128)fail('SUPPLY_INVALID_REGISTRATION',400);

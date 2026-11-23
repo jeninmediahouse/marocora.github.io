@@ -1,4 +1,21 @@
 const form=document.getElementById('production-login'),status=document.getElementById('login-status');
+const forgot=document.getElementById('forgot-password');
+let resetBusy=false;
+forgot.onclick=async()=>{
+ if(resetBusy)return;
+ const email=form.email.value;
+ const show=key=>{status.textContent=window.MarocoraSite?.t(key)||key;};
+ if(email.length>320||!/^\S+@\S+\.\S+$/.test(email)){show('Enter a valid email address.');return;}
+ resetBusy=true;forgot.disabled=true;
+ try{
+  const response=await fetch('/api/auth/request-reset',{method:'POST',credentials:'omit',cache:'no-store',
+   headers:{'Content-Type':'application/json'},body:JSON.stringify({email})});
+  if(!response.ok){show('Please wait before requesting another reset link.');return;}
+  const result=await response.json();if(result?.accepted!==true)throw Error('RESET_REQUEST_FAILED');
+  show('If an account uses this address, a reset link will be sent. Check your inbox and spam folder.');
+ }catch{show('Unable to request a reset link. Please try again later.');}
+ finally{resetBusy=false;forgot.disabled=false;}
+};
 form.onsubmit=async event=>{
  event.preventDefault();const button=form.querySelector('button');button.disabled=true;
  try{

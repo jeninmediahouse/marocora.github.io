@@ -42,7 +42,7 @@ function translate(root){
  for(const field of root.querySelectorAll('input[name=interface_language]'))field.value=locale;
 }
 const bar=document.createElement('div');bar.className='site-language-bar';bar.dataset.siteLanguage='';
-bar.innerHTML='<a href="/?v=20260929-home4">Marocora</a><label><span></span> <select id="site-locale"></select></label>';
+bar.innerHTML=(document.body.hasAttribute('data-password-reset')?'':'<a href="/?v=20260929-home4">Marocora</a>')+'<label><span></span> <select id="site-locale"></select></label>';
 const selector=bar.querySelector('select');
 for(const [value,label] of Object.entries(localeNames)){const option=document.createElement('option');option.value=value;option.textContent=label;selector.append(option);}
 document.body.prepend(bar);

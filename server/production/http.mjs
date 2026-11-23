@@ -1,4 +1,5 @@
 import {supplyRoutes} from '../supply/http.mjs';
+import {resetEmail,resetInput} from './password-reset.mjs';
 import {createServer} from 'node:http';
 import {readFile} from 'node:fs/promises';
 import {resolve,extname,relative,sep} from 'node:path';
@@ -43,6 +44,27 @@ export async function startProductionServer({env=process.env,auth,storage,scanne
    if(url.pathname.startsWith('/api/local')||url.pathname.startsWith('/api/staging'))fail('NOT_FOUND',404);
    const cookie=/(?:^|;\s*)__Host-marocora_session=([A-Za-z0-9_.-]+)(?:;|$)/.exec(req.headers.cookie||'');
    const bearer=req.headers.authorization!==undefined?(/^Bearer ([A-Za-z0-9_.-]+)$/.exec(req.headers.authorization)?.[1]||''):cookie?.[1];
+   if(req.method==='POST'&&['/api/auth/request-reset','/api/auth/complete-reset'].includes(url.pathname)){
+    const ip=config.trustProxy?req.headers['x-real-ip']||req.socket.remoteAddress:req.socket.remoteAddress,now=Date.now();
+    for(const [key,value] of rates)if(value.until<=now)rates.delete(key);
+    const key=url.pathname+':'+ip,rate=rates.get(key)||{count:0,until:now+60000};
+    if(rate.count>=10||rates.size>=5000)fail('LOGIN_RATE_LIMIT',429);rate.count++;rates.set(key,rate);
+    const fields=await input();
+    if(url.pathname==='/api/auth/request-reset'){
+     if(Object.keys(fields).length!==1||!Object.hasOwn(fields,'email'))fail('RESET_EMAIL_INVALID');
+     resetEmail(fields.email);
+     // The owner-confirmed recovery redirect is the canonical apex URL.
+     const resetOrigin=origin==='https://www.marocora.com'?'https://marocora.com':origin;
+     if(!config.origins.includes(resetOrigin))fail('RESET_ORIGIN_INVALID');
+     try{await auth.requestPasswordReset(fields.email,resetOrigin);}catch{}
+     return json(res,202,{accepted:true});
+    }
+    if(Object.keys(fields).length!==3||Object.keys(fields).some(key=>!['accessToken','refreshToken','password'].includes(key)))fail('RESET_LINK_EXPIRED');
+    resetInput(fields.accessToken,fields.refreshToken,fields.password);
+    try{await auth.completePasswordReset(fields.accessToken,fields.refreshToken,fields.password);}
+    catch{fail('RESET_LINK_EXPIRED');}
+    return json(res,200,{reset:true});
+   }
    if(url.pathname==='/api/supply/profiles'&&req.method==='GET'){
     const id=url.searchParams.get('id');if(id&&!/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(id))fail('SUPPLY_INVALID_PROFILE',400);
     return json(res,200,await auth.supplyPublic(id));
