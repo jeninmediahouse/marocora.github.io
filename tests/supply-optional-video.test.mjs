@@ -19,7 +19,7 @@ const L=s=>"'"+String(s).replaceAll("'","''")+"'",J=v=>L(JSON.stringify(v))+'::j
 
 test('optional-video migration changes exactly the original video predicate without grants or data writes',()=>{
  const actual=migration.match(/CREATE OR REPLACE FUNCTION[\s\S]*?END;\$\$;/g);assert.equal(actual.length,1);
- assert.equal(actual[0],original.replace('CREATE FUNCTION','CREATE OR REPLACE FUNCTION').replace(old,replacement));
+ assert.equal(actual[0],original.replace('CREATE FUNCTION','CREATE OR REPLACE FUNCTION').replace(old,()=>replacement));
  const rest=migration.replace(/^--.*$/gm,'').replace(actual[0],'').trim();
  assert.equal(rest,"BEGIN;\nSET LOCAL lock_timeout='3s';\nSET LOCAL statement_timeout='15s';\n\nCOMMIT;");
  assert.doesNotMatch(actual[0],/\b(?:GRANT|REVOKE|DROP|INSERT|UPDATE|DELETE|TRUNCATE)\b/);
