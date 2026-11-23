@@ -19,7 +19,7 @@ async function post(path,fields){
  if(!response.ok)throw Error(response.status===429?'RESET_TOO_MANY_ATTEMPTS':Object.hasOwn(errors,data?.error)?data.error:'RESET_SERVICE_UNAVAILABLE');
  return data;
 }
-show(statusKey);document.addEventListener('marocora:language',()=>show(statusKey));
+resend.hidden=false;show(statusKey);document.addEventListener('marocora:language',()=>show(statusKey));
 form.onsubmit=async event=>{
  event.preventDefault();if(busy||done)return;
  const email=form.email.value.trim(),code=form.code.value,password=form.password.value;
