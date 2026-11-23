@@ -1,5 +1,12 @@
 # Marocora — Pre-Campaign Owner Checklist
 
+Later final-batch update: FINAL-PRECAMPAIGN-LAUNCH-GATES-20261123.md supersedes
+this draft for source freeze, live directory promise, evidence reconciliation,
+SMTP pre-switch proof/cutover/recovery and genuine publication checks. The older
+one-send mail sequence below is historical, not an execution instruction. The
+manual reply templates and public DNS worksheet remain reference material.
+Do not verify803648b or treat dirty-tree410 as release evidence.
+
 23 November 2026, Africa/Casablanca. PREPARATION ONLY. Nothing in this checklist
 is an execution authorization. No production/DNS/provider/settings action has
 been performed by the agent. Owner-only steps need separate owner authorization

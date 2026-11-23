@@ -61,7 +61,10 @@ test('all four static entry pages are inert accessible multilingual notices with
 });
 
 test('professional-page CTA is replaced while all other authored content is preserved',()=>{
- const original=readFileSync(new URL('professionals.html',root),'utf8'),boundary=read('professionals.html');
+ const source=manifest.professionalSourceForOverlay;
+ const original=readFileSync(new URL(source.path,artifact),'utf8'),boundary=read('professionals.html');
+ assert.equal(sha(original),source.sha256);
+ assert.equal(source.commit,'803648b24b4e5aad2987ec197ff292ef66d0c7dc');
  const cta='<a href="supply-register.html" class="button primary-button">Apply as a supply partner</a>';
  assert.equal(original.split(cta).length-1,1);
  assert.doesNotMatch(boundary,/<a\b[^>]*href=["'][^"']*supply-/i);

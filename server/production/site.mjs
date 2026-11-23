@@ -18,7 +18,7 @@ export const privatePages=new Set([
 ]);
 export const adminPages=new Set(['supply-review.html']);
 export const browserAssets=new Set([
- 'reset-password.mjs',
+ 'reset-password.mjs','supply-directory.mjs',
  'supply-copy.mjs','supply-dashboard.mjs','supply-review.mjs','supply-register.mjs','supply-profile.mjs','supply-client.mjs','supply.css',
  'production-login.mjs','learning-room.mjs','learning-room.css','home-language.mjs',
  'site-language.mjs','site-language.css','site-services.mjs','site-copy.mjs','home-copy.mjs',

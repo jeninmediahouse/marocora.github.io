@@ -228,9 +228,15 @@ footer {
         display: none;
     }
 }
+/* Single public partner section; existing service categories remain unchanged. */
+.published-partners{list-style:none;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:24px;margin-top:28px}
+.published-partner{border:1px solid #d9e3dd;border-radius:8px;padding:24px;background:#f9fafb;min-width:0;overflow-wrap:anywhere}
+.published-partner h3{margin:8px 0}.published-partner p{white-space:pre-wrap}.published-partner-type{color:#496454}.published-partner a{color:#12644f;font-weight:700;text-underline-offset:.2em}
+.published-partner a:focus-visible{outline:3px solid #d28b19;outline-offset:4px}#published-partners-status{text-align:center}[hidden]{display:none!important}
 </style>
 <link rel="stylesheet" href="site-language.css?v=20260928-site1">
 <script type="module" src="site-language.mjs?v=20261112-vendor1"></script>
+<script type="module" src="supply-directory.mjs"></script>
 </head>
 
 <body>
@@ -393,29 +399,13 @@ footer {
 
 </main>
 
-<section class="providers">
-
+<section class="providers" aria-labelledby="published-partners-title">
     <div class="providers-inner">
-
-        <h2>Featured Professionals</h2>
-
-        <div class="empty-network">
-
-            <h3>Our Professional Network Is Growing</h3>
-
-            <p>
-                Professional profiles will appear here as providers
-                complete the Marocora application and review process.
-            </p>
-
-            <a href="join.html" class="button primary-button">
-                Apply to Join
-            </a>
-
-        </div>
-
+        <h2 id="published-partners-title">Published partners</h2>
+        <p id="published-partners-status" role="status" aria-live="polite">Loading published partners…</p>
+        <ul id="published-partners" class="published-partners" aria-labelledby="published-partners-title" aria-busy="true" hidden></ul>
+        <noscript><p>Enable JavaScript to view published partners.</p></noscript>
     </div>
-
 </section>
 
 <footer>
