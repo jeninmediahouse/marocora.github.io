@@ -42,10 +42,11 @@ function translate(root){
  for(const field of root.querySelectorAll('input[name=interface_language]'))field.value=locale;
 }
 const bar=document.createElement('div');bar.className='site-language-bar';bar.dataset.siteLanguage='';
-bar.innerHTML=(document.body.hasAttribute('data-password-reset')?'':'<a href="/?v=20260929-home4">Marocora</a>')+'<label><span></span> <select id="site-locale"></select></label>';
+const supplyHeader=document.querySelector('body[data-supply-page] > header');
+bar.innerHTML=(document.body.hasAttribute('data-password-reset')||supplyHeader?'':'<a href="/?v=20260929-home4">Marocora</a>')+'<label><span></span> <select id="site-locale"></select></label>';
 const selector=bar.querySelector('select');
 for(const [value,label] of Object.entries(localeNames)){const option=document.createElement('option');option.value=value;option.textContent=label;selector.append(option);}
-document.body.prepend(bar);
+if(supplyHeader)supplyHeader.append(bar);else document.body.prepend(bar);
 // Personal details are data, even when a name happens to equal a translated label.
 for(const n of document.querySelectorAll('#review-name,#review-email,#review-phone,#review-notes,#success-name,#success-email,#payment-name,#payment-email,#student-name,#student-email'))if(!['Not provided','No message provided'].includes(norm(n.textContent)))n.dataset.userContent='';
 function watch(){observer.observe(document.documentElement,{subtree:true,childList:true,characterData:true,attributes:true,attributeFilter:['placeholder','aria-label','alt','href']});}

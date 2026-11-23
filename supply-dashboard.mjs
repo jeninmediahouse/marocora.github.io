@@ -1,4 +1,4 @@
-import {api,node,dataNode,message,typeNames,statusNames,profileDetails} from './supply-client.mjs';
+import {api,node,dataNode,message,typeNames,statusNames,profileDetails,optionalIntroVideo} from './supply-client.mjs';
 const form=document.querySelector('#profile-form'),notice=document.querySelector('#message'),type=document.querySelector('#vendor-type');let rows=[];
 const split=value=>value.split(/[,\n]/).map(s=>s.trim()).filter(Boolean);
 const field=name=>form.elements.namedItem(name);
@@ -29,7 +29,7 @@ type.onchange=()=>editor(type.value);
 form.onsubmit=event=>{event.preventDefault();void submit(form,async()=>{
  const data=new FormData(form),t=type.value,p={displayName:data.get('displayName').trim(),bio:data.get('bio').trim(),publicationConsent:data.has('publicationConsent')};
  const rate=value=>{if(!/^\d+(\.\d{1,2})?$/.test(value))throw Error('Use a positive rate with at most two decimal places.');return Math.round(Number(value)*100);};
- if(t==='teacher'){Object.assign(p,{languages:split(data.get('languages')),hourlyRateMinor:rate(data.get('hourlyRate')),currency:data.get('teacherCurrency'),timezone:data.get('timezone').trim(),introVideo:data.get('introVideo').trim(),availability:data.getAll('day').map(day=>({day:Number(day),start:data.get('start'+day),end:data.get('end'+day)}))});}
+ if(t==='teacher'){Object.assign(p,{languages:split(data.get('languages')),hourlyRateMinor:rate(data.get('hourlyRate')),currency:data.get('teacherCurrency'),timezone:data.get('timezone').trim(),introVideo:optionalIntroVideo(data.get('introVideo')),availability:data.getAll('day').map(day=>({day:Number(day),start:data.get('start'+day),end:data.get('end'+day)}))});}
  if(t==='translator'){const pairs=data.get('languagePairs').split('\n').filter(s=>s.trim()).map(line=>{const parts=line.split('|');if(parts.length!==2)throw Error('Use one language pair per line, separated by a vertical bar.');return {source:parts[0].trim(),target:parts[1].trim()};});Object.assign(p,{organizationKind:data.get('organizationKind'),languagePairs:pairs,specialties:data.getAll('specialties')});}
  if(t==='transport')Object.assign(p,{vehicleTypes:data.getAll('vehicleTypes'),capacity:Number(data.get('capacity')),serviceRegions:split(data.get('serviceRegions')),baseRateMinor:rate(data.get('baseRate')),currency:data.get('transportCurrency')});
  const current=rows.find(r=>r.type===t);await api('/api/supply/applications',{method:'POST',body:{type:t,profile:p,...(current?{id:current.id,revision:current.revision}:{})}});

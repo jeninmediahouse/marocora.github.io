@@ -1,3 +1,9 @@
+export function optionalIntroVideo(value){
+ if(typeof value!=='string')throw Error('Leave the video link blank or use a plain HTTPS URL.');
+ const text=value.trim();
+ if(text&&!/^https:\/\/[A-Za-z0-9.-]+(:443)?(\/[^\s<>]*)?$/.test(text))throw Error('Leave the video link blank or use a plain HTTPS URL.');
+ return text;
+}
 export async function api(path,{method='GET',body,headers={}}={}){
  const response=await fetch(path,{method,credentials:'same-origin',cache:'no-store',headers:{...(body instanceof Blob?{}:body?{'Content-Type':'application/json'}:{}),...headers},...(body?{body:body instanceof Blob?body:JSON.stringify(body)}:{})});
  const data=await response.json();
