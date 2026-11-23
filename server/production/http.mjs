@@ -1,5 +1,5 @@
 import {supplyRoutes} from '../supply/http.mjs';
-import {resetEmail,resetInput} from './password-reset.mjs';
+import {resetEmail,resetCodeInput,createResetAttemptLimiter} from './password-reset.mjs';
 import {createServer} from 'node:http';
 import {readFile} from 'node:fs/promises';
 import {resolve,extname,relative,sep} from 'node:path';
@@ -15,7 +15,7 @@ import {publicPages,privatePages,adminPages,browserAssets,productionAliases,webs
 const root=fileURLToPath(new URL('../../',import.meta.url)),cookieName='__Host-marocora_session';
 const fail=(code,status=400)=>{throw Object.assign(Error(code),{status});};
 const mime={'.html':'text/html; charset=utf-8','.mjs':'text/javascript; charset=utf-8','.js':'text/javascript; charset=utf-8','.css':'text/css; charset=utf-8','.svg':'image/svg+xml','.png':'image/png','.jpg':'image/jpeg','.jpeg':'image/jpeg','.webp':'image/webp','.ico':'image/x-icon','.xml':'application/xml','.txt':'text/plain'};
-export async function startProductionServer({env=process.env,auth,storage,scanner,learning,exchangeService,handleSignals=true,log=console.log}={}){
+export async function startProductionServer({env=process.env,auth,storage,scanner,learning,exchangeService,handleSignals=true,log=console.log,clock=Date.now}={}){
  const config=productionConfig(env);
  const publicService=env.SUPABASE_URL?new URL(env.SUPABASE_URL).origin:'';
  const policy=(live,hashes=[])=>`default-src 'self'; script-src 'self' ${hashes.join(' ')}; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self' ${publicService} ${live?live+' '+live.replace(/^wss:/,'https:')+' https://*.livekit.cloud wss://*.livekit.cloud':''}; media-src 'self' blob:; worker-src 'self' blob:; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'self' ${publicService}`;
@@ -23,6 +23,7 @@ export async function startProductionServer({env=process.env,auth,storage,scanne
  if(storage.kind!=='spaces'||scanner.mockOnly===true)fail('PRODUCTION_ADAPTER_REQUIRED',503);
  learning??=createProductionLearning({auth,env});
  const supply=supplyRoutes({auth,storage,scanner,env});
+ const resetAttempts=createResetAttemptLimiter({clock});
  const instant=instantRoutes({db:auth.db,storage,scanner,exchangeService,allowMockPayments:false});
  const origins=new Map(config.origins.map(origin=>[new URL(origin).host,origin])),rates=new Map();let concurrent=0,heavyRequests=0,closing;
  const json=(res,status,value)=>{res.writeHead(status,{'Content-Type':'application/json; charset=utf-8'});res.end(JSON.stringify(value));};
@@ -44,25 +45,31 @@ export async function startProductionServer({env=process.env,auth,storage,scanne
    if(url.pathname.startsWith('/api/local')||url.pathname.startsWith('/api/staging'))fail('NOT_FOUND',404);
    const cookie=/(?:^|;\s*)__Host-marocora_session=([A-Za-z0-9_.-]+)(?:;|$)/.exec(req.headers.cookie||'');
    const bearer=req.headers.authorization!==undefined?(/^Bearer ([A-Za-z0-9_.-]+)$/.exec(req.headers.authorization)?.[1]||''):cookie?.[1];
-   if(req.method==='POST'&&['/api/auth/request-reset','/api/auth/complete-reset'].includes(url.pathname)){
+   if(req.method==='POST'&&url.pathname==='/api/auth/complete-reset')fail('RESET_CODE_REQUIRED',410);
+   if(req.method==='POST'&&['/api/auth/request-reset','/api/auth/complete-reset-code'].includes(url.pathname)){
     const ip=config.trustProxy?req.headers['x-real-ip']||req.socket.remoteAddress:req.socket.remoteAddress,now=Date.now();
     for(const [key,value] of rates)if(value.until<=now)rates.delete(key);
     const key=url.pathname+':'+ip,rate=rates.get(key)||{count:0,until:now+60000};
-    if(rate.count>=10||rates.size>=5000)fail('LOGIN_RATE_LIMIT',429);rate.count++;rates.set(key,rate);
+    if(rate.count>=10||rates.size>=5000)fail('RESET_TOO_MANY_ATTEMPTS',429);rate.count++;rates.set(key,rate);
     const fields=await input();
     if(url.pathname==='/api/auth/request-reset'){
      if(Object.keys(fields).length!==1||!Object.hasOwn(fields,'email'))fail('RESET_EMAIL_INVALID');
-     resetEmail(fields.email);
-     // The owner-confirmed recovery redirect is the canonical apex URL.
+     fields.email=resetEmail(fields.email);
+     resetAttempts.consume({email:fields.email,ip,kind:'request'});
+     // Validate the canonical origin; code emails do not depend on a redirect.
      const resetOrigin=origin==='https://www.marocora.com'?'https://marocora.com':origin;
      if(!config.origins.includes(resetOrigin))fail('RESET_ORIGIN_INVALID');
      try{await auth.requestPasswordReset(fields.email,resetOrigin);}catch{}
      return json(res,202,{accepted:true});
     }
-    if(Object.keys(fields).length!==3||Object.keys(fields).some(key=>!['accessToken','refreshToken','password'].includes(key)))fail('RESET_LINK_EXPIRED');
-    resetInput(fields.accessToken,fields.refreshToken,fields.password);
-    try{await auth.completePasswordReset(fields.accessToken,fields.refreshToken,fields.password);}
-    catch{fail('RESET_LINK_EXPIRED');}
+    if(Object.keys(fields).length!==3||Object.keys(fields).some(key=>!['email','code','password'].includes(key)))fail('RESET_CODE_MALFORMED');
+    fields.email=resetCodeInput(fields.email,fields.code,fields.password);
+    resetAttempts.consume({email:fields.email,ip});
+    try{await auth.completePasswordResetCode(fields.email,fields.code,fields.password);}
+    catch(error){
+     const allowed={RESET_CODE_INVALID_OR_EXPIRED:400,RESET_TOO_MANY_ATTEMPTS:429,RESET_PASSWORD_REJECTED:400,RESET_COMPLETION_UNCERTAIN:503,RESET_SERVICE_UNAVAILABLE:503};
+     fail(Object.hasOwn(allowed,error?.message)?error.message:'RESET_SERVICE_UNAVAILABLE',allowed[error?.message]||503);
+    }
     return json(res,200,{reset:true});
    }
    if(url.pathname==='/api/supply/profiles'&&req.method==='GET'){
@@ -128,7 +135,7 @@ export async function startProductionServer({env=process.env,auth,storage,scanne
  });
  server.requestTimeout=60000;server.headersTimeout=15000;server.keepAliveTimeout=5000;
  const stop=()=>void close().catch(()=>{process.exitCode=1;});
- const close=()=>closing??=(async()=>{process.removeListener('SIGINT',stop);process.removeListener('SIGTERM',stop);const done=new Promise(resolve=>server.listening?server.close(resolve):resolve());server.closeAllConnections();try{await learning.close();await done;}finally{storage.close?.();auth.db.stop?.();rates.clear();}})();
+ const close=()=>closing??=(async()=>{process.removeListener('SIGINT',stop);process.removeListener('SIGTERM',stop);const done=new Promise(resolve=>server.listening?server.close(resolve):resolve());server.closeAllConnections();try{await learning.close();await done;}finally{storage.close?.();auth.db.stop?.();rates.clear();resetAttempts.clear();}})();
  try{await new Promise((resolve,reject)=>{server.once('error',reject);server.listen(config.port,config.host,()=>{server.removeListener('error',reject);resolve();});});}catch(error){await close();throw error;}
  if(handleSignals){process.once('SIGINT',stop);process.once('SIGTERM',stop);}
  log('PRODUCTION_LISTEN '+config.host+':'+server.address().port+'; origins='+config.origins.join(','));

@@ -15,7 +15,7 @@ export function createProductionSupabase(env,{fetcher=fetch}={}){
  return {
   db,
   requestPasswordReset:(email,origin)=>passwordReset.requestPasswordReset(email,origin),
-  completePasswordReset:(accessToken,refreshToken,password)=>passwordReset.completePasswordReset(accessToken,refreshToken,password),
+  completePasswordResetCode:(email,code,password)=>passwordReset.completePasswordResetCode(email,code,password),
   async checkReady(){const {data,error}=await client(undefined,config.service).rpc('production_runtime_status',{});if(error||data?.version!==4||data.mockPayments!==false)fail('PRODUCTION_SCHEMA_REQUIRED',503);},
   async register(email,password,origin){
    if(typeof email!=='string'||email.length>320||!/^\S+@\S+\.\S+$/.test(email)||typeof password!=='string'||password.length<12||password.length>128)fail('SUPPLY_INVALID_REGISTRATION',400);

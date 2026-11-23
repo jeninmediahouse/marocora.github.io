@@ -10,10 +10,11 @@ forgot.onclick=async()=>{
  try{
   const response=await fetch('/api/auth/request-reset',{method:'POST',credentials:'omit',cache:'no-store',
    headers:{'Content-Type':'application/json'},body:JSON.stringify({email})});
-  if(!response.ok){show('Please wait before requesting another reset link.');return;}
+  if(!response.ok){show(response.status===429?'Too many attempts. Try again later.':'Service temporarily unavailable. Please try again later.');return;}
   const result=await response.json();if(result?.accepted!==true)throw Error('RESET_REQUEST_FAILED');
-  show('If an account uses this address, a reset link will be sent. Check your inbox and spam folder.');
- }catch{show('Unable to request a reset link. Please try again later.');}
+  show('If an account uses this address, a new code will be sent. Check your inbox and spam folder.');
+  location.assign('/reset-password.html');
+ }catch{show('Service temporarily unavailable. Please try again later.');}
  finally{resetBusy=false;forgot.disabled=false;}
 };
 form.onsubmit=async event=>{
