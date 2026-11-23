@@ -25,6 +25,28 @@ function dom(){
 }
 const response=value=>({ok:true,json:async()=>value});
 
+test('directory still renders successfully when AbortSignal.timeout is absent',async()=>{
+ const descriptor=Object.getOwnPropertyDescriptor(AbortSignal,'timeout');
+ try{
+  delete AbortSignal.timeout;
+  assert.equal(typeof AbortSignal.timeout,'undefined');
+  const d=dom();let options;
+  await mountDirectory({...d,fetcher:async(path,input)=>{options=input;return response([row()]);}});
+  assert.equal(options.signal,undefined);assert.equal(d.root.hidden,false);assert.equal(d.root.children.length,1);
+  assert.equal(d.status.textContent,'Published partner profiles.');
+ }finally{if(descriptor)Object.defineProperty(AbortSignal,'timeout',descriptor);}
+});
+test('directory requests the ten-second timeout signal when supported',async()=>{
+ const descriptor=Object.getOwnPropertyDescriptor(AbortSignal,'timeout'),signal=new AbortController().signal,requested=[];
+ try{
+  Object.defineProperty(AbortSignal,'timeout',{configurable:true,writable:true,value:ms=>{requested.push(ms);return signal;}});
+  const d=dom();let options;
+  await mountDirectory({...d,fetcher:async(path,input)=>{options=input;return response([row()]);}});
+  assert.deepEqual(requested,[10000]);assert.equal(options.signal,signal);assert.equal(d.root.hidden,false);
+  assert.equal(d.status.textContent,'Published partner profiles.');
+ }finally{if(descriptor)Object.defineProperty(AbortSignal,'timeout',descriptor);else delete AbortSignal.timeout;}
+});
+
 test('directory preserves API order and uses only validated public projection with the recorded100 cap',()=>{
  const second=row({id:'20000000-0000-4000-8000-000000000002',type:'translator'});
  assert.deepEqual(directoryRows([second,row()]).map(r=>r.id),[second.id,id]);

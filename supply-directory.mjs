@@ -25,8 +25,10 @@ export async function mountDirectory({root,status,fetcher=fetch}){
  const language=()=>{status.textContent=copy(statusKey);for(const [element,key] of authored)element.textContent=copy(key);};
  doc.addEventListener('marocora:language',language);
  try{
+  const signal=typeof globalThis.AbortSignal?.timeout==='function'
+   ?globalThis.AbortSignal.timeout(10000):undefined;
   const response=await fetcher('/api/supply/profiles',{method:'GET',credentials:'omit',cache:'no-store',
-   headers:{Accept:'application/json'},signal:AbortSignal.timeout(10000)});
+   headers:{Accept:'application/json'},signal});
   if(!response.ok)throw Error('DIRECTORY_UNAVAILABLE');
   const rows=directoryRows(await response.json());
   // Validate the entire batch before creating cards: no partial unsafe listing.
