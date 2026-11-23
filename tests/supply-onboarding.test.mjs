@@ -124,7 +124,7 @@ test('supply migration and review flow on isolated PostgreSQL (no TCP or managed
 });
 
 test('supply HTTP routes enforce signup, admin access, private uploads, encryption and no payment actions',async()=>{
- const ids={owner:randomUUID(),staff:randomUUID(),other:randomUUID()},application=randomUUID(),credential=randomUUID();let uploaded=0,scans=0,serviceCalls=[],registration=0,scannerStatus='clean';
+ const ids={owner:randomUUID(),staff:randomUUID(),other:randomUUID()},application=randomUUID(),credential=randomUUID();let uploaded=0,scans=0,serviceCalls=[],registration=0,scannerStatus='clean',verifications=[];
  const env={NODE_ENV:'production',APP_ORIGINS:'https://app.fixture.invalid',HOST:'127.0.0.1',PORT:'0',LEARNING_VIDEO_MODE:'live',LEARNING_VIDEO_ENABLED:'false',SUPABASE_URL:'https://service.fixture.invalid',SUPPLY_PAYOUT_ENCRYPTION_KEY:syntheticKey};
  const auth={checkReady:async()=>{},db:{stop(){}},authenticate:async token=>{const actor=ids[token?.split('.')[0]];if(!actor)throw Object.assign(Error('AUTH_REQUIRED'),{status:401});return {actor,bearer:token};},register:async()=>{registration++;return {confirmationRequired:true};},supplyPublic:async()=>[],supplyRpc:async(session,name)=>{
   if(name==='supply_admin_access')return session.actor===ids.staff;
@@ -133,7 +133,7 @@ test('supply HTTP routes enforce signup, admin access, private uploads, encrypti
   if(name==='supply_upload_context'){if(session.actor!==ids.owner)throw Object.assign(Error('SUPPLY_APPLICATION_NOT_FOUND'),{status:404});return true;}
   if(name==='supply_credential_file'){if(![ids.owner,ids.staff].includes(session.actor))throw Object.assign(Error('SUPPLY_CREDENTIAL_NOT_FOUND'),{status:404});return {mime:'application/pdf'};}
   throw Error('SYNTHETIC_UNEXPECTED_RPC');},supplyServiceRpc:async(name,p)=>{serviceCalls.push({name,p});return {status:'pending'};}};
- const app=await startProductionServer({env,auth,storage:{kind:'spaces',put:async(bytes,mime)=>{uploaded++;return {mime};},get:async()=>Buffer.from('SYNTHETIC_PRIVATE_FILE')},scanner:{available:true,scanBytes:async()=>{scans++;return {status:scannerStatus};}},learning:{close:async()=>{}},handleSignals:false,log:()=>{}});
+ const app=await startProductionServer({env,auth,storage:{kind:'spaces',put:async(bytes,mime)=>{uploaded++;return {mime};},get:async()=>Buffer.from('SYNTHETIC_PRIVATE_FILE')},scanner:{available:true,scanBytes:async()=>{scans++;return {status:scannerStatus};}},learning:{close:async()=>{}},turnstile:{siteKey:'synthetic-site-key',verify:async(token,ip)=>{verifications.push({token,ip});return token==='synthetic-human-token';}},handleSignals:false,log:()=>{}});
  const url='http://127.0.0.1:'+app.server.address().port;
  // Use the same explicit-Host HTTP transport as production.test.mjs. Fetch
  // implementations can replace Host with the loopback URL's authority, causing
@@ -149,8 +149,11 @@ test('supply HTTP routes enforce signup, admin access, private uploads, encrypti
   assert.equal((await request('/supply-dashboard.html')).status,302);assert.equal((await request('/supply-review.html',{role:'owner'})).status,403);assert.equal((await request('/supply-review.html',{role:'staff'})).status,200);
   assert.equal((await request('/api/supply/applications')).status,401);assert.equal((await request('/api/supply/review',{role:'owner'})).status,403);assert.equal((await request('/api/supply/review',{role:'staff'})).status,200);
   assert.deepEqual(await (await request('/api/supply/profiles')).json(),[]);
-  assert.equal((await request('/api/supply/register',{body:{email:'synthetic@fixture.invalid',password:'SYNTHETIC_PASSWORD_12345'}})).status,202);assert.equal(registration,1);
-  assert.equal((await request('/api/supply/register',{body:{email:'synthetic@fixture.invalid',password:'SYNTHETIC_PASSWORD_12345'},origin:'https://foreign.fixture.invalid'})).status,403);
+  assert.equal((await request('/api/supply/register',{body:{email:'synthetic@fixture.invalid',password:'SYNTHETIC_PASSWORD_12345',token:'synthetic-human-token'}})).status,202);assert.equal(registration,1);assert.equal(verifications.length,1);
+  const missingToken=await request('/api/supply/register',{body:{email:'synthetic@fixture.invalid',password:'SYNTHETIC_PASSWORD_12345'}});assert.equal(missingToken.status,400);assert.equal(missingToken.json().error,'SUPPLY_HUMAN_CHECK_REQUIRED');assert.equal(registration,1);
+  const wrongToken=await request('/api/supply/register',{body:{email:'synthetic@fixture.invalid',password:'SYNTHETIC_PASSWORD_12345',token:'synthetic-wrong-token'}});assert.equal(wrongToken.status,400);assert.equal(wrongToken.json().error,'SUPPLY_HUMAN_CHECK_REQUIRED');assert.equal(registration,1);
+  const config=await (await request('/api/supply/register-config')).json();assert.deepEqual(config,{humanCheck:'turnstile',siteKey:'synthetic-site-key',action:'supply-register'});
+  assert.equal((await request('/api/supply/register',{body:{email:'synthetic@fixture.invalid',password:'SYNTHETIC_PASSWORD_12345',token:'synthetic-human-token'},origin:'https://foreign.fixture.invalid'})).status,403);
   assert.equal((await request('/api/supply/applications/'+application+'/payout',{role:'owner',body:syntheticPayout})).status,200);const payout=serviceCalls.at(-1);assert.equal(payout.name,'supply_save_payout');assert.equal(payout.p.p_actor,ids.owner);assert.equal(JSON.stringify(payout).includes('WEST'),false);
   const before=serviceCalls.length;assert.equal((await request('/api/supply/applications/'+application+'/payout',{role:'other',body:syntheticPayout})).status,404);assert.equal(serviceCalls.length,before);
   const pdf=Buffer.from('%PDF-1.7\nSYNTHETIC_CREDENTIAL\n%%EOF');

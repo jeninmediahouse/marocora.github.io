@@ -8,6 +8,7 @@ import {createHash} from 'node:crypto';
 import {productionConfig} from './config.mjs';
 import {createProductionSupabase} from './supabase.mjs';
 import {createProductionLearning} from './learning.mjs';
+import {createTurnstileVerifier} from './turnstile.mjs';
 import {createSpacesStore} from '../storage/spaces.mjs';
 import {cloudmersiveScanner} from '../block1/uploads.mjs';
 import {instantRoutes} from '../block1/instant-http.mjs';
@@ -15,13 +16,14 @@ import {publicPages,privatePages,adminPages,browserAssets,productionAliases,webs
 const root=fileURLToPath(new URL('../../',import.meta.url)),cookieName='__Host-marocora_session';
 const fail=(code,status=400)=>{throw Object.assign(Error(code),{status});};
 const mime={'.html':'text/html; charset=utf-8','.mjs':'text/javascript; charset=utf-8','.js':'text/javascript; charset=utf-8','.css':'text/css; charset=utf-8','.svg':'image/svg+xml','.png':'image/png','.jpg':'image/jpeg','.jpeg':'image/jpeg','.webp':'image/webp','.ico':'image/x-icon','.xml':'application/xml','.txt':'text/plain'};
-export async function startProductionServer({env=process.env,auth,storage,scanner,learning,exchangeService,handleSignals=true,log=console.log,clock=Date.now}={}){
+export async function startProductionServer({env=process.env,auth,storage,scanner,learning,exchangeService,turnstile,handleSignals=true,log=console.log,clock=Date.now}={}){
  const config=productionConfig(env);
  const publicService=env.SUPABASE_URL?new URL(env.SUPABASE_URL).origin:'';
- const policy=(live,hashes=[])=>`default-src 'self'; script-src 'self' ${hashes.join(' ')}; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self' ${publicService} ${live?live+' '+live.replace(/^wss:/,'https:')+' https://*.livekit.cloud wss://*.livekit.cloud':''}; media-src 'self' blob:; worker-src 'self' blob:; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'self' ${publicService}`;
+ const policy=(live,hashes=[])=>`default-src 'self'; script-src 'self' https://challenges.cloudflare.com ${hashes.join(' ')}; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self' ${publicService} https://challenges.cloudflare.com ${live?live+' '+live.replace(/^wss:/,'https:')+' https://*.livekit.cloud wss://*.livekit.cloud':''}; media-src 'self' blob:; worker-src 'self' blob:; frame-src https://challenges.cloudflare.com; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'self' ${publicService}`;
  auth??=createProductionSupabase(env);await auth.checkReady();storage??=createSpacesStore(env);scanner??=cloudmersiveScanner({env});
  if(storage.kind!=='spaces'||scanner.mockOnly===true)fail('PRODUCTION_ADAPTER_REQUIRED',503);
  learning??=createProductionLearning({auth,env});
+ const humanCheck=turnstile===undefined?createTurnstileVerifier(env):turnstile;
  const supply=supplyRoutes({auth,storage,scanner,env});
  const resetAttempts=createResetAttemptLimiter({clock});
  const instant=instantRoutes({db:auth.db,storage,scanner,exchangeService,allowMockPayments:false});
@@ -76,11 +78,16 @@ export async function startProductionServer({env=process.env,auth,storage,scanne
     const id=url.searchParams.get('id');if(id&&!/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(id))fail('SUPPLY_INVALID_PROFILE',400);
     return json(res,200,await auth.supplyPublic(id));
    }
+   if(url.pathname==='/api/supply/register-config'&&req.method==='GET'){
+    return json(res,200,humanCheck?{humanCheck:'turnstile',siteKey:humanCheck.siteKey,action:'supply-register'}:{humanCheck:'unavailable'});
+   }
    if(url.pathname==='/api/supply/register'&&req.method==='POST'){
     const ip=config.trustProxy?req.headers['x-real-ip']||req.socket.remoteAddress:req.socket.remoteAddress,now=Date.now();
     for(const [key,value] of rates)if(value.until<=now)rates.delete(key);
     const key='supply-register:'+ip,rate=rates.get(key)||{count:0,until:now+60000};if(rate.count>=3||rates.size>=5000)fail('LOGIN_RATE_LIMIT',429);rate.count++;rates.set(key,rate);
-    const fields=await input();if(Object.keys(fields).some(key=>!['email','password'].includes(key)))fail('SUPPLY_INVALID_REGISTRATION');
+    const fields=await input();if(Object.keys(fields).some(key=>!['email','password','token'].includes(key)))fail('SUPPLY_INVALID_REGISTRATION');
+    if(!humanCheck)fail('SUPPLY_REGISTRATION_UNAVAILABLE',503);
+    if(!await humanCheck.verify(fields.token,ip))fail('SUPPLY_HUMAN_CHECK_REQUIRED',400);
     return json(res,202,await auth.register(fields.email,fields.password,origin));
    }
    if(url.pathname==='/api/auth/login'&&req.method==='POST'){
