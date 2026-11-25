@@ -2,14 +2,26 @@ import {api,node,dataNode,message,typeNames,statusNames,profileDetails,optionalI
 const form=document.querySelector('#profile-form'),notice=document.querySelector('#message'),type=document.querySelector('#vendor-type');let rows=[];
 const split=value=>value.split(/[,\n]/).map(s=>s.trim()).filter(Boolean);
 const field=name=>form.elements.namedItem(name);
+const pairBox=document.querySelector('#language-pairs'),addPair=document.querySelector('#add-pair');
+function pairRow(source='',target=''){
+ const row=document.createElement('div');row.className='pair';
+ const from=document.createElement('input');from.placeholder='From language';from.maxLength=80;from.dataset.pair='from';from.value=source;
+ const to=document.createElement('input');to.placeholder='To language';to.maxLength=80;to.dataset.pair='to';to.value=target;
+ const remove=document.createElement('button');remove.type='button';remove.textContent='×';remove.setAttribute('aria-label','Remove language pair');
+ remove.onclick=()=>{row.remove();if(!pairBox.querySelector('.pair'))pairRow();};
+ row.append(from,to,remove);pairBox.append(row);return row;
+}
+function renderPairs(pairs){pairBox.replaceChildren();for(const pair of pairs)pairRow(pair.source,pair.target);if(!pairBox.querySelector('.pair'))pairRow();}
+addPair.textContent='+ Add language pair';
+addPair.onclick=()=>pairRow();
 function editor(t){
  const row=rows.find(r=>r.type===t),p=row?.profile;form.reset();type.value=t;
  for(const fs of form.querySelectorAll('[data-type]')){fs.hidden=fs.dataset.type!==t;fs.disabled=fs.hidden;}
- if(!p)return;
- for(const key of ['displayName','bio','timezone','introVideo','organizationKind','capacity'])if(p[key]!==undefined)field(key).value=p[key];
+ if(t==='translator')renderPairs(p?.languagePairs||[]);
+ if(!p)return; for(const key of ['displayName','bio','timezone','introVideo','organizationKind','capacity'])if(p[key]!==undefined)field(key).value=p[key];
  field('publicationConsent').checked=p.publicationConsent;
  if(t==='teacher'){field('languages').value=p.languages.join(', ');field('hourlyRate').value=(p.hourlyRateMinor/100).toFixed(2);field('teacherCurrency').value=p.currency;for(const slot of p.availability){form.querySelector(`[name="day"][value="${slot.day}"]`).checked=true;field('start'+slot.day).value=slot.start;field('end'+slot.day).value=slot.end;}}
- if(t==='translator'){field('languagePairs').value=p.languagePairs.map(pair=>pair.source+' | '+pair.target).join('\n');for(const box of form.querySelectorAll('[name="specialties"]'))box.checked=p.specialties.includes(box.value);}
+ if(t==='translator'){for(const box of form.querySelectorAll('[name="specialties"]'))box.checked=p.specialties.includes(box.value);}
  if(t==='transport'){field('serviceRegions').value=p.serviceRegions.join(', ');field('baseRate').value=(p.baseRateMinor/100).toFixed(2);field('transportCurrency').value=p.currency;for(const box of form.querySelectorAll('[name="vehicleTypes"]'))box.checked=p.vehicleTypes.includes(box.value);}
 }
 async function load(){
@@ -24,13 +36,13 @@ async function load(){
  for(const [id,selected] of [['payout-application',rows],['credential-application',rows.filter(r=>r.type==='translator')]]){const select=document.getElementById(id);select.replaceChildren();if(!selected.length){const option=node('option','Save an application first');option.value='';select.append(option);}for(const row of selected){const option=dataNode('option',row.profile.displayName+' · '+(window.MarocoraSite?.t(typeNames[row.type])||typeNames[row.type]));option.value=row.id;select.append(option);}}
  editor(type.value);
 }
-async function submit(form,work){const buttons=[...form.querySelectorAll('button')];buttons.forEach(b=>b.disabled=true);message(notice,'Saving…');try{await work();await load();message(notice,'Saved. Profile changes and new credentials are pending review. Payout connections remain pending.');}catch(error){message(notice,error.message,true);}finally{buttons.forEach(b=>b.disabled=false);}}
+async function submit(form,work){const buttons=[...form.querySelectorAll('button')];buttons.forEach(b=>b.disabled=true);message(notice,'Saving…');notice.scrollIntoView({behavior:'smooth',block:'center'});try{await work();await load();message(notice,'Saved. Profile changes and new credentials are pending review. Payout connections remain pending.');notice.scrollIntoView({behavior:'smooth',block:'center'});}catch(error){message(notice,error.message,true);notice.scrollIntoView({behavior:'smooth',block:'center'});}finally{buttons.forEach(b=>b.disabled=false);}}
 type.onchange=()=>editor(type.value);
 form.onsubmit=event=>{event.preventDefault();void submit(form,async()=>{
  const data=new FormData(form),t=type.value,p={displayName:data.get('displayName').trim(),bio:data.get('bio').trim(),publicationConsent:data.has('publicationConsent')};
  const rate=value=>{if(!/^\d+(\.\d{1,2})?$/.test(value))throw Error('Use a positive rate with at most two decimal places.');return Math.round(Number(value)*100);};
  if(t==='teacher'){Object.assign(p,{languages:split(data.get('languages')),hourlyRateMinor:rate(data.get('hourlyRate')),currency:data.get('teacherCurrency'),timezone:data.get('timezone').trim(),introVideo:optionalIntroVideo(data.get('introVideo')),availability:data.getAll('day').map(day=>({day:Number(day),start:data.get('start'+day),end:data.get('end'+day)}))});}
- if(t==='translator'){const pairs=data.get('languagePairs').split('\n').filter(s=>s.trim()).map(line=>{const parts=line.split('|');if(parts.length!==2)throw Error('Use one language pair per line, separated by a vertical bar.');return {source:parts[0].trim(),target:parts[1].trim()};});Object.assign(p,{organizationKind:data.get('organizationKind'),languagePairs:pairs,specialties:data.getAll('specialties')});}
+ if(t==='translator'){const pairs=[...pairBox.querySelectorAll('.pair')].map(row=>({source:row.querySelector('[data-pair="from"]').value.trim(),target:row.querySelector('[data-pair="to"]').value.trim()})).filter(pair=>pair.source||pair.target);if(!pairs.length)throw Error('Add at least one language pair.');for(const pair of pairs)if(!pair.source||!pair.target)throw Error('Each language pair needs both a from and a to language.');Object.assign(p,{organizationKind:data.get('organizationKind'),languagePairs:pairs,specialties:data.getAll('specialties')});}
  if(t==='transport')Object.assign(p,{vehicleTypes:data.getAll('vehicleTypes'),capacity:Number(data.get('capacity')),serviceRegions:split(data.get('serviceRegions')),baseRateMinor:rate(data.get('baseRate')),currency:data.get('transportCurrency')});
  const current=rows.find(r=>r.type===t);await api('/api/supply/applications',{method:'POST',body:{type:t,profile:p,...(current?{id:current.id,revision:current.revision}:{})}});
  });};

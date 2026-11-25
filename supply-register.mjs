@@ -1,6 +1,6 @@
 import {api,message} from './supply-client.mjs';
 const form=document.querySelector('#register-form'),notice=document.querySelector('#message'),slot=document.querySelector('#turnstile'),button=form.querySelector('button');
-let widget=null;
+let widget=null,tokenAt=0;
 const human=humanCheck();
 async function humanCheck(){
  if(typeof fetch!=='function')return 'off';
@@ -20,7 +20,7 @@ async function humanCheck(){
    script.async=true;script.onload=resolve;script.onerror=reject;
    (document.head||document.body).append(script);
   });
-  widget=window.turnstile.render(slot,{sitekey:config.siteKey,action:'supply-register'});
+  widget=window.turnstile.render(slot,{sitekey:config.siteKey,action:'supply-register',callback:()=>{tokenAt=Date.now();},'expired-callback':()=>{tokenAt=0;}});
   return 'ready';
  }catch{return 'unavailable';}
 }
@@ -30,7 +30,7 @@ form.onsubmit=async event=>{
  const state=await human;
  if(state==='unavailable'){message(notice,'The human check could not load. Please refresh and try again.',true);button.disabled=false;return;}
  const token=state==='ready'?window.turnstile.getResponse(widget):'';
- if(state==='ready'&&!token){message(notice,'Complete the human check, then create your account.',true);button.disabled=false;return;}
+ if(state==='ready'&&(!token||(tokenAt&&Date.now()-tokenAt>240000))){message(notice,'The human check expired or is not finished. Please complete it again, then submit.',true);if(token)window.turnstile.reset(widget);tokenAt=0;button.disabled=false;return;}
  const data=new FormData(form);
  try{
   await api('/api/supply/register',{method:'POST',body:{email:data.get('email').trim(),password:data.get('password'),...(token?{token}:{})}});

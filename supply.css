@@ -4,3 +4,6 @@
 
 /* Supply keeps its authored wordmark/navigation and hosts one shared locale control. */
 body[data-supply-page]>header .site-language-bar{background:transparent;padding:0;color:inherit;gap:.6rem}body[data-supply-page]>header .site-language-bar label{margin:0}body[data-supply-page]>header nav{flex:1}@media(max-width:600px){body[data-supply-page]>header{gap:1rem}body[data-supply-page]>header .site-language-bar{width:100%;justify-content:flex-end}}
+.pair{display:grid;grid-template-columns:1fr 1fr auto;gap:.5rem;align-items:center;margin:.5rem 0}
+.pair button{padding:.45rem .7rem}
+@media(max-width:600px){.pair{grid-template-columns:1fr 1fr}.pair button{grid-column:2;justify-self:end}}
