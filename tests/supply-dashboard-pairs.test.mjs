@@ -22,6 +22,8 @@ test('translator profiles use structured from/to rows instead of a vertical-bar 
   assert.match(reviewHtml, /id="all-applications-section"/);
   assert.match(reviewJs, /\/api\/supply\/applications\/all/);
   assert.match(reviewJs, /\/api\/auth\/me/);
+  assert.match(reviewJs, /allStatus\.value=''/);
+  assert.match(reviewJs, /allType\.value=''/);
   assert.match(dashboardHtml, /id="signed-in"/);
   assert.match(dashboardHtml, /id="credential-panel"/);
   assert.doesNotMatch(dashboardHtml, /id="payout-form"/);

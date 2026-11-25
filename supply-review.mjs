@@ -3,8 +3,8 @@ const queue=document.querySelector('#queue'),notice=document.querySelector('#mes
 let allRows=[],currentEmail='';
 const wrap=(label,control)=>{const el=node('label');el.append(document.createTextNode(label+' '),control);return el;};
 const status=document.createElement('select'),type=document.createElement('select'),search=document.createElement('input'),refreshAll=node('button','Refresh all','secondary');
-status.append(node('option','All statuses'));for(const [value,text] of Object.entries(statusNames)){const option=node('option',text);option.value=value;status.append(option);}
-type.append(node('option','All types'));for(const [value,text] of Object.entries(typeNames)){const option=node('option',text);option.value=value;type.append(option);}
+const allStatus=node('option','All statuses');allStatus.value='';status.append(allStatus);for(const [value,text] of Object.entries(statusNames)){const option=node('option',text);option.value=value;status.append(option);}
+const allType=node('option','All types');allType.value='';type.append(allType);for(const [value,text] of Object.entries(typeNames)){const option=node('option',text);option.value=value;type.append(option);}
 search.type='search';search.placeholder='Search name or email';refreshAll.type='button';
 const panel=node('section',undefined,'panel'),heading=node('h2','All applications'),signedIn=node('p',undefined,'muted'),controls=node('div',undefined,'actions'),allList=node('div');
 controls.append(wrap('Status',status),wrap('Type',type),wrap('Search',search),refreshAll);
