@@ -15,6 +15,9 @@ export function supplyRoutes({auth,storage,scanner,env}){
   }
   if(path==='/api/supply/admin'&&req.method==='GET'){json(res,200,{admin:await rpc(session,'supply_admin_access')});return true;}
   if(path==='/api/supply/review'&&req.method==='GET'){json(res,200,await rpc(session,'supply_review_queue'));return true;}
+  if(path==='/api/supply/applications/all'&&req.method==='GET'){
+   const rows=await rpc(session,'supply_all_applications');if(rows===null)fail('SUPPLY_ADMIN_REQUIRED',403);json(res,200,rows);return true;
+  }
   const review=/^\/api\/supply\/applications\/([^/]+)\/review$/.exec(path);
   if(review&&req.method==='POST'){
    const p=record(await input(),['revision','decision','reason','credentialsReviewed']);

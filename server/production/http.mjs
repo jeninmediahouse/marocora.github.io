@@ -104,7 +104,7 @@ export async function startProductionServer({env=process.env,auth,storage,scanne
     const session=await auth.authenticate(bearer);
     if(req.method==='POST'&&/^\/api\/supply\/applications\/[^/]+\/credentials$/.test(url.pathname)){if(heavyRequests>=2)fail('UPLOAD_BUSY',429);heavyRequests++;heavy=true;}
     if(await supply({req,url,session,input,body,json,res}))return;
-    if(url.pathname==='/api/auth/me'&&req.method==='GET')return json(res,200,{authenticated:true});
+    if(url.pathname==='/api/auth/me'&&req.method==='GET')return json(res,200,{authenticated:true,email:session.email});
     if(url.pathname==='/api/learning/room-config'&&req.method==='GET')return json(res,200,learning.getConfig(session));
     const methods={'/api/learning/room-token':'issue','/api/learning/room-connect':'connect','/api/learning/room-heartbeat':'heartbeat','/api/learning/room-leave':'leave'};
     if(req.method==='POST'&&methods[url.pathname])return json(res,200,await learning[methods[url.pathname]](session,await input()));

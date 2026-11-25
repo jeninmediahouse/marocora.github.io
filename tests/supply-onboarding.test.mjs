@@ -39,7 +39,9 @@ test('supply migration and review flow on isolated PostgreSQL (no TCP or managed
   sql(readFileSync(new URL('tests/quote-sql/bootstrap.sql',root),'utf8'));
   sql('CREATE TABLE public.learning_review_staff(user_id uuid PRIMARY KEY REFERENCES auth.users(id));CREATE TABLE public.learning_review_exclusions(user_id uuid PRIMARY KEY REFERENCES auth.users(id),reason text NOT NULL);');
   const migration=readFileSync(new URL('supabase/migrations/202611200001_supply_onboarding.sql',root),'utf8');
+  const allMigration=readFileSync(new URL('supabase/migrations/202611250001_supply_all_applications.sql',root),'utf8');
   await t.test('new migration applies once, enables RLS, and refuses repeat application',()=>{sql(migration);assert.equal(sql("SELECT count(*) FROM pg_class WHERE relnamespace='public'::regnamespace AND relname LIKE 'supply_%' AND relkind='r' AND relrowsecurity"),'7');denied(()=>sql(migration),'SUPPLY_OBJECTS_ALREADY_EXIST');});
+  sql(allMigration);
   sql(`INSERT INTO auth.users(id,email,email_confirmed_at) VALUES ${Object.entries(ids).map(([k,id])=>`(${L(id)},${L(k+'@fixture.invalid')},${k==='unverified'?'NULL':'now()'})`).join(',')}; INSERT INTO public.learning_review_staff VALUES(${L(ids.staff)});INSERT INTO public.learning_review_exclusions VALUES(${L(ids.excluded)},'Synthetic exclusion');`);
   await t.test('scalar RPC results serialize PostgreSQL booleans as JSON without changing values',()=>{
    assert.equal(rpc(ids.staff,'supply_admin_access'),true);
@@ -59,6 +61,12 @@ test('supply migration and review flow on isolated PostgreSQL (no TCP or managed
    for(const [type,profile] of Object.entries({teacher,translator,transport})){const app=rpc(ids.owner,'supply_save_application',{p_type:type,p_profile:profile});applications[type]=app;assert.equal(app.status,'pending_review');assert.equal(app.revision,1);assert.deepEqual(app.profile,profile);assert.deepEqual(app.earnings,{minor:0,currency:'USD'});assert.equal(app.payout.status,'pending');}
    assert.equal(rpc(ids.owner,'supply_my_applications').length,3);assert.deepEqual(rpc('', 'supply_public_profiles',{},'anon'),[]);
    denied(()=>rpc(ids.unverified,'supply_save_application',{p_type:'teacher',p_profile:teacher}),'SUPPLY_VERIFIED_ACCOUNT_REQUIRED');
+  });
+  await t.test('admin inventory lists every application with safe fields only',()=>{
+   assert.equal(sql(as(ids.other,"SELECT coalesce(to_jsonb(public.supply_all_applications()),'null')")),"null");
+   const rows=rpc(ids.staff,'supply_all_applications');assert.equal(rows.length,3);
+   for(const row of rows){assert.equal(row.ownerEmail,'owner@fixture.invalid');assert.ok(row.displayName);assert.equal(row.status,'pending_review');assert.equal(row.public,false);for(const key of ['credentials','payout','earnings','profile','iban','dateOfBirth'])assert.equal(Object.hasOwn(row,key),false);}
+   denied(()=>rpc('','supply_all_applications',{},'anon'),'permission denied');
   });
   await t.test('only current administrators access review queue and decisions; profile owners cannot approve',()=>{
    assert.equal(rpc(ids.staff,'supply_review_queue').length,3);denied(()=>rpc(ids.other,'supply_review_queue'),'SUPPLY_ADMIN_REQUIRED');
@@ -130,6 +138,7 @@ test('supply HTTP routes enforce signup, admin access, private uploads, encrypti
   if(name==='supply_admin_access')return session.actor===ids.staff;
   if(name==='supply_my_applications')return session.actor===ids.owner?[{id:application}]:[];
   if(name==='supply_review_queue'){if(session.actor!==ids.staff)throw Object.assign(Error('SUPPLY_ADMIN_REQUIRED'),{status:403});return [];}
+   if(name==='supply_all_applications'){if(session.actor!==ids.staff)return null;return [{id:application,type:'translator',status:'approved',displayName:'Synthetic Translator',ownerEmail:'owner@fixture.invalid',revision:1,createdAt:'2026-01-01T00:00:00.000Z',updatedAt:'2026-01-01T00:00:00.000Z',public:true}];}
   if(name==='supply_upload_context'){if(session.actor!==ids.owner)throw Object.assign(Error('SUPPLY_APPLICATION_NOT_FOUND'),{status:404});return true;}
   if(name==='supply_credential_file'){if(![ids.owner,ids.staff].includes(session.actor))throw Object.assign(Error('SUPPLY_CREDENTIAL_NOT_FOUND'),{status:404});return {mime:'application/pdf'};}
   throw Error('SYNTHETIC_UNEXPECTED_RPC');},supplyServiceRpc:async(name,p)=>{serviceCalls.push({name,p});return {status:'pending'};}};
@@ -148,6 +157,8 @@ test('supply HTTP routes enforce signup, admin access, private uploads, encrypti
   const foreignHost=await request('/supply-dashboard.html',{headers:{Host:'foreign.fixture.invalid'}});assert.equal(foreignHost.status,403);assert.equal(foreignHost.json().error,'HOST_DENIED');
   assert.equal((await request('/supply-dashboard.html')).status,302);assert.equal((await request('/supply-review.html',{role:'owner'})).status,403);assert.equal((await request('/supply-review.html',{role:'staff'})).status,200);
   assert.equal((await request('/api/supply/applications')).status,401);assert.equal((await request('/api/supply/review',{role:'owner'})).status,403);assert.equal((await request('/api/supply/review',{role:'staff'})).status,200);
+  const all=await request('/api/supply/applications/all',{role:'staff'});assert.equal(all.status,200);const allRows=all.json();assert.equal(allRows.length,1);assert.equal(allRows[0].ownerEmail,'owner@fixture.invalid');for(const key of ['credentials','payout','earnings','dateOfBirth','iban'])assert.equal(Object.hasOwn(allRows[0],key),false);
+  const allDenied=await request('/api/supply/applications/all',{role:'owner'});assert.equal(allDenied.status,403);assert.equal(allDenied.json().error,'SUPPLY_ADMIN_REQUIRED');
   assert.deepEqual(await (await request('/api/supply/profiles')).json(),[]);
   assert.equal((await request('/api/supply/register',{body:{email:'synthetic@fixture.invalid',password:'SYNTHETIC_PASSWORD_12345',token:'synthetic-human-token'}})).status,202);assert.equal(registration,1);assert.equal(verifications.length,1);
   const missingToken=await request('/api/supply/register',{body:{email:'synthetic@fixture.invalid',password:'SYNTHETIC_PASSWORD_12345'}});assert.equal(missingToken.status,400);assert.equal(missingToken.json().error,'SUPPLY_HUMAN_CHECK_REQUIRED');assert.equal(registration,1);

@@ -516,6 +516,12 @@ export const supplyCopy = {
     "ar": "ستبقى الأرباح صفرًا حتى تفعيل المدفوعات.",
     "es": "Los ingresos seguirán en cero hasta que se activen los pagos."
   },
+  "Payments are paused. Payout setup will open when payments launch. You will be invited to connect a payout account.": {
+    "en": "Payments are paused. Payout setup will open when payments launch. You will be invited to connect a payout account.",
+    "fr": "Les paiements sont en pause. La configuration des versements ouvrira au lancement des paiements. Vous serez invité à connecter un compte de versement.",
+    "ar": "المدفوعات متوقفة. سيُفتح إعداد التحويلات عند إطلاق المدفوعات. ستُدعى إلى ربط حساب للتحويل.",
+    "es": "Los pagos están en pausa. La configuración de los cobros se abrirá cuando se activen los pagos. Se le invitará a conectar una cuenta de cobro."
+  },
   "Credential documents": {
     "en": "Credential documents",
     "fr": "Justificatifs professionnels",

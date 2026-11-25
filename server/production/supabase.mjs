@@ -24,7 +24,7 @@ export function createProductionSupabase(env,{fetcher=fetch}={}){
    return {confirmationRequired:true};
   },
   async supplyRpc(session,name,args={}){
-   if(!['supply_admin_access','supply_my_applications','supply_save_application','supply_review_queue','supply_review_application','supply_upload_context','supply_credential_file'].includes(name))fail('SUPPLY_RPC_DENIED',403);
+   if(!['supply_admin_access','supply_my_applications','supply_save_application','supply_review_queue','supply_review_application','supply_all_applications','supply_upload_context','supply_credential_file'].includes(name))fail('SUPPLY_RPC_DENIED',403);
    const {data,error}=await client(session.bearer).rpc(name,args);if(error)supplyError(error);return data;
   },
   async supplyPublic(id=null){const {data,error}=await auth.rpc('supply_public_profiles',{p_id:id});if(error)supplyError(error);return data;},
