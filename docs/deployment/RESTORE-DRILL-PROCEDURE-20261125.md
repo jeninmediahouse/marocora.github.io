@@ -1,7 +1,7 @@
 # Restore drill procedure — database snapshots (prepared 25 November 2026)
 
-Status: **prepared, not performed.** Nothing in this document has been run
-against production, and no snapshot has been decrypted or restored yet.
+Status: **performed 25 November 2026 — PASS.** See `RESTORE-DRILL-RESULT-20261125.md`.
+Nothing in this document is ever run against production.
 
 Purpose: prove that an encrypted snapshot in `marocora-translation-backups-ams3`
 can actually be restored. Until this is done, "we have backups" is an assumption.

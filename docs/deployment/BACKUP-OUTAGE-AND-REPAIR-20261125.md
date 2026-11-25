@@ -107,13 +107,16 @@ failure produced no notification of any kind.
 
 ## Open items
 
-- **Restore drill:** never performed. An encrypted snapshot that has never been
-  restored is an untested assumption, not a proven backup. Requires an isolated
-  target and explicit owner approval; must never be run over production.
-- **Backup alerting:** needs a decision. The cheapest options are an external
-  ping (Healthchecks-style) emitted by the backup on success, or a small
-  systemd timer that checks the newest manifest age and fails loudly. Either is
-  a reviewed change, not an ad-hoc edit.
+- **Restore drill:** performed on 25 November 2026 against snapshot
+  `db/2026-11-25T200512Z` in an isolated local PostgreSQL 17 cluster: PASS.
+  Every recorded object came back (0 missing across tables, functions,
+  constraints, triggers, policies), with `auth.users` 591 and the approved
+  supply application present. Only `supabase_vault` was unavailable. See
+  `RESTORE-DRILL-RESULT-20261125.md`.
+- **Backup alerting:** installed 25 November 2026. `marocora-db-freshness.timer`
+  runs daily at 05:15 UTC (+10 min jitter), pings the external check on success
+  and its `/fail` endpoint when the newest snapshot is older than 30 hours. The
+  down→up path was verified by email.
 - **Worker-dependent jobs:** `translation-health` and
   `translation-document-backup` remain disabled and should stay disabled until
   the translation worker is rebuilt against the RPC-only grants of
