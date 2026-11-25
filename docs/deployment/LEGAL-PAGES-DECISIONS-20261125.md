@@ -1,7 +1,12 @@
 # Legal pages — decisions and facts (25 November 2026)
 
-Status: **built and tested, not yet published.** Pages are committed in
-`67e4f38` and reachable only from a local preview.
+Status: **published 25 November 2026** in release
+`supabase-5628ab3.legal-20261125-r1`, source `5628ab3`, PM2
+`marocora-supply-5628ab3`. All four pages verified byte-identical to the frozen
+build after the switch; `22da9ff` stopped and retained for rollback.
+
+Published file count 121 (116 + `legal.html`, `privacy.html`, `terms.html`,
+`imprint.html`, `legal.css`); guarded suite 431/431.
 
 ## Entity facts used in the documents
 

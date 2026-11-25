@@ -1,6 +1,18 @@
 # Marocora — Supply Onboarding Launch Record
 
-## Live state, 25 November 2026 (current)
+## Live state, 25 November 2026, 23:40 UTC (current)
+
+Production is `/srv/marocora/releases/supabase-5628ab3.legal-20261125-r1`,
+source `5628ab31d48807dea9ec0b34669e65856911a064`, PM2 registration
+`marocora-supply-5628ab3` online on 4195; `pm2 save` performed. Published files
+121; guarded suite 431/431. This release adds `legal.html`, `privacy.html`,
+`terms.html`, `imprint.html` and `legal.css`, with footer links from the
+homepage, contact and learning pages. Verified after switch: all four pages and
+their stylesheet are byte-identical to the frozen build, private pages still
+redirect 302, `/api/auth/me` still 401, and the public profiles API is intact.
+`marocora-supply-22da9ff` is stopped and retained for rollback.
+
+## Previous live state, 25 November 2026 (superseded)
 
 Production is `/srv/marocora/releases/supabase-22da9ff.site-polish-20261125-r1`,
 source `22da9ff3f74b21263daa3a69709ef2c8ac71587f`, served by PM2 registration
