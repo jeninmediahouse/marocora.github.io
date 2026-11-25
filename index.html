@@ -76,7 +76,8 @@ nav a {
 
 .hero-accent {
     display: block;
-    color: #d62828;
+    color: #fff;
+    text-shadow: 0 2px 10px #0008;
 }
 
 .hero-content p {
@@ -240,7 +241,7 @@ nav a {
 }
 
 .teaching-pathways .network-category:nth-child(2) {
-    border-top-color: #c1272d;
+    border-top-color: #fff;
 }
 
 .teaching-pathways .network-category h3 {
@@ -524,7 +525,7 @@ nav a {
 
         
       .hero-accent {
-    color: #c1272d;
+    color: #fff;
     white-space: nowrap;
 }
 @media (max-width: 800px) {
@@ -544,7 +545,7 @@ nav a {
                 font-size: 38px;
             }
 .hero-accent {
-    color: #c1272d;
+    color: #fff;
 }
             
 
@@ -569,7 +570,8 @@ nav a {
     </style>
 <style>header nav{display:flex;align-items:center;gap:22px;flex-wrap:wrap}header nav a{margin:0}.hero-accent{white-space:normal}.hero-content{min-width:0}.network-category{min-width:0;overflow-wrap:anywhere}.site-language{display:flex;align-items:center;gap:8px;font-size:14px}.site-language select{font:inherit;padding:8px;border-radius:6px;min-height:40px;background:white;color:#17352a}html[dir=rtl] .hero-content{direction:rtl}html[dir=rtl] .hero h1{letter-spacing:normal}html[dir=rtl] .contact-info a{direction:ltr;unicode-bidi:isolate}@media(max-width:800px){.hero-content{width:100%;max-width:650px}.hero{min-height:0;padding:56px 8%}.hero h1{font-size:clamp(30px,7vw,44px)}.hero p{font-size:18px}.hero-buttons{flex-wrap:wrap}.network-categories,.service-grid{grid-template-columns:minmax(0,1fr)}.contact-layout,.about-layout{flex-direction:column;gap:28px}.network-join{padding:28px 20px}.language-list{flex-wrap:wrap}}@media(max-width:600px){header{flex-wrap:wrap;gap:14px}header nav{justify-content:center;gap:12px}.site-language{width:100%;justify-content:center}}</style><script type="module" src="home-language.mjs?v=20260929-home4"></script><style>
 a.brand{color:#fff;text-decoration:none;display:inline-block}a.brand:focus-visible{outline:3px solid #f1c453;outline-offset:5px}.language-shortcuts{display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:10px;padding:12px 16px;background:#eff5f1;border-bottom:1px solid #d7e3db}.language-shortcuts a{margin:0;padding:8px 17px;border:1px solid #9cb8a7;border-radius:7px;color:#173b2e;background:#fff;text-decoration:none;font-size:16px;font-weight:700;min-height:44px;box-sizing:border-box}.language-shortcuts a:hover,.language-shortcuts a[aria-current]{background:#173b2e;color:#fff}.language-shortcuts a:focus-visible,.language-item:focus-visible{outline:3px solid #c91f25;outline-offset:3px}a.language-item{color:inherit;text-decoration:none;border:1px solid #bbcbbf}a.language-item:hover,a.language-item[aria-current]{background:#e4efe7;border-color:#173b2e}@media(max-width:420px){.language-shortcuts{gap:6px}.language-shortcuts a{padding:8px 11px;font-size:15px}}
-</style></head>
+</style><script type="module" src="site-language.mjs?v=20261112-vendor1"></script>
+</head>
 
 <body>
 
@@ -581,19 +583,12 @@ a.brand{color:#fff;text-decoration:none;display:inline-block}a.brand:focus-visib
 <a href="#home">Home</a>
         <a href="#about">About</a>
         <a href="#network">Services</a>
-        <a href="#languages">Languages</a>
+        <a href="professionals.html">Professional Network</a>
 
     <a href="contact.html">Contact</a>
     <a href="production-login.html">Sign in</a>
-    <label class="site-language"><span id="language-label">Language</span><select id="locale" aria-label="Language"><option value="en">English</option><option value="ar">العربية</option><option value="fr">Français</option><option value="es">Español</option></select></label></nav>
+    </nav>
 </header>
-<nav class="language-shortcuts" aria-label="English / العربية / Français / Español">
-    <a href="/?lang=en" data-language-choice="en" lang="en">English</a>
-    <a href="/?lang=ar" data-language-choice="ar" lang="ar" dir="rtl">العربية</a>
-    <a href="/?lang=fr" data-language-choice="fr" lang="fr">Français</a>
-    <a href="/?lang=es" data-language-choice="es" lang="es">Español</a>
-</nav>
-
 <section class="hero" id="home">
 
     <div class="hero-content">
@@ -642,17 +637,6 @@ a.brand{color:#fff;text-decoration:none;display:inline-block}a.brand:focus-visib
 
 
 
-<section class="languages" id="languages">
-    <h2>Languages</h2>
-
-   <div class="language-list">
-    <a class="language-item" href="/?lang=ar" data-language-choice="ar"><strong>Arabic</strong><span lang="ar">العربية</span></a>
-
-    <a class="language-item" href="/?lang=en" data-language-choice="en"><strong>English</strong><span lang="en">English</span></a>
-
-    <a class="language-item" href="/?lang=fr" data-language-choice="fr"><strong>French</strong><span lang="fr">Français</span></a>
-<a class="language-item" href="/?lang=es" data-language-choice="es"><strong>Spanish</strong><span lang="es">Español</span></a></div>
-</section>
 <section class="network" id="network">
 
     <h2>Marocora Professional Network</h2>
