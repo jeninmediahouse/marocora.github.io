@@ -2208,4 +2208,11 @@ export const siteCopy = {
     "ar": "طلب درس عبر الإنترنت | Marocora",
     "es": "Solicitar una clase en línea | Marocora"
   }
+,
+  "Legal & privacy": {
+    "en": "Legal & privacy",
+    "fr": "Mentions légales et confidentialité",
+    "ar": "الشؤون القانونية والخصوصية",
+    "es": "Aviso legal y privacidad"
+  }
 };
