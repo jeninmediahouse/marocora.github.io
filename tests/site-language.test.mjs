@@ -19,6 +19,13 @@ test('all authored visitor text, page titles and form hints have four language v
  }
  for(const lang of ['en','ar','fr','es'])for(const key of Object.keys(siteUI.en))assert.ok(siteUI[lang][key]);
 });
+test('every page loading the shared language script also loads its stylesheet',()=>{
+ for(const file of readdirSync('.').filter(n=>n.endsWith('.html'))){
+  const source=readFileSync(file,'utf8');
+  if(!/src="site-language\.mjs/.test(source))continue;
+  assert.match(source,/href="site-language\.css/,file+': missing site-language.css');
+ }
+});
 test('home service links resolve to existing pages and translated search categories',()=>{
  const home=readFileSync('index.html','utf8'),directory=readFileSync('professionals.html','utf8');
  const categories=[...directory.matchAll(/data-service-title="([^"]+)"/g)].map(m=>decode(m[1]));
