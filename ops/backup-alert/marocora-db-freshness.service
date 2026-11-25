@@ -1,0 +1,25 @@
+[Unit]
+Description=Report whether the newest Marocora encrypted database snapshot is fresh
+Documentation=file:/opt/marocora-backup-alert/README.md
+Wants=network-online.target
+After=network-online.target
+ConditionPathExists=/etc/marocora-translation-worker/backup.env
+
+[Service]
+Type=oneshot
+User=root
+Group=root
+Environment=PYTHONDONTWRITEBYTECODE=1
+EnvironmentFile=-/etc/marocora-backup-alert/monitor.env
+ExecStart=/usr/bin/python3 /opt/marocora-backup-alert/check-db-freshness.py
+TimeoutStartSec=5min
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ProtectKernelTunables=true
+ProtectControlGroups=true
+ProtectKernelModules=true
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
+MemoryDenyWriteExecute=true
+UMask=0077

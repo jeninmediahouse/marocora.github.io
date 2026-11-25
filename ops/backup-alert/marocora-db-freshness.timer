@@ -1,0 +1,14 @@
+[Unit]
+Description=Daily check that the newest Marocora database snapshot is fresh
+Documentation=file:/opt/marocora-backup-alert/README.md
+
+[Timer]
+# After translation-db-backup (03:10 UTC) and translation-db-prune (04:30 UTC).
+OnCalendar=*-*-* 05:15:00 UTC
+RandomizedDelaySec=10m
+Persistent=true
+AccuracySec=1min
+Unit=marocora-db-freshness.service
+
+[Install]
+WantedBy=timers.target
