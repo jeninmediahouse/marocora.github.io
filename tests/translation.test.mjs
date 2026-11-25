@@ -19,12 +19,13 @@ test('language pairs distinguish direction and require named other languages',()
  assert.equal(languagePairError('Other','Other','  Italian ','ITALIAN').field,'target-language');
  assert.equal(languagePairError('Other','Other','Italian','German'),null);
 });
-test('real quote requests have no sample assignment and service choices agree across application and intake',()=>{
+test('real quote requests have no sample assignment and the old translator intake routes to reviewed onboarding',()=>{
  const request=readFileSync('translation-request.html','utf8'),directory=readFileSync('translators.html','utf8'),application=readFileSync('translator-apply.html','utf8');
  assert.match(request,/name="provider" value="Unassigned"/);assert.doesNotMatch(request,/Sample Translator Profile/);
  assert.doesNotMatch(directory,/class="translator-card"|data-search-index|href="translator-sample/);
- for(const service of translationServices){assert.ok(request.includes(service));assert.ok(application.includes(service));}
- assert.match(application,/name="pricing-method"/);assert.match(application,/name="rate-currency"/);assert.match(application,/name="rate-unit"/);
+ for(const service of translationServices)assert.ok(request.includes(service));
+ assert.match(application,/url=\/supply-register\.html/);assert.match(application,/location\.replace\('\/supply-register\.html'\)/);
+ assert.doesNotMatch(application,/name="pricing-method"/);
  assert.match(request,/<section id="block1-upload" hidden>/);
  assert.match(request,/<input id="block1-document" type="file"[^>]* disabled>/);
  assert.doesNotMatch(request,/<script[^>]+src="block1-request/);

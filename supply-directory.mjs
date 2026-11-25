@@ -36,7 +36,8 @@ export async function mountDirectory({root,status,fetcher=fetch}){
   for(const row of rows){
    const item=doc.createElement('li');item.className='published-partner';
    const name=doc.createElement('h3'),bio=doc.createElement('p');
-   for(const [element,value] of [[name,row.name],[bio,row.bio]]){element.textContent=value;element.dataset.userContent='';element.dir='auto';}
+   const summary=row.bio.length>280?row.bio.slice(0,280).trimEnd()+'…':row.bio;
+   for(const [element,value] of [[name,row.name],[bio,summary]]){element.textContent=value;element.dataset.userContent='';element.dir='auto';}
    const type=doc.createElement('p');type.className='published-partner-type';type.textContent=copy(labels[row.type]);
    const link=doc.createElement('a');link.href='/supply-profile.html?'+new URLSearchParams({id:row.id});link.textContent=copy('View public profile');
    authored.push([type,labels[row.type]],[link,'View public profile']);

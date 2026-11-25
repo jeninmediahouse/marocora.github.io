@@ -12,12 +12,17 @@ if(page==='professionals.html'){
  const records=cards.map(card=>{
   const title=card.dataset.serviceTitle;
   const description=card.dataset.serviceDescription;
-  let link;if(card.tagName!=='A'){link=document.createElement('a');link.className='service-request-link';link.dataset.siteLanguage='';card.append(link);}
-  return {card,title,description,link,index:terms(title)+' '+terms(description)};
+  const interest=card.hasAttribute('data-coming-soon');
+  let link,badge;
+  if(card.tagName!=='A'){
+   link=document.createElement('a');link.className='service-request-link';link.dataset.siteLanguage='';card.append(link);
+   if(interest){badge=document.createElement('span');badge.className='service-coming-soon';badge.dataset.siteLanguage='';card.append(badge);}
+  }
+  return {card,title,description,link,badge,interest,index:terms(title)+' '+terms(description)};
  });
  function filter(){const query=normalize(input.value);let count=0;for(const item of records){item.card.hidden=!!query&&!item.index.includes(query);if(!item.card.hidden)count++;}empty.hidden=count!==0;empty.textContent=api.ui('noServices');}
  const selected=new URLSearchParams(location.search).get('service');let autoValue='';
- function render(){if(selected&&(!autoValue||input.value===autoValue)){autoValue=api.t(selected);input.value=autoValue;}search.querySelector('label').textContent=api.ui('search');input.placeholder=api.ui('searchHint');search.querySelector('.service-request-note').textContent=api.ui('requestNote');for(const item of records){if(item.link){item.link.textContent=api.ui('request');item.link.href=api.localURL('contact.html?service='+encodeURIComponent(item.title));}}filter();}
+ function render(){if(selected&&(!autoValue||input.value===autoValue)){autoValue=api.t(selected);input.value=autoValue;}search.querySelector('label').textContent=api.ui('search');input.placeholder=api.ui('searchHint');search.querySelector('.service-request-note').textContent=api.ui('requestNote');for(const item of records){if(item.link){item.link.textContent=api.ui(item.interest?'registerInterest':'request');item.link.href=api.localURL(item.interest?'join.html':'contact.html?service='+encodeURIComponent(item.title));}if(item.badge)item.badge.textContent=api.ui('comingSoon');}filter();}
  input.addEventListener('input',filter);document.addEventListener('marocora:language',render);render();
 }
 if(page==='contact.html'){
