@@ -44,9 +44,11 @@ loads after the staff row was restored.
   two service-side RPCs. A read-only REST canary returned `403 / 42501` by design;
   the replacement secret key itself is valid (REST root returned 200). These
   helpers need a separate RPC-based rebuild before they can work.
-- **Database backup and prune jobs:** `DB_BACKUP_FAILED` and `DB_PRUNE_FAILED` are
-  separate pre-existing failures using direct database access. They are not part
-  of this credential incident and must be repaired separately.
+- **Database backup and prune jobs:** repaired on 25 November 2026. The cause was
+  a deleted DigitalOcean Spaces access key (`InvalidAccessKeyId`), not database
+  access; a Full Access key restored both jobs and a verified snapshot was taken.
+  See `BACKUP-OUTAGE-AND-REPAIR-20261125.md`. Backup alerting and a restore drill
+  remain open.
 - **Log audit:** review Auth/API provider logs for past misuse of the exposed key
   where the provider still retains them.
 
