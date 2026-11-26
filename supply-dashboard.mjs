@@ -72,7 +72,7 @@ async function introLoad(){
  try{
   const state=await api('/api/supply/applications/'+encodeURIComponent(row.id)+'/intro');
   if(state.status==='ready'){
-   introSay('Approved video on file'+(state.hasAudio===false?' (no sound detected — please record again with a microphone)':'')+'. Duration '+Math.round(state.durationSeconds||0)+'s. Uploading a new one replaces it.');
+   introSay('Video ready on file'+(state.hasAudio===false?' (no sound detected — please record again with a microphone)':'')+'. Duration '+Math.round(state.durationSeconds||0)+'s. Uploading a new one replaces it.');
    introPreview.src='/api/supply/applications/'+encodeURIComponent(row.id)+'/intro/video?v='+Date.now();introPreview.hidden=false;introUpload.hidden=true;
   }else if(state.status==='processing'){
    introSay('Processing your video…');introUpload.hidden=true;scheduleIntroPoll(row.id);
@@ -132,7 +132,7 @@ introRecord.onclick=async()=>{
    seconds+=1;introSay('Recording… '+Math.floor(seconds/60)+':'+String(seconds%60).padStart(2,'0'));
    if(seconds>=INTRO_MAX_SECONDS-5){introRecorder.stop();}
   },1000);
- }catch(error){introCleanup();introSay(error.message||'Camera access was refused. You can upload a file instead.',true);}
+ }catch(error){introCleanup();introSay(error&&error.name==='NotAllowedError'?'Camera access was refused. Allow camera permission in your browser settings, or upload a recording from your phone.':(error.message||'Recording could not start. You can upload a file instead.'),true);}
 };
 introStop.onclick=()=>{if(introRecorder&&introRecorder.state!=='inactive')introRecorder.stop();};
 const originalEditor=editor;
