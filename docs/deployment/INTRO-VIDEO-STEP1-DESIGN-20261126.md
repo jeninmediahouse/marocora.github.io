@@ -1,8 +1,13 @@
 # Teacher introduction video — step 1 design (26 November 2026)
 
-Status: **design only. Nothing implemented, nothing deployed.**
+Status: **implemented and tested locally on 26 November 2026; not deployed.**
 Scope of step 1: private storage, validation, transcode. No applicant UI, no
-public player, no database rule changes shipped in this step.
+public player, no approval rule in this step.
+
+Owner inputs received: bucket `marocora-intro-videos` (AMS3, private), a
+bucket-scoped key stored as `INTRO_VIDEO_BUCKET`/`INTRO_VIDEO_KEY`/
+`INTRO_VIDEO_SECRET`, `ffmpeg`/`ffprobe` 6.1.1 installed, and caps confirmed
+(120 MB, 3 minutes, 3 uploads per hour).
 
 ## 1. Decisions already made by the owner
 
@@ -21,7 +26,7 @@ New private bucket, separate from credentials and from database backups:
 
 ```text
 marocora-intro-videos            (private, AMS3)
-  intro/<applicationId>/<videoId>/source.<ext>     temporary, deleted after transcode
+  intro-source/<applicationId>/<videoId>/source.<ext>  temporary, deleted after transcode
   intro/<applicationId>/<videoId>/playback.mp4     720p H.264 + AAC, faststart
   intro/<applicationId>/<videoId>/poster.jpg       640px frame at 1s
   intro/<applicationId>/<videoId>/meta.json        duration, bytes, sha256, created
@@ -29,6 +34,10 @@ marocora-intro-videos            (private, AMS3)
 
 `<videoId>` is a server-generated UUID, so replacing a video never overwrites an
 old object and public URLs cannot be guessed from an application id.
+
+The source lives under its own `intro-source/` prefix because the console offers
+no lifecycle rules: keeping sources separate means any future cleanup rule or
+sweeper can target them without touching playable videos.
 
 Why a separate bucket: per-bucket lifecycle rules (delete `source.*` after a day),
 per-bucket CDN and CORS settings, and no chance of a video path colliding with a
@@ -189,16 +198,28 @@ terabyte, then roughly $0.01/GB.
 - Approval gate: teacher without a ready video cannot be approved; translator
   unaffected.
 
-## 11. What the owner must provide before step 1 can ship
+## 11. Implementation notes
 
-1. **Bucket** `marocora-intro-videos` created in AMS3, private, with a lifecycle
-   rule deleting `intro/*/source.*` after 1 day.
-2. **Access key** for that bucket, stored in the release environment as
-   `INTRO_VIDEO_KEY` / `INTRO_VIDEO_SECRET` (or confirmation that the existing
-   Spaces key pair may be reused).
-3. **`ffmpeg` and `ffprobe`** installed on the server (one command, owner-run).
-4. Confirmation of the **120 MB / 3 minute** caps and the **3 uploads per hour**
-   limit.
+Files: `server/storage/video.mjs` (streaming store), `server/supply/intro.mjs`
+(validation, probe, transcode, rate limit), routes in `server/supply/http.mjs`,
+RPC allowlists in `server/production/supabase.mjs`, and migration
+`202611260002_supply_intro_videos.sql` (table + four functions).
 
-No UI is included in step 1. After it is deployed and proven with a synthetic
-upload to a test application, step 2 adds upload and recording to the dashboard.
+Tests: `tests/intro-video.test.mjs` covers magic-byte format detection, size and
+duration edges, accepted upload (source → playback → poster → prune), rejected
+format, over-long video, unreadable video, the fourth upload in an hour, and a
+transcode failure marking the row failed. Suite 472/472.
+
+Known limits carried into step 2:
+
+- No automatic sweeper yet for a source left behind by a crash mid-transcode.
+  The transcode path deletes it on success and on handled failure; the sweep is
+  part of step 2.
+- Nothing is playable yet: staff playback is step 4, public playback step 5.
+- The migration has not been applied; it should be applied before step 2 ships,
+  because the upload endpoint needs those functions.
+
+## 12. What remains from the owner before step 2
+
+Nothing for storage; the bucket, key and binaries are in place. Step 2 is code
+plus the migration application.

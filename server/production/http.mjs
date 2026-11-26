@@ -10,6 +10,7 @@ import {createProductionSupabase} from './supabase.mjs';
 import {createProductionLearning} from './learning.mjs';
 import {createTurnstileVerifier} from './turnstile.mjs';
 import {createSpacesStore} from '../storage/spaces.mjs';
+import {createVideoStore} from '../storage/video.mjs';
 import {cloudmersiveScanner} from '../block1/uploads.mjs';
 import {instantRoutes} from '../block1/instant-http.mjs';
 import {publicPages,privatePages,adminPages,browserAssets,productionAliases,websitePath,loginLocation} from './site.mjs';
@@ -21,10 +22,11 @@ export async function startProductionServer({env=process.env,auth,storage,scanne
  const publicService=env.SUPABASE_URL?new URL(env.SUPABASE_URL).origin:'';
  const policy=(live,hashes=[])=>`default-src 'self'; script-src 'self' https://challenges.cloudflare.com ${hashes.join(' ')}; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self' ${publicService} https://challenges.cloudflare.com ${live?live+' '+live.replace(/^wss:/,'https:')+' https://*.livekit.cloud wss://*.livekit.cloud':''}; media-src 'self' blob:; worker-src 'self' blob:; frame-src https://challenges.cloudflare.com; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'self' ${publicService}`;
  auth??=createProductionSupabase(env);await auth.checkReady();storage??=createSpacesStore(env);scanner??=cloudmersiveScanner({env});
+ let video=null;try{video=createVideoStore(env);}catch{video=null;}
  if(storage.kind!=='spaces'||scanner.mockOnly===true)fail('PRODUCTION_ADAPTER_REQUIRED',503);
  learning??=createProductionLearning({auth,env});
  const humanCheck=turnstile===undefined?createTurnstileVerifier(env):turnstile;
- const supply=supplyRoutes({auth,storage,scanner,env});
+ const supply=supplyRoutes({auth,storage,scanner,env,video});
  const resetAttempts=createResetAttemptLimiter({clock});
  const instant=instantRoutes({db:auth.db,storage,scanner,exchangeService,allowMockPayments:false});
  const origins=new Map(config.origins.map(origin=>[new URL(origin).host,origin])),rates=new Map();let concurrent=0,heavyRequests=0,closing;

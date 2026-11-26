@@ -2,13 +2,15 @@ import {uuid} from '../quote/contracts.mjs';
 import {validateUpload} from '../block1/uploads.mjs';
 import {encryptPayout} from './payout.mjs';
 import {createSupplyNotifier, createSupplyReviewerNotifier} from '../supply-notify.mjs';
+import {createIntroService} from './intro.mjs';
 const fail=(code,status=400)=>{throw Object.assign(Error(code),{status});};
 const record=(p,keys)=>{if(!p||Object.getPrototypeOf(p)!==Object.prototype||Object.keys(p).some(k=>!keys.includes(k)))fail('SUPPLY_INVALID_INPUT');return p;};
-export function supplyRoutes({auth,storage,scanner,env,fetcher,logger}){
+export function supplyRoutes({auth,storage,scanner,env,fetcher,logger,video}){
  const rpc=(session,name,args={})=>auth.supplyRpc(session,name,args);
  const notify=createSupplyNotifier({env,fetcher,logger});
  const notifyReviewer=createSupplyReviewerNotifier({env,fetcher,logger});
  const log=logger??console;
+ const intro=video?createIntroService({env,store:video,rpc,serviceRpc:(name,args)=>auth.supplyServiceRpc(name,args),logger:log}):null;
  return async({req,url,session,input,body,json,res})=>{
   if(!url.pathname.startsWith('/api/supply/'))return false;
   const path=url.pathname;
@@ -25,6 +27,16 @@ export function supplyRoutes({auth,storage,scanner,env,fetcher,logger}){
   if(path==='/api/supply/review'&&req.method==='GET'){json(res,200,await rpc(session,'supply_review_queue'));return true;}
   if(path==='/api/supply/applications/all'&&req.method==='GET'){
    const rows=await rpc(session,'supply_all_applications');if(rows===null)fail('SUPPLY_ADMIN_REQUIRED',403);json(res,200,rows);return true;
+  }
+  const introPath=/^\/api\/supply\/applications\/([^/]+)\/intro$/.exec(path);
+  if(introPath&&req.method==='POST'){
+   if(!intro)fail('SUPPLY_INTRO_UNAVAILABLE',503);
+   const id=uuid(introPath[1]);
+   json(res,202,await intro.upload({req,session,applicationId:id}));return true;
+  }
+  if(introPath&&req.method==='GET'){
+   if(!intro)fail('SUPPLY_INTRO_UNAVAILABLE',503);
+   json(res,200,await intro.status({session,applicationId:uuid(introPath[1])}));return true;
   }
   const review=/^\/api\/supply\/applications\/([^/]+)\/review$/.exec(path);
   if(review&&req.method==='POST'){
