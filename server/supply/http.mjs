@@ -1,17 +1,22 @@
 import {uuid} from '../quote/contracts.mjs';
 import {validateUpload} from '../block1/uploads.mjs';
 import {encryptPayout} from './payout.mjs';
+import {createSupplyNotifier} from '../supply-notify.mjs';
 const fail=(code,status=400)=>{throw Object.assign(Error(code),{status});};
 const record=(p,keys)=>{if(!p||Object.getPrototypeOf(p)!==Object.prototype||Object.keys(p).some(k=>!keys.includes(k)))fail('SUPPLY_INVALID_INPUT');return p;};
-export function supplyRoutes({auth,storage,scanner,env}){
+export function supplyRoutes({auth,storage,scanner,env,fetcher,logger}){
  const rpc=(session,name,args={})=>auth.supplyRpc(session,name,args);
+ const notify=createSupplyNotifier({env,fetcher,logger});
  return async({req,url,session,input,body,json,res})=>{
   if(!url.pathname.startsWith('/api/supply/'))return false;
   const path=url.pathname;
   if(path==='/api/supply/applications'&&req.method==='GET'){json(res,200,await rpc(session,'supply_my_applications'));return true;}
   if(path==='/api/supply/applications'&&req.method==='POST'){
    const p=record(await input(),['type','profile','id','revision']);
-   json(res,200,await rpc(session,'supply_save_application',{p_type:p.type,p_profile:p.profile,p_id:p.id?uuid(p.id):null,p_revision:p.revision??0}));return true;
+   const saved=await rpc(session,'supply_save_application',{p_type:p.type,p_profile:p.profile,p_id:p.id?uuid(p.id):null,p_revision:p.revision??0});
+   // Never block or fail the submission on mail; the dashboard remains authoritative.
+   void notify({kind:'submitted',application:{id:saved?.id,email:session.email},revision:saved?.revision});
+   json(res,200,saved);return true;
   }
   if(path==='/api/supply/admin'&&req.method==='GET'){json(res,200,{admin:await rpc(session,'supply_admin_access')});return true;}
   if(path==='/api/supply/review'&&req.method==='GET'){json(res,200,await rpc(session,'supply_review_queue'));return true;}
@@ -21,7 +26,16 @@ export function supplyRoutes({auth,storage,scanner,env}){
   const review=/^\/api\/supply\/applications\/([^/]+)\/review$/.exec(path);
   if(review&&req.method==='POST'){
    const p=record(await input(),['revision','decision','reason','credentialsReviewed']);
-   json(res,200,await rpc(session,'supply_review_application',{p_id:uuid(review[1]),p_revision:p.revision,p_decision:p.decision,p_reason:p.reason??'',p_credentials_reviewed:p.credentialsReviewed===true}));return true;
+   const decided=await rpc(session,'supply_review_application',{p_id:uuid(review[1]),p_revision:p.revision,p_decision:p.decision,p_reason:p.reason??'',p_credentials_reviewed:p.credentialsReviewed===true});
+   if(decided?.status==='approved'||decided?.status==='rejected'){
+    void (async()=>{
+     try{
+      const email=await rpc(session,'supply_application_email',{p_id:decided.id});
+      await notify({kind:decided.status,application:{id:decided.id,email},revision:decided.reviewed_revision??decided.revision});
+     }catch{}
+    })();
+   }
+   json(res,200,decided);return true;
   }
   const payout=/^\/api\/supply\/applications\/([^/]+)\/payout$/.exec(path);
   if(payout&&req.method==='POST'){
