@@ -7,6 +7,7 @@ const record=(p,keys)=>{if(!p||Object.getPrototypeOf(p)!==Object.prototype||Obje
 export function supplyRoutes({auth,storage,scanner,env,fetcher,logger}){
  const rpc=(session,name,args={})=>auth.supplyRpc(session,name,args);
  const notify=createSupplyNotifier({env,fetcher,logger});
+ const log=logger??console;
  return async({req,url,session,input,body,json,res})=>{
   if(!url.pathname.startsWith('/api/supply/'))return false;
   const path=url.pathname;
@@ -32,7 +33,7 @@ export function supplyRoutes({auth,storage,scanner,env,fetcher,logger}){
      try{
       const email=await rpc(session,'supply_application_email',{p_id:decided.id});
       await notify({kind:decided.status,application:{id:decided.id,email},revision:decided.reviewed_revision??decided.revision});
-     }catch{}
+     }catch{log.warn('SUPPLY_DECISION_EMAIL_LOOKUP_FAILED');}
     })();
    }
    json(res,200,decided);return true;

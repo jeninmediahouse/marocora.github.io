@@ -1,5 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
 import {eventId, createSupplyNotifier} from '../server/supply-notify.mjs';
 
 const APP = '0b0e1c9d-61e2-49f0-9bb5-d1b6e6fb3cbc';
@@ -78,4 +79,12 @@ test('invalid events are rejected before any network call', async () => {
   assert.equal((await notify({kind: 'submitted', application: {id: APP, email: 'a@b.co'}, revision: 0})).state, 'invalid');
   assert.equal((await notify({kind: 'submitted', application: {id: 'not-a-uuid', email: 'a@b.co'}, revision: 1})).state, 'invalid');
   assert.equal(called, false);
+});
+
+test('the server rpc allowlist admits the decision email lookup', () => {
+  const source = readFileSync('server/production/supabase.mjs', 'utf8');
+  const allowlist = /async supplyRpc\(session,name,args=\{\}\)\{\s*if\(!\[([^\]]+)\]/.exec(source);
+  assert.ok(allowlist, 'supplyRpc allowlist not found');
+  assert.ok(allowlist[1].includes("'supply_application_email'"), 'decision email lookup is not allowed');
+  assert.ok(!allowlist[1].includes("'supply_anything_else'"), 'unexpected rpc admitted');
 });
