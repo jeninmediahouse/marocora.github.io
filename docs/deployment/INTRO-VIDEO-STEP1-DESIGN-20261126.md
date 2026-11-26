@@ -1,8 +1,8 @@
 # Teacher introduction video — step 1 design (26 November 2026)
 
-Status: **steps 1–3 live on 26 November 2026**, release
-`supabase-8f67f3a.intro-video-20261126-r1`, source `8f67f3a`, PM2
-`marocora-supply-8f67f3a`. Migrations `202611260002` and `202611260003` applied.
+Status: **steps 1–6 live on 26 November 2026**, release
+`supabase-9639494.video-consent-20261126-r1`, source `9639494`, PM2
+`marocora-supply-9639494`. Migrations `202611260002`–`202611260005` applied.
 
 Verified in production with a real applicant: an 8.4 MB phone video uploaded,
 converted, and streamed back to its owner through the authenticated range
@@ -262,7 +262,27 @@ intro failure code.
 Tests: 477/477, including a SQL guard that the approval check exists and a UI
 guard that the player and the approval block are wired.
 
-## 14. What remains from the owner before step 2
+## 14. Steps 5 and 6 — live 26 November 2026
+
+Step 5 adds the public `/intro/<id>` page and `/api/intro/<id>/video` range
+stream, both gated by `supply_public_intro` (approved at the current revision,
+verified owner, not excluded, publication consent, processed video). Public
+profiles expose `hasVideo`, so the profile shows a Watch introduction button
+only when one exists. No third-party embed, no cookies.
+
+Step 6 adds an explicit consent checkbox at capture (enforced server-side via an
+`X-Video-Consent` header and recorded as `consent_at`), an owner **Withdraw
+application** action that deletes the application and its stored playback and
+poster immediately, a six-hourly orphan sweep that deletes any intro object
+whose row is gone (covering crashes and account closure), and privacy-policy
+text in English and Arabic describing video as personal data with its storage,
+retention and deletion.
+
+Verified live: `/intro/ba79531c…` 200 with the converted video and the correct
+"Language teacher" label, stream 200 with range support, unapproved or
+non-consented profiles 404, privacy page carries both language sections.
+
+## 15. What remains from the owner before step 2
 
 Nothing for storage; the bucket, key and binaries are in place. The migration
 `202611260002_supply_intro_videos.sql` must be applied in the SQL editor before

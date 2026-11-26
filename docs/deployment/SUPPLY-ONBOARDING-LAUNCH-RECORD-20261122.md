@@ -1,6 +1,18 @@
 # Marocora — Supply Onboarding Launch Record
 
-## Live state, 26 November 2026, 18:30 UTC (current)
+## Live state, 26 November 2026, 20:45 UTC (current)
+
+Production is `/srv/marocora/releases/supabase-9639494.video-consent-20261126-r1`,
+source `963949491f4598ef172bc2d41550b0f0d97499bf`, PM2 `marocora-supply-9639494`
+on 4195; `pm2 save` performed. Published files 123; guarded suite 471/471.
+
+Completes teacher introduction videos: public player page and stream, publication
+consent at capture recorded in the database, withdrawal that deletes the video
+objects, an orphan sweep, and privacy text for video in English and Arabic. Live
+checks: public page 200 with converted playback, range requests 206, unapproved
+profiles 404, privacy sections present.
+
+## Previous live state, 26 November 2026, 18:30 UTC
 
 Production is `/srv/marocora/releases/supabase-8f67f3a.intro-video-20261126-r1`,
 source `8f67f3a348f289269b358524030f15d5b280627d`, PM2
