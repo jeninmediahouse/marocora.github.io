@@ -1,4 +1,4 @@
-import {api,node,dataNode,message,typeNames,statusNames,profileDetails} from './supply-client.mjs';
+import {api,node,dataNode,message,typeNames,statusNames,profileDetails,mountSignOut} from './supply-client.mjs';
 const queue=document.querySelector('#queue'),notice=document.querySelector('#message'),allHost=document.querySelector('#all-applications-section');
 let allRows=[],currentEmail='';
 const wrap=(label,control)=>{const el=node('label');el.append(document.createTextNode(label+' '),control);return el;};
@@ -69,3 +69,5 @@ async function load(){
 }
 document.querySelector('#refresh').onclick=()=>load().catch(error=>message(notice,error.message,true));
 load().catch(error=>{queue.replaceChildren();message(notice,error.message,true);});
+
+void mountSignOut();

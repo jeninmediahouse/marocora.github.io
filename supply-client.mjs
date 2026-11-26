@@ -32,3 +32,13 @@ export function profileDetails(profile,type){
  return dl;
 }
 export function money(minor,currency){return new Intl.NumberFormat('en',{style:'currency',currency}).format(minor/100);}
+
+export async function mountSignOut(id='sign-out'){
+ const button=document.getElementById(id);
+ if(!button)return;
+ button.addEventListener('click',async()=>{
+  button.disabled=true;
+  try{await fetch('/api/auth/logout',{method:'POST',credentials:'same-origin',cache:'no-store'});}catch{}
+  location.assign('/');
+ });
+}

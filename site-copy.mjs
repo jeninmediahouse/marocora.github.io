@@ -2265,4 +2265,11 @@ export const siteCopy = {
     "fr": "Obligatoire avant l’approbation d’un profil d’enseignant.",
     "es": "Obligatorio antes de aprobar un perfil de profesor."
   }
+,
+  "Sign out": {
+    "en": "Sign out",
+    "ar": "تسجيل الخروج",
+    "fr": "Se déconnecter",
+    "es": "Cerrar sesión"
+  }
 };

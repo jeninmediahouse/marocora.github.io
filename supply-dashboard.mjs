@@ -1,4 +1,4 @@
-import {api,node,dataNode,message,typeNames,statusNames,profileDetails,optionalIntroVideo} from './supply-client.mjs';
+import {api,node,dataNode,message,typeNames,statusNames,profileDetails,optionalIntroVideo,mountSignOut} from './supply-client.mjs';
 const form=document.querySelector('#profile-form'),notice=document.querySelector('#message'),type=document.querySelector('#vendor-type');let rows=[];
 const split=value=>value.split(/[,\n]/).map(s=>s.trim()).filter(Boolean);
 const field=name=>form.elements.namedItem(name);
@@ -137,3 +137,5 @@ introRecord.onclick=async()=>{
 introStop.onclick=()=>{if(introRecorder&&introRecorder.state!=='inactive')introRecorder.stop();};
 const originalEditor=editor;
 editor=function(t){originalEditor(t);void introLoad();};
+
+void mountSignOut();
