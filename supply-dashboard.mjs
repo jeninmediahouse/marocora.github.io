@@ -27,7 +27,8 @@ function editor(t){
 async function load(){
  rows=await api('/api/supply/applications');const list=document.querySelector('#applications');list.replaceChildren();
  if(!rows.length)list.append(node('p','No applications yet. Complete a profile below.','muted'));
- for(const row of rows){const card=node('article',undefined,'card');card.append(dataNode('h3',row.profile.displayName),node('p',typeNames[row.type]),node('span',statusNames[row.status],'status '+row.status),profileDetails(row.profile,row.type));const edit=node('button','Edit profile','secondary');edit.type='button';edit.onclick=()=>{editor(row.type);form.scrollIntoView({behavior:'auto'});field('displayName').focus();};card.append(edit);
+ for(const row of rows){const card=node('article',undefined,'card');card.append(dataNode('h3',row.profile.displayName),node('p',typeNames[row.type]),node('span',statusNames[row.status],'status '+row.status),profileDetails(row.profile,row.type));const remove=node('button','Withdraw application','secondary');remove.type='button';remove.onclick=async()=>{if(!confirm('Remove this application and its introduction video? This cannot be undone.'))return;remove.disabled=true;try{await api('/api/supply/applications/'+encodeURIComponent(row.id),{method:'DELETE'});await load();void introLoad();message(notice,'Application withdrawn and video removed.');}catch(error){message(notice,error.message,true);remove.disabled=false;}};
+ const edit=node('button','Edit profile','secondary');edit.type='button';edit.onclick=()=>{editor(row.type);form.scrollIntoView({behavior:'auto'});field('displayName').focus();};card.append(edit,remove);
   const payout=row.payout,payoutLine=node('p',undefined,'muted');payoutLine.append(node('span','Payout connection: pending'));if(payout.configured)payoutLine.append(document.createTextNode(' · '),node('span','Bank details saved'),dataNode('span',' (•••• '+payout.lastFour+')'));card.append(payoutLine);
   for(const review of row.reviews.slice(0,1))if(review.reason){const feedback=node('p');feedback.append(node('span','Review feedback:'),document.createTextNode(' '),dataNode('span',review.reason));card.append(feedback);}
   for(const credential of row.credentials){const link=node('a','Download private credential');link.href='/api/supply/credentials/'+encodeURIComponent(credential.id);link.style.display='block';card.append(link);}
@@ -54,7 +55,7 @@ api('/api/auth/me').then(me=>{const el=document.querySelector('#signed-in');if(e
 
 document.addEventListener('marocora:language',()=>{for(const id of ['credential-application'])for(const option of document.getElementById(id).options){const row=rows.find(item=>item.id===option.value);if(row)option.textContent=row.profile.displayName+' · '+window.MarocoraSite.t(typeNames[row.type]);}});
 // —— Introduction video (step 2): upload first, camera recording second. ——
-const introCapture=document.querySelector('#intro-capture'),introStatus=document.querySelector('#intro-status'),introPreview=document.querySelector('#intro-preview'),introFile=document.querySelector('#intro-file'),introRecord=document.querySelector('#intro-record'),introStop=document.querySelector('#intro-stop'),introUpload=document.querySelector('#intro-upload'),introProgress=document.querySelector('#intro-progress');
+const introCapture=document.querySelector('#intro-capture'),introStatus=document.querySelector('#intro-status'),introConsent=document.querySelector('#intro-consent'),introPreview=document.querySelector('#intro-preview'),introFile=document.querySelector('#intro-file'),introRecord=document.querySelector('#intro-record'),introStop=document.querySelector('#intro-stop'),introUpload=document.querySelector('#intro-upload'),introProgress=document.querySelector('#intro-progress');
 const INTRO_MAX_BYTES=120*1024*1024,INTRO_MAX_SECONDS=180;
 let introPending=null,introRecorder=null,introTimer=null,introPoll=null,introStream=null;
 function introSay(text,error=false){introStatus.textContent=text;introStatus.classList.toggle('error',error);}
@@ -67,7 +68,7 @@ async function introLoad(){
  if(!type.value||type.value!=='teacher'){introCapture.hidden=true;introCleanup();return;}
  introCapture.hidden=false;
  if(!row){introSay('Save your profile once to add a video.');introFile.disabled=true;introRecord.disabled=true;introUpload.disabled=true;introReset();return;}
- introFile.disabled=false;introRecord.disabled=false;
+ introFile.disabled=false;introRecord.disabled=false;introRecord.disabled=!introConsent?.checked;introFile.disabled=!introConsent?.checked;
  introSay('Checking your video…');
  try{
   const state=await api('/api/supply/applications/'+encodeURIComponent(row.id)+'/intro');
@@ -95,7 +96,7 @@ function introSend(blob,filename){
  const row=introPick(rows.find(r=>r.type==='teacher'));if(!row)return;
  introSay('Uploading…');introProgress.hidden=false;introProgress.value=0;introUpload.disabled=true;introRecord.disabled=true;
  const xhr=new XMLHttpRequest();xhr.open('POST','/api/supply/applications/'+encodeURIComponent(row.id)+'/intro');
- xhr.withCredentials=true;xhr.setRequestHeader('Content-Type',blob.type||'video/mp4');xhr.setRequestHeader('X-File-Name',filename);
+ xhr.withCredentials=true;xhr.setRequestHeader('Content-Type',blob.type||'video/mp4');xhr.setRequestHeader('X-File-Name',filename);xhr.setRequestHeader('X-Video-Consent',introConsent&&introConsent.checked?'yes':'no');
  xhr.upload.onprogress=event=>{if(event.lengthComputable)introProgress.value=Math.round(event.loaded/event.total*100);};
  xhr.onload=()=>{
   introUpload.disabled=false;introRecord.disabled=false;
@@ -106,6 +107,7 @@ function introSend(blob,filename){
  xhr.onerror=()=>{introUpload.disabled=false;introRecord.disabled=false;introProgress.hidden=true;introSay('The upload was interrupted. Check your connection and try again.',true);};
  xhr.send(blob);
 }
+introConsent?.addEventListener('change',()=>{const ok=introConsent.checked;introFile.disabled=!ok;introRecord.disabled=!ok;});
 introFile.onchange=()=>introChoose(introFile.files[0]);
 introUpload.onclick=()=>{if(!introPending)return;introSend(introPending,introPending.name||'introduction');introPending=null;};
 introRecord.onclick=async()=>{

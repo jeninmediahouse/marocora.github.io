@@ -2272,4 +2272,11 @@ export const siteCopy = {
     "fr": "Se déconnecter",
     "es": "Cerrar sesión"
   }
+,
+  "I confirm this is me and I have the right to share this video.": {
+    "en": "I confirm this is me and I have the right to share this video.",
+    "ar": "أؤكد أن هذا الفيديو يخصّني وأن لي الحق في مشاركته.",
+    "fr": "Je confirme que cette vidéo est bien la mienne et que j’ai le droit de la partager.",
+    "es": "Confirmo que este vídeo es mío y que tengo derecho a compartirlo."
+  }
 };

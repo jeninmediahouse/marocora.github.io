@@ -49,11 +49,11 @@
   ],
   "preservedSourceSha256": {
     "supply-register.html": "152b875e166fcd68b657858499e659c3d82b386763d92b847e2723309ba68b4b",
-    "supply-dashboard.html": "4417ca90a4947be7353e629f2c60780d7f334345c2bdc1e85780ed3123079873",
+    "supply-dashboard.html": "661fca46a54c7c2d5f33d6b8ed8d936b695417195041b63266a7abb4337514cc",
     "supply-review.html": "60e29890cec9df6ce44f66c52967eec05511704f2309fdcc6b11ae0a619d4f50",
     "supply-profile.html": "f47b87b0fafdf8239148c98d9ff15b045a22298683d392cd1d91edf353983292",
     "supply-register.mjs": "154f5eed31683fcd1a60c5b822085a041d6af5594fc39df0b9fd622bb505f967",
-    "supply-dashboard.mjs": "77eb66c2d0b6cc83c04020d70b553b94a593a7cd5e2be96ede5ddc8930a0dbff",
+    "supply-dashboard.mjs": "23e91df5b9576ac5aaacc0ee2ebe99b347b9185f91edb6baab19b68110182918",
     "supply-review.mjs": "d89a80792771f79b19df343bea4b828cdfe6b9dd4a8da579aacf082e24d3e3d5",
     "supply-profile.mjs": "2802e1776a44d9a19af268ad80234b9254ff06d3062adf2686b001226026fddd",
     "professionals.html": "c68eb167272ef4f3c51adf1fbaadad233787bb7fd0f66918e91e7aaee72b262d",
@@ -61,7 +61,7 @@
     "site-extra-copy.mjs": "02004bd74eaf43c473ad3a44d4b003bb31776b60e6e799112610b69e88f13824",
     "supply-client.mjs": "50ecbe09a72fb4d349fc6639971326c18adce044ec33af270aba94681f4e481d",
     "supply-copy.mjs": "87ea3cf9b04881a8af3c6ac8bebcce62443cbb8c4f4ff7f6f67d5f4680b07395",
-    "supply.css": "d02bd829ca97fcd11b2fdc7acfc8525ef0e37ddc305033ec3991efc12695fe20"
+    "supply.css": "6b67528d949a0c6a7d7696ecbac04adbf6b35de6ed5e9fd4a57ba94e1016d62c"
   },
   "sharedLocaleSource": {
     "commit": "346be721e626a6dfab425985213490dc7e3d6d3e",
@@ -109,9 +109,9 @@
   },
   "adminPulseSourceFingerprintNote": "Intentional refresh: the admin \"All applications\" panel now renders a read-only onboarding pulse from rows it already loads. No rollback overlay payload, unit, server route or database object changed.",
   "previousSourceFingerprintsForIntroVideo": {
-    "supply-dashboard.html": "46583ed8f4b145ea9b7546ff6c66d5b2559c8898f4ea3328d6adac2800468d16",
-    "supply-dashboard.mjs": "6898dd71dd7cf33eb4a13ea5c596c868b5fc5362a708ff187f6c38b80846a2e0",
-    "supply.css": "f35ad12d95cffe852e42f9245ca6939376c4d57b340da50826fb3e8d56f8a7d8",
+    "supply-dashboard.html": "4417ca90a4947be7353e629f2c60780d7f334345c2bdc1e85780ed3123079873",
+    "supply-dashboard.mjs": "77eb66c2d0b6cc83c04020d70b553b94a593a7cd5e2be96ede5ddc8930a0dbff",
+    "supply.css": "d02bd829ca97fcd11b2fdc7acfc8525ef0e37ddc305033ec3991efc12695fe20",
     "supply-review.mjs": "ebb83db4bb95c66fb38f2e84697d73b0743be753de7d40c31d575beaa467f2eb",
     "supply-client.mjs": "096ffeb14ce6e1bacb1e284d5ee95176c6fee7e893a2ee68fe6c41d209b53874",
     "production-login.mjs": "e9a4b7622ec0fcd92e03272e5bb2b1b7dcf5b9998c2f18ade27c45faf9450668",

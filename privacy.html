@@ -39,6 +39,9 @@
     </table>
     <p>We do not collect payment card data: payments and bookings are not enabled on this site. We do not use advertising or analytics trackers, and we do not build advertising profiles.</p>
 
+    <h2>2a. Introduction videos</h2>
+    <p>Teachers may upload or record a short introduction video. That video is personal data: it shows a face and records a voice. It is stored in a private object-storage bucket at DigitalOcean (Amsterdam), converted to a standard format, and shown publicly only when the profile is approved, publication consent has been given, and the video has been processed. Reviewers can watch it before any decision. At upload, the teacher must confirm that the video is their own and that they have the right to share it. Replacing a video deletes the previous file; withdrawing the application or deleting the account removes the video and its stored files.</p>
+
     <h2>3. Why we use it</h2>
     <ul>
       <li><strong>To provide the service</strong> — create and secure your account, publish an approved profile, let clients contact professionals, and respond to enquiries. Legal basis: performance of a contract, or steps taken at your request before a contract.</li>
@@ -62,7 +65,7 @@
     <table>
       <tr><th>Provider</th><th>Purpose</th><th>Location</th></tr>
       <tr><td>Supabase</td><td>Authentication and database</td><td>European Union region</td></tr>
-      <tr><td>DigitalOcean</td><td>Web hosting; Spaces object storage for encrypted database backups</td><td>Amsterdam (AMS3)</td></tr>
+      <tr><td>DigitalOcean</td><td>Web hosting; object storage for encrypted database backups and introduction videos</td><td>Amsterdam (AMS3)</td></tr>
       <tr><td>Formspree</td><td>Delivery of contact and interest form submissions</td><td>United States</td></tr>
       <tr><td>Cloudflare</td><td>Turnstile bot check on sign-up</td><td>Global edge network</td></tr>
       <tr><td>Resend</td><td>Transactional email delivery</td><td>United States</td></tr>
@@ -77,6 +80,7 @@
       <li><strong>Published profiles</strong> — while published, and for 12 months after you ask us to remove them, to prevent duplicate or disputed listings.</li>
       <li><strong>Enquiries</strong> — 24 months from receipt.</li>
       <li><strong>Encrypted database backups</strong> — rolling 30 days, then deleted automatically.</li>
+      <li><strong>Introduction videos</strong> — while the profile is published; deleted when the teacher withdraws, when the account is deleted, or when a replacement finishes processing.</li>
     </ul>
     <p>We may keep records longer where the law requires, or where needed to establish or defend a legal claim.</p>
 
@@ -129,6 +133,9 @@
     </table>
     <p>لا نجمع بيانات بطاقات الدفع لأن الدفع والحجز غير مُفعّلين في هذا الموقع. ولا نستخدم أدوات تتبّع إعلانية أو تحليلية، ولا نبني ملفات إعلانية.</p>
 
+    <h2>2أ. فيديوهات التعريف</h2>
+    <p>يمكن للمدرّسين رفع أو تسجيل فيديو تعريف قصير. وهذا الفيديو بيانات شخصية: يُظهر الوجه ويسجّل الصوت. ويُخزَّن في مساحة تخزين خاصة لدى DigitalOcean (أمستردام)، ويُحوَّل إلى صيغة موحّدة، ولا يُعرض علناً إلا بعد الموافقة على الملف ومنح إذن النشر ومعالجة الفيديو. ويمكن للمراجعين مشاهدته قبل أي قرار. وعند الرفع يجب على المدرّس تأكيد أن الفيديو له وأنه يملك حق مشاركته. واستبدال الفيديو يحذف الملف السابق، كما أن سحب الطلب أو حذف الحساب يحذف الفيديو وملفاته المخزّنة.</p>
+
     <h2>3. لماذا نستخدم البيانات</h2>
     <ul>
       <li><strong>لتقديم الخدمة</strong> — إنشاء حسابك وتأمينه، ونشر الملف بعد الموافقة، وتمكين العملاء من التواصل مع المهنيين، والرد على الاستفسارات. الأساس: تنفيذ عقد أو خطوات تمهيدية بطلب منك.</li>
@@ -152,7 +159,7 @@
     <table>
       <tr><th>المزوّد</th><th>الغرض</th><th>الموقع</th></tr>
       <tr><td>Supabase</td><td>المصادقة وقاعدة البيانات</td><td>منطقة الاتحاد الأوروبي</td></tr>
-      <tr><td>DigitalOcean</td><td>استضافة الموقع، وتخزين نسخ قاعدة البيانات المشفّرة</td><td>أمستردام (AMS3)</td></tr>
+      <tr><td>DigitalOcean</td><td>استضافة الموقع، وتخزين نسخ قاعدة البيانات المشفّرة وفيديوهات التعريف</td><td>أمستردام (AMS3)</td></tr>
       <tr><td>Formspree</td><td>توصيل نماذج التواصل والاهتمام</td><td>الولايات المتحدة</td></tr>
       <tr><td>Cloudflare</td><td>فحص Turnstile عند التسجيل</td><td>شبكة عالمية موزّعة</td></tr>
       <tr><td>Resend</td><td>إرسال البريد المعاملاتي</td><td>الولايات المتحدة</td></tr>
@@ -167,6 +174,7 @@
       <li><strong>الملفات المنشورة</strong> — مدة نشرها، و12 شهراً بعد طلب الإزالة لمنع التكرار أو النزاع.</li>
       <li><strong>الاستفسارات</strong> — 24 شهراً من الاستلام.</li>
       <li><strong>نسخ قاعدة البيانات المشفّرة</strong> — 30 يوماً متجددة، ثم تُحذف تلقائياً.</li>
+      <li><strong>فيديوهات التعريف</strong> — طوال نشر الملف؛ وتُحذف عند سحب الطلب أو حذف الحساب أو اكتمال معالجة فيديو بديل.</li>
     </ul>
     <p>قد نحتفظ بسجلات لمدة أطول حيث يوجب القانون ذلك أو حيث يلزم لإثبات حق أو الدفاع عنه.</p>
 

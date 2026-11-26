@@ -12,7 +12,7 @@ import {createTurnstileVerifier} from './turnstile.mjs';
 import {createSpacesStore} from '../storage/spaces.mjs';
 import {createVideoStore} from '../storage/video.mjs';
 import {introPage} from '../supply/public-intro.mjs';
-import {sweepIntroSources, parseRange} from '../supply/intro.mjs';
+import {sweepIntroSources, sweepOrphanVideos, parseRange} from '../supply/intro.mjs';
 import {cloudmersiveScanner} from '../block1/uploads.mjs';
 import {instantRoutes} from '../block1/instant-http.mjs';
 import {publicPages,privatePages,adminPages,browserAssets,productionAliases,websitePath,loginLocation} from './site.mjs';
@@ -29,7 +29,9 @@ export async function startProductionServer({env=process.env,auth,storage,scanne
  if(video){
   const sweep=()=>sweepIntroSources({store:video,serviceRpc:(name,args)=>auth.supplyServiceRpc(name,args),logger:console})
    .then(r=>{if(r.removed)console.log('SUPPLY_INTRO_SWEEP removed='+r.removed);}).catch(()=>{});
-  const timer=setInterval(sweep,6*60*60*1000);timer.unref();
+  const sweepVideos=()=>sweepOrphanVideos({store:video,serviceRpc:(name,args)=>auth.supplyServiceRpc(name,args),logger:console})
+   .then(r=>{if(r.removed)console.log('SUPPLY_VIDEO_SWEEP removed='+r.removed);}).catch(()=>{});
+  const timer=setInterval(()=>{void sweep();void sweepVideos();},6*60*60*1000);timer.unref();
  }
  if(storage.kind!=='spaces'||scanner.mockOnly===true)fail('PRODUCTION_ADAPTER_REQUIRED',503);
  learning??=createProductionLearning({auth,env});

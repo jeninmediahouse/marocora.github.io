@@ -5,7 +5,7 @@ import {writeFile} from 'node:fs/promises';
 import {join} from 'node:path';
 import {readFileSync, existsSync} from 'node:fs';
 import {introPage} from '../server/supply/public-intro.mjs';
-import {sniff, withinLimits, durationAllowed, parseRange, createIntroService, sweepIntroSources, MAX_DURATION_SECONDS} from '../server/supply/intro.mjs';
+import {sniff, withinLimits, durationAllowed, parseRange, createIntroService, sweepIntroSources, sweepOrphanVideos, MAX_DURATION_SECONDS} from '../server/supply/intro.mjs';
 
 const APP = '0b0e1c9d-61e2-49f0-9bb5-d1b6e6fb3cbc';
 const VIDEO = '7c9e6679-7425-40de-944b-e07fc1f90ae7';
@@ -50,7 +50,7 @@ function service({bytes = mp4(), probe = {duration: 30, hasAudio: true}, begin =
     }),
   });
   const req = Readable.from([bytes]);
-  req.headers = {'content-length': String(bytes.length), 'content-type': 'video/mp4'};
+  req.headers = {'content-length': String(bytes.length), 'content-type': 'video/mp4', 'x-video-consent': 'yes'};
   return {instance, req, rpcCalls};
 }
 
@@ -115,11 +115,11 @@ test('the fourth upload within an hour is rate limited', async () => {
   const {instance, req} = service({calls});
   for (let i = 0; i < 3; i += 1) {
     const r = Readable.from([mp4()]);
-    r.headers = {'content-length': String(mp4().length)};
+    r.headers = {'content-length': String(mp4().length), 'x-video-consent': 'yes'};
     await instance.upload({req: r, session: {actor: 'heavy'}, applicationId: APP});
   }
   const blocked = Readable.from([mp4()]);
-  blocked.headers = {'content-length': String(mp4().length)};
+  blocked.headers = {'content-length': String(mp4().length), 'x-video-consent': 'yes'};
   await assert.rejects(instance.upload({req: blocked, session: {actor: 'heavy'}, applicationId: APP}), /SUPPLY_INTRO_RATE_LIMIT/);
 });
 
@@ -254,4 +254,55 @@ test('the public intro lookup uses the service key its grant requires', () => {
   const line = source.split('\n').find(l => l.includes('supplyPublicIntro'));
   assert.ok(line, 'supplyPublicIntro missing');
   assert.match(line, /config\.service/, 'must call as service_role, matching the SQL grant');
+});
+
+test('an upload without the consent header is refused before storage', async () => {
+  const calls = {put: [], remove: []};
+  const {instance, req} = service({calls});
+  delete req.headers['x-video-consent'];
+  await assert.rejects(instance.upload({req, session: {actor: 'noconsent'}, applicationId: APP}), /SUPPLY_INTRO_CONSENT_REQUIRED/);
+  assert.equal(calls.put.length, 0);
+});
+
+test('withdrawal deletes the stored playback and poster', async () => {
+  const calls = {put: [], remove: []};
+  const instance = createIntroService({
+    env: {}, store: fakeStore(calls),
+    rpc: async () => ({withdrawn: true, videoId: VIDEO}),
+    serviceRpc: async () => ({}), logger: {warn() {}},
+    probeFile: async () => ({duration: 30, hasAudio: true}),
+    transcodeFile: async () => { throw Error('unused'); },
+  });
+  const result = await instance.withdraw({session: {actor: 'x'}, applicationId: APP});
+  assert.equal(result.withdrawn, true);
+  assert.equal(calls.remove.length, 2);
+  assert.ok(calls.remove.some(k => k.endsWith('/playback.mp4')));
+  assert.ok(calls.remove.some(k => k.endsWith('/poster.jpg')));
+});
+
+test('the orphan sweep deletes groups the database no longer knows', async () => {
+  const removed = [];
+  const store = {
+    async list(prefix) {
+      return [
+        {key: `intro/${APP}/${VIDEO}/playback.mp4`},
+        {key: `intro/${APP}/${VIDEO}/poster.jpg`},
+        {key: `intro/${APP}/gone/playback.mp4`},
+      ].filter(i => i.key.startsWith(prefix));
+    },
+    async remove(key) { removed.push(key); },
+  };
+  const result = await sweepOrphanVideos({
+    store, logger: {warn() {}},
+    serviceRpc: async (name, args) => args.p_video === VIDEO,
+  });
+  assert.equal(result.removed, 1);
+  assert.deepEqual(removed, [`intro/${APP}/gone/playback.mp4`]);
+});
+
+test('the privacy policy names video, storage and deletion', () => {
+  const source = readFileSync('privacy.html', 'utf8');
+  for (const token of ['2a. Introduction videos', 'private object-storage bucket', 'face', 'voice', 'withdrawing the application'])
+    assert.ok(source.includes(token), `missing ${token}`);
+  assert.ok(source.includes('فيديوهات التعريف'), 'arabic section missing');
 });

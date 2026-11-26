@@ -15,6 +15,18 @@ export function supplyRoutes({auth,storage,scanner,env,fetcher,logger,video}){
   if(!url.pathname.startsWith('/api/supply/'))return false;
   const path=url.pathname;
   if(path==='/api/supply/applications'&&req.method==='GET'){json(res,200,await rpc(session,'supply_my_applications'));return true;}
+  const withdraw=/^\/api\/supply\/applications\/([^/]+)$/.exec(path);
+  if(withdraw&&req.method==='DELETE'){
+   const id=uuid(withdraw[1]);
+   const result=await rpc(session,'supply_withdraw_application',{p_id:id});
+   const videoId=result&&result.videoId;
+   if(video&&videoId){
+    for(const suffix of ['playback.mp4','poster.jpg']){
+     await video.remove('intro/'+id+'/'+videoId+'/'+suffix).catch(()=>{});
+    }
+   }
+   json(res,200,result);return true;
+  }
   if(path==='/api/supply/applications'&&req.method==='POST'){
    const p=record(await input(),['type','profile','id','revision']);
    const saved=await rpc(session,'supply_save_application',{p_type:p.type,p_profile:p.profile,p_id:p.id?uuid(p.id):null,p_revision:p.revision??0});

@@ -144,6 +144,7 @@ export function createIntroService({env, store, rpc, serviceRpc, logger = consol
 
   return {
     async upload({req, session, applicationId}) {
+      if (req.headers['x-video-consent'] !== 'yes') fail('SUPPLY_INTRO_CONSENT_REQUIRED', 400);
       if (!allowed(session.actor)) fail('SUPPLY_INTRO_RATE_LIMIT', 429);
       const {dir, source, sha256} = await receive(req);
       try {
@@ -157,7 +158,7 @@ export function createIntroService({env, store, rpc, serviceRpc, logger = consol
         if (duration !== null && !durationAllowed(duration)) fail('SUPPLY_INTRO_TOO_LONG', 422);
         if (duration === null) fail('SUPPLY_INTRO_UNREADABLE', 422);
 
-        const begun = await rpc(session, 'supply_intro_begin', {p_id: applicationId, p_video: store.newId()});
+        const begun = await rpc(session, 'supply_intro_begin', {p_id: applicationId, p_video: store.newId(), p_consent: true});
         if (!begun || !begun.videoId) fail('SUPPLY_INTRO_STATE_INVALID', 409);
         const videoId = begun.videoId;
         const sourceKey = `${SOURCE_PREFIX}${applicationId}/${videoId}/source.${extensionFor(format, contentType)}`;
@@ -194,6 +195,17 @@ export function createIntroService({env, store, rpc, serviceRpc, logger = consol
       }
     },
 
+    async withdraw({session, applicationId}) {
+      const result = await rpc(session, 'supply_withdraw_application', {p_id: applicationId});
+      const videoId = result && result.videoId;
+      if (videoId) {
+        for (const suffix of ['playback.mp4', 'poster.jpg']) {
+          await store.remove(`${VIDEO_PREFIX}${applicationId}/${videoId}/${suffix}`).catch(() => {});
+        }
+      }
+      return result;
+    },
+
     async status({session, applicationId}) {
       const row = await rpc(session, 'supply_intro_get', {p_id: applicationId});
       if (!row) return {status: 'none'};
@@ -223,4 +235,33 @@ export async function sweepIntroSources({store, serviceRpc, now = Date.now(), ma
     }
   }
   return {removed, candidates: stale.length};
+}
+
+export async function sweepOrphanVideos({store, serviceRpc, logger = console}) {
+  const objects = await store.list(VIDEO_PREFIX);
+  const groups = new Map();
+  for (const item of objects) {
+    const parts = item.key.split('/');
+    if (parts.length < 4) continue;
+    const [, applicationId, videoId] = parts;
+    const key = applicationId + '/' + videoId;
+    if (!groups.has(key)) groups.set(key, {applicationId, videoId, keys: []});
+    groups.get(key).keys.push(item.key);
+  }
+  let removed = 0;
+  for (const group of groups.values()) {
+    if (typeof serviceRpc !== 'function') break;
+    let valid = false;
+    try {
+      valid = (await serviceRpc('supply_intro_object_valid', {p_id: group.applicationId, p_video: group.videoId})) === true;
+    } catch {
+      logger.warn('SUPPLY_VIDEO_ORPHAN_CHECK_FAILED');
+      continue;
+    }
+    if (valid) continue;
+    for (const key of group.keys) {
+      try { await store.remove(key); removed += 1; } catch { logger.warn('SUPPLY_VIDEO_ORPHAN_DELETE_FAILED'); }
+    }
+  }
+  return {removed, groups: groups.size};
 }
