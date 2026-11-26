@@ -242,7 +242,19 @@ Known limits at this point:
 - The approval rule is not in place until step 3, so a teacher could still be
   approved without a video if step 2 shipped alone. Ship steps 2 and 3 together.
 
-## 13. What remains from the owner before step 2
+## 13. Step 3 — implemented 26 November 2026 (not deployed)
+
+The database now refuses to approve a teacher application unless a video row is
+`ready` (`SUPPLY_INTRO_VIDEO_REQUIRED`); translators and transport are unaffected.
+The review card fetches the video status, plays the converted video inline, and
+disables **Approve** for teachers until it is ready. The dashboard marks the
+video as required before approval. Client error messages were added for every
+intro failure code.
+
+Tests: 477/477, including a SQL guard that the approval check exists and a UI
+guard that the player and the approval block are wired.
+
+## 14. What remains from the owner before step 2
 
 Nothing for storage; the bucket, key and binaries are in place. The migration
 `202611260002_supply_intro_videos.sql` must be applied in the SQL editor before

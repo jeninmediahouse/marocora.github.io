@@ -186,4 +186,23 @@ test('the dashboard capture UI and playback route are wired', () => {
   assert.match(server, /intro\\\/video/);
   assert.match(server, /Content-Range/);
   assert.ok(existsSync('supabase/migrations/202611260002_supply_intro_videos.sql'));
+  assert.ok(existsSync('supabase/migrations/202611260003_supply_intro_required.sql'));
+});
+
+test('teacher approval is gated on a ready video in the database', () => {
+  const sql = readFileSync('supabase/migrations/202611260003_supply_intro_required.sql', 'utf8');
+  assert.match(sql, /p_decision='approved' AND a\.vendor_type='teacher'/);
+  assert.match(sql, /status='ready'/);
+  assert.match(sql, /RAISE EXCEPTION 'SUPPLY_INTRO_VIDEO_REQUIRED'/);
+  assert.match(sql, /CREATE OR REPLACE FUNCTION public\.supply_review_application/);
+});
+
+test('the review screen plays the video and blocks approval until it is ready', () => {
+  const review = readFileSync('supply-review.mjs', 'utf8');
+  assert.match(review, /\/intro\/video/);
+  assert.match(review, /approveButtons/);
+  assert.match(review, /cannot be approved without one/);
+  assert.match(review, /player\.controls=true/);
+  const client = readFileSync('supply-client.mjs', 'utf8');
+  assert.match(client, /SUPPLY_INTRO_VIDEO_REQUIRED/);
 });

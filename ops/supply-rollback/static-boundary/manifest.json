@@ -49,19 +49,19 @@
   ],
   "preservedSourceSha256": {
     "supply-register.html": "152b875e166fcd68b657858499e659c3d82b386763d92b847e2723309ba68b4b",
-    "supply-dashboard.html": "58d987f0c97661ad8658f41af28206a7912b572e9a32548d291332a9d32ebc45",
+    "supply-dashboard.html": "46583ed8f4b145ea9b7546ff6c66d5b2559c8898f4ea3328d6adac2800468d16",
     "supply-review.html": "0c9475f3665e322cb19bc955bfecb29fb0241cfbc1420bc02272b3597d8c2478",
     "supply-profile.html": "f47b87b0fafdf8239148c98d9ff15b045a22298683d392cd1d91edf353983292",
     "supply-register.mjs": "154f5eed31683fcd1a60c5b822085a041d6af5594fc39df0b9fd622bb505f967",
     "supply-dashboard.mjs": "1f2ebfb9dcf5c0c01b9264223099e3f65f7dc0d2e00480b18692b49452843f2f",
-    "supply-review.mjs": "e73b0f38ac1c03f23987f397d9a3d4a7bd212a0b15379f623820609d78854a6a",
+    "supply-review.mjs": "ebb83db4bb95c66fb38f2e84697d73b0743be753de7d40c31d575beaa467f2eb",
     "supply-profile.mjs": "69bb6c940fdd8b31961d15d8d44ae1a2f9d8bcd0e2e1ab2f3f3dba8bb631b0d7",
     "professionals.html": "c68eb167272ef4f3c51adf1fbaadad233787bb7fd0f66918e91e7aaee72b262d",
     "production-login.mjs": "e9a4b7622ec0fcd92e03272e5bb2b1b7dcf5b9998c2f18ade27c45faf9450668",
     "site-extra-copy.mjs": "02004bd74eaf43c473ad3a44d4b003bb31776b60e6e799112610b69e88f13824",
-    "supply-client.mjs": "3f32a7c9df095157bb609bcc53b3c9731422d1c95bb1cd46aa03db64c201233a",
+    "supply-client.mjs": "096ffeb14ce6e1bacb1e284d5ee95176c6fee7e893a2ee68fe6c41d209b53874",
     "supply-copy.mjs": "87ea3cf9b04881a8af3c6ac8bebcce62443cbb8c4f4ff7f6f67d5f4680b07395",
-    "supply.css": "4ed68183bdaa3eb3cc8d8d1fff8605d3aa62d97b066c403a20bcba7448b7bbd9"
+    "supply.css": "21d782e657ca4a57f938c894920a5b560baba227970c1a1334cd506a6b82d01c"
   },
   "sharedLocaleSource": {
     "commit": "346be721e626a6dfab425985213490dc7e3d6d3e",
@@ -109,9 +109,11 @@
   },
   "adminPulseSourceFingerprintNote": "Intentional refresh: the admin \"All applications\" panel now renders a read-only onboarding pulse from rows it already loads. No rollback overlay payload, unit, server route or database object changed.",
   "previousSourceFingerprintsForIntroVideo": {
-    "supply-dashboard.html": "952f64ce721fcd9bc6bd58b9614ac0d54929450c194ab8e9136f53504d6d1475",
+    "supply-dashboard.html": "58d987f0c97661ad8658f41af28206a7912b572e9a32548d291332a9d32ebc45",
     "supply-dashboard.mjs": "a3555f653b6028fb8e53f36c105c4526266562941b9e55560cbc98dd23463c6a",
-    "supply.css": "87bb76280385eb3d1155b0142e3eb0442a8fe682d7458860101a5c62f6d100df"
+    "supply.css": "4ed68183bdaa3eb3cc8d8d1fff8605d3aa62d97b066c403a20bcba7448b7bbd9",
+    "supply-review.mjs": "e73b0f38ac1c03f23987f397d9a3d4a7bd212a0b15379f623820609d78854a6a",
+    "supply-client.mjs": "3f32a7c9df095157bb609bcc53b3c9731422d1c95bb1cd46aa03db64c201233a"
   },
-  "introVideoSourceFingerprintNote": "Intentional refresh: the teacher dashboard gained upload/record controls and the stylesheet gained their styles. No rollback overlay payload, server route or database object changed."
+  "introVideoSourceFingerprintNote": "Intentional refresh across the video steps: dashboard capture and required note, review player and approval block, shared error messages and styles. No rollback overlay payload, server route or database object changed."
 }

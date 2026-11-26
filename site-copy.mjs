@@ -2258,4 +2258,11 @@ export const siteCopy = {
     "fr": "Jusqu’à 3 minutes et 120 Mo. Téléversez un fichier ou enregistrez ici si votre appareil le permet. Votre vidéo est vérifiée avant d’apparaître sur votre profil.",
     "es": "Hasta 3 minutos y 120 MB. Sube un archivo o graba aquí si tu dispositivo lo permite. Tu vídeo se revisa antes de aparecer en tu perfil."
   }
+,
+  "Required before a teacher profile can be approved.": {
+    "en": "Required before a teacher profile can be approved.",
+    "ar": "مطلوب قبل الموافقة على ملف المدرّس.",
+    "fr": "Obligatoire avant l’approbation d’un profil d’enseignant.",
+    "es": "Obligatorio antes de aprobar un perfil de profesor."
+  }
 };

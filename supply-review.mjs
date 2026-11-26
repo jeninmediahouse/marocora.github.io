@@ -39,11 +39,26 @@ refreshAll.onclick=()=>load().catch(error=>message(notice,error.message,true));
 function renderQueue(applications){
  queue.replaceChildren();if(!applications.length)queue.append(node('p','No applications are awaiting review.','notice'));
  for(const app of applications){const card=node('article',undefined,'card');card.id='application-'+app.id;card.append(dataNode('h2',app.profile.displayName),node('p',typeNames[app.type]),node('span','Pending review','status pending_review'),profileDetails(app.profile,app.type),node('p',app.profile.publicationConsent?'Public profile consent provided.':'Public profile consent has not been provided.','muted'));
+  const videoBox=node('div');videoBox.append(node('h3','Introduction video'),node('p','Checking…','muted'));card.append(videoBox);
+  const approveButtons=[];
+  api('/api/supply/applications/'+encodeURIComponent(app.id)+'/intro').then(state=>{
+   videoBox.replaceChildren(node('h3','Introduction video'));
+   if(state.status==='ready'){
+    const player=document.createElement('video');player.controls=true;player.preload='metadata';player.src='/api/supply/applications/'+encodeURIComponent(app.id)+'/intro/video?v='+Date.now();
+    videoBox.append(player,node('p','Duration '+Math.round(state.durationSeconds||0)+'s'+(state.hasAudio===false?' · no sound detected':'')+'.','muted'));
+   }else if(state.status==='processing'){
+    videoBox.append(node('p','Still converting — approval is blocked until it finishes.','muted'));
+    approveButtons.forEach(b=>{b.disabled=true;});
+   }else{
+    videoBox.append(node('p',app.type==='teacher'?'No introduction video yet. A teacher cannot be approved without one.':'No introduction video (not required for this type).','muted'));
+    if(app.type==='teacher')approveButtons.forEach(b=>{b.disabled=true;});
+   }
+  }).catch(()=>{videoBox.replaceChildren(node('h3','Introduction video'),node('p','Video status unavailable.','muted'));approveButtons.forEach(b=>{b.disabled=true;});});
   const credentials=node('div');credentials.append(node('h3','Private credentials'));if(!app.credentials.length)credentials.append(node('p','No credential documents attached.','muted'));
   for(const file of app.credentials){const link=node('a','Download scanned credential');link.href='/api/supply/credentials/'+encodeURIComponent(file.id);const paragraph=node('p');paragraph.append(link);credentials.append(paragraph);}card.append(credentials);
   const form=node('form'),reviewed=node('input');reviewed.type='checkbox';reviewed.name='credentialsReviewed';const checkedLabel=node('label',undefined,'check');checkedLabel.append(reviewed,document.createTextNode('I reviewed the attached credential documents.'));form.append(checkedLabel);
   const label=node('label','Decision note (required for rejection)'),reason=node('textarea');reason.id='reason-'+app.id;label.htmlFor=reason.id;reason.maxLength=2000;form.append(label,reason);const actions=node('div',undefined,'actions');
-  for(const [decision,text,style] of [['approved','Approve application',''],['rejected','Reject application','reject']]){const button=node('button',text,style);button.type='submit';button.value=decision;actions.append(button);}form.append(actions);
+  for(const [decision,text,style] of [['approved','Approve application',''],['rejected','Reject application','reject']]){const button=node('button',text,style);button.type='submit';button.value=decision;if(decision==='approved')approveButtons.push(button);actions.append(button);}form.append(actions);
   form.onsubmit=async event=>{event.preventDefault();const decision=event.submitter?.value;if(!decision)return;const buttons=[...form.querySelectorAll('button')];buttons.forEach(b=>b.disabled=true);try{await api('/api/supply/applications/'+encodeURIComponent(app.id)+'/review',{method:'POST',body:{revision:app.revision,decision,reason:reason.value.trim(),credentialsReviewed:reviewed.checked}});await load();message(notice,'Review saved.');}catch(error){message(notice,error.message,true);}finally{buttons.forEach(b=>b.disabled=false);}};card.append(form);queue.append(card);
  }
 }
