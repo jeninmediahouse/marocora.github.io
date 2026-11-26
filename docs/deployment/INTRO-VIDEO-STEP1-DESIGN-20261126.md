@@ -1,6 +1,14 @@
 # Teacher introduction video — step 1 design (26 November 2026)
 
-Status: **implemented and tested locally on 26 November 2026; not deployed.**
+Status: **steps 1–3 live on 26 November 2026**, release
+`supabase-8f67f3a.intro-video-20261126-r1`, source `8f67f3a`, PM2
+`marocora-supply-8f67f3a`. Migrations `202611260002` and `202611260003` applied.
+
+Verified in production with a real applicant: an 8.4 MB phone video uploaded,
+converted, and streamed back to its owner through the authenticated range
+endpoint; the reviewer saw and played the same converted video; approval
+succeeded and the approval email was delivered. Test application and its stored
+objects were then deleted.
 Scope of step 1: private storage, validation, transcode. No applicant UI, no
 public player, no approval rule in this step.
 

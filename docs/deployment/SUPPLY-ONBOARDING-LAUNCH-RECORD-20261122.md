@@ -1,6 +1,20 @@
 # Marocora — Supply Onboarding Launch Record
 
-## Live state, 26 November 2026, 14:30 UTC (current)
+## Live state, 26 November 2026, 18:30 UTC (current)
+
+Production is `/srv/marocora/releases/supabase-8f67f3a.intro-video-20261126-r1`,
+source `8f67f3a348f289269b358524030f15d5b280627d`, PM2
+`marocora-supply-8f67f3a` on 4195; `pm2 save` performed. Published files 123;
+guarded suite 461/461.
+
+Adds teacher introduction videos: private Spaces bucket, streamed upload with
+magic-byte/size/duration validation, server-side ffmpeg transcode to 720p MP4
+with a poster, owner/staff range playback, and a database rule that refuses to
+approve a teacher without a ready video. A first canary failed because the
+service constructor referenced helpers before they were defined; that path is
+now covered by a test that builds the service without fakes.
+
+## Previous live state, 26 November 2026, 14:30 UTC
 
 Production is `/srv/marocora/releases/supabase-af0391d.reviewer-mail-20261126-r1`,
 source `af0391d929228ff4cc3ee67a65989630a9493626`, PM2
