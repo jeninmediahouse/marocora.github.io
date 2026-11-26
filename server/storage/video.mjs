@@ -2,7 +2,7 @@
 // Separate bucket and credentials from credentials/backups. Never buffers a
 // whole video in memory: uploads stream from disk, playback streams ranges.
 
-import {S3Client, PutObjectCommand, HeadObjectCommand, GetObjectCommand, DeleteObjectCommand} from '@aws-sdk/client-s3';
+import {S3Client, PutObjectCommand, HeadObjectCommand, GetObjectCommand, DeleteObjectCommand, ListObjectsV2Command} from '@aws-sdk/client-s3';
 import {createReadStream} from 'node:fs';
 import {randomUUID} from 'node:crypto';
 
@@ -49,6 +49,20 @@ export function createVideoStore(env, {client} = {}) {
         const r = await send(new GetObjectCommand({Bucket: config.bucket, Key: key, Range: range}));
         return {body: r.Body, bytes: Number(r.ContentLength), contentType: r.ContentType, contentRange: r.ContentRange, status: range ? 206 : 200};
       } catch { fail('VIDEO_READ_FAILED'); }
+    },
+
+    async list(prefix) {
+      const out = [];
+      let token;
+      do {
+        let page;
+        try {
+          page = await send(new ListObjectsV2Command({Bucket: config.bucket, Prefix: prefix, ContinuationToken: token, MaxKeys: 1000}));
+        } catch { fail('VIDEO_LIST_FAILED'); }
+        for (const item of page.Contents || []) out.push({key: item.Key, bytes: Number(item.Size), lastModified: item.LastModified});
+        token = page.IsTruncated ? page.NextContinuationToken : undefined;
+      } while (token);
+      return out;
     },
 
     async remove(key) {

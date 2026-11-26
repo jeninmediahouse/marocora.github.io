@@ -3,7 +3,8 @@ import assert from 'node:assert/strict';
 import {Readable} from 'node:stream';
 import {writeFile} from 'node:fs/promises';
 import {join} from 'node:path';
-import {sniff, withinLimits, durationAllowed, createIntroService, MAX_DURATION_SECONDS} from '../server/supply/intro.mjs';
+import {readFileSync, existsSync} from 'node:fs';
+import {sniff, withinLimits, durationAllowed, parseRange, createIntroService, sweepIntroSources, MAX_DURATION_SECONDS} from '../server/supply/intro.mjs';
 
 const APP = '0b0e1c9d-61e2-49f0-9bb5-d1b6e6fb3cbc';
 const VIDEO = '7c9e6679-7425-40de-944b-e07fc1f90ae7';
@@ -131,4 +132,58 @@ test('a transcode failure marks the row failed and removes the source', async ()
   await new Promise(r => setTimeout(r, 50));
   assert.ok(rpcCalls.service.some(c => c.name === 'supply_intro_failed'));
   assert.ok(calls.remove.some(k => k.startsWith('intro-source/')));
+});
+
+test('the sweeper removes only expired sources and marks their rows failed', async () => {
+  const now = Date.parse('2026-11-26T12:00:00Z');
+  const listed = [
+    {key: `intro-source/${APP}/old/source.mp4`, lastModified: new Date(now - 25 * 3600 * 1000)},
+    {key: `intro-source/${APP}/new/source.mp4`, lastModified: new Date(now - 2 * 3600 * 1000)},
+    {key: 'intro/other/keep/playback.mp4', lastModified: new Date(now - 99 * 3600 * 1000)},
+  ];
+  const removed = [];
+  const failed = [];
+  const store = {
+    async list(prefix) { return listed.filter(item => item.key.startsWith(prefix)); },
+    async remove(key) { removed.push(key); },
+  };
+  const result = await sweepIntroSources({
+    store, now, logger: {warn() {}},
+    serviceRpc: async (name, args) => { failed.push({name, args}); },
+  });
+  assert.deepEqual(removed, [`intro-source/${APP}/old/source.mp4`]);
+  assert.equal(result.removed, 1);
+  assert.equal(result.candidates, 1);
+  assert.equal(failed.length, 1);
+  assert.equal(failed[0].args.p_code, 'STALE_UPLOAD');
+});
+
+test('range parsing handles full, open, suffix and invalid requests', () => {
+  assert.deepEqual(parseRange(undefined, 1000), {status: 200, start: 0, end: 999});
+  assert.deepEqual(parseRange('bytes=0-99', 1000), {status: 206, start: 0, end: 99});
+  assert.deepEqual(parseRange('bytes=500-', 1000), {status: 206, start: 500, end: 999});
+  assert.deepEqual(parseRange('bytes=-100', 1000), {status: 206, start: 900, end: 999});
+  assert.deepEqual(parseRange('bytes=-5000', 1000), {status: 206, start: 0, end: 999});
+  assert.equal(parseRange('bytes=1000-', 1000), null);
+  assert.equal(parseRange('bytes=9-5', 1000), null);
+  assert.equal(parseRange('items=0-5', 1000), null);
+  assert.equal(parseRange('bytes=-', 1000), null);
+});
+
+test('the dashboard capture UI and playback route are wired', () => {
+  const html = readFileSync('supply-dashboard.html', 'utf8');
+  const js = readFileSync('supply-dashboard.mjs', 'utf8');
+  const server = readFileSync('server/supply/http.mjs', 'utf8');
+  for (const token of ['intro-capture', 'intro-file', 'intro-record', 'intro-upload', 'intro-progress', 'intro-preview'])
+    assert.ok(html.includes(token), `missing ${token}`);
+  assert.match(html, /accept="video\/mp4,video\/webm,video\/quicktime"/);
+  assert.match(html, /120 MB/);
+  assert.match(js, /MediaRecorder/);
+  assert.match(js, /getUserMedia/);
+  assert.match(js, /XMLHttpRequest/);
+  assert.match(js, /INTRO_MAX_SECONDS=180/);
+  assert.match(js, /intro\/video/);
+  assert.match(server, /intro\\\/video/);
+  assert.match(server, /Content-Range/);
+  assert.ok(existsSync('supabase/migrations/202611260002_supply_intro_videos.sql'));
 });

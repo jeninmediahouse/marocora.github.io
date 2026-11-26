@@ -219,7 +219,31 @@ Known limits carried into step 2:
 - The migration has not been applied; it should be applied before step 2 ships,
   because the upload endpoint needs those functions.
 
-## 12. What remains from the owner before step 2
+## 12. Step 2 — implemented 26 November 2026 (not deployed)
 
-Nothing for storage; the bucket, key and binaries are in place. Step 2 is code
-plus the migration application.
+Added to the teacher dashboard: a capture block with file upload first and
+camera recording second, a live timer capped at 180 seconds, a local playback
+preview before uploading, an upload progress bar, and status polling through
+`processing` → `ready`/`failed`. Recorded clips are sent as WebM or MP4 depending
+on what the browser supports.
+
+Also added: authenticated owner/staff playback with correct range responses, so
+a teacher can review their own video after conversion, and a six-hourly sweep
+that deletes stray `intro-source/` objects older than a day and marks their rows
+failed.
+
+Tests: 475/475, including range parsing (full, open, suffix, invalid), sweeper
+selection and the capture wiring.
+
+Known limits at this point:
+
+- Dashboard status messages are English only; the static labels are translated.
+- Nothing is public yet: no profile button, no player page.
+- The approval rule is not in place until step 3, so a teacher could still be
+  approved without a video if step 2 shipped alone. Ship steps 2 and 3 together.
+
+## 13. What remains from the owner before step 2
+
+Nothing for storage; the bucket, key and binaries are in place. The migration
+`202611260002_supply_intro_videos.sql` must be applied in the SQL editor before
+the release that enables uploads.

@@ -15,6 +15,7 @@ export const MAX_UPLOADS_PER_HOUR = 3;
 const SOURCE_PREFIX = 'intro-source/';
 const VIDEO_PREFIX = 'intro/';
 const RATE_WINDOW_MS = 60 * 60 * 1000;
+export const SOURCE_MAX_AGE_MS = 24 * 60 * 60 * 1000;
 
 const fail = (code, status = 400) => { throw Object.assign(Error(code), {status}); };
 
@@ -39,6 +40,24 @@ export function extensionFor(format, contentType) {
 
 export function withinLimits(bytes) {
   return Number.isSafeInteger(bytes) && bytes > 0 && bytes <= MAX_VIDEO_BYTES;
+}
+
+export function parseRange(header, total) {
+  if (typeof header !== 'string' || !header.trim()) return {status: 200, start: 0, end: total - 1};
+  const match = /^bytes=(\d*)-(\d*)$/.exec(header.trim());
+  if (!match || (match[1] === '' && match[2] === '')) return null;
+  let start;
+  let end = total - 1;
+  if (match[1] === '') {
+    const suffix = Number(match[2]);
+    if (!Number.isFinite(suffix) || suffix <= 0) return null;
+    start = Math.max(0, total - suffix);
+  } else {
+    start = Number(match[1]);
+    if (match[2] !== '') end = Math.min(Number(match[2]), total - 1);
+  }
+  if (!Number.isSafeInteger(start) || !Number.isSafeInteger(end) || start > end || start >= total) return null;
+  return {status: 206, start, end};
 }
 
 export function durationAllowed(seconds) {
@@ -179,4 +198,27 @@ export function createIntroService({env, store, rpc, serviceRpc, logger = consol
       return row;
     },
   };
+}
+
+export async function sweepIntroSources({store, serviceRpc, now = Date.now(), maxAge = SOURCE_MAX_AGE_MS, logger = console}) {
+  const stale = (await store.list(SOURCE_PREFIX)).filter(item => {
+    const at = item?.lastModified ? new Date(item.lastModified).getTime() : NaN;
+    return Number.isFinite(at) ? now - at >= maxAge : true;
+  });
+  let removed = 0;
+  const failed = new Set();
+  for (const item of stale) {
+    try {
+      await store.remove(item.key);
+      removed += 1;
+      const [, applicationId, videoId] = item.key.split('/');
+      if (applicationId && videoId && !failed.has(applicationId) && typeof serviceRpc === 'function') {
+        failed.add(applicationId);
+        try { await serviceRpc('supply_intro_failed', {p_id: applicationId, p_video: videoId, p_code: 'STALE_UPLOAD'}); } catch {}
+      }
+    } catch {
+      logger.warn('SUPPLY_INTRO_SWEEP_FAILED');
+    }
+  }
+  return {removed, candidates: stale.length};
 }

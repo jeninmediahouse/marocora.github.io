@@ -2,7 +2,7 @@ import {uuid} from '../quote/contracts.mjs';
 import {validateUpload} from '../block1/uploads.mjs';
 import {encryptPayout} from './payout.mjs';
 import {createSupplyNotifier, createSupplyReviewerNotifier} from '../supply-notify.mjs';
-import {createIntroService} from './intro.mjs';
+import {createIntroService, parseRange} from './intro.mjs';
 const fail=(code,status=400)=>{throw Object.assign(Error(code),{status});};
 const record=(p,keys)=>{if(!p||Object.getPrototypeOf(p)!==Object.prototype||Object.keys(p).some(k=>!keys.includes(k)))fail('SUPPLY_INVALID_INPUT');return p;};
 export function supplyRoutes({auth,storage,scanner,env,fetcher,logger,video}){
@@ -37,6 +37,28 @@ export function supplyRoutes({auth,storage,scanner,env,fetcher,logger,video}){
   if(introPath&&req.method==='GET'){
    if(!intro)fail('SUPPLY_INTRO_UNAVAILABLE',503);
    json(res,200,await intro.status({session,applicationId:uuid(introPath[1])}));return true;
+  }
+  const introStream=/^\/api\/supply\/applications\/([^/]+)\/intro\/video$/.exec(path);
+  if(introStream&&req.method==='GET'){
+   if(!video)fail('SUPPLY_INTRO_UNAVAILABLE',503);
+   const id=uuid(introStream[1]);
+   const state=await rpc(session,'supply_intro_get',{p_id:id});
+   if(!state||state.status!=='ready')fail('SUPPLY_INTRO_NOT_READY',404);
+   const key='intro/'+id+'/'+state.videoId+'/playback.mp4';
+   const meta=await video.head(key);
+   if(!meta)fail('SUPPLY_INTRO_NOT_READY',404);
+   const total=meta.bytes;
+   const range=parseRange(req.headers.range,total);
+   if(!range)fail('SUPPLY_RANGE_INVALID',416);
+   const {status,start,end}=range;
+   const opened=await video.openRange(key,status===206?start:undefined,status===206?end:undefined);
+   res.writeHead(status,{
+    'Content-Type':'video/mp4','Content-Length':String(opened.bytes),
+    'X-Content-Type-Options':'nosniff','Content-Disposition':'inline',
+    'Accept-Ranges':'bytes','Cache-Control':'private, max-age=300',
+    ...(status===206?{'Content-Range':'bytes '+start+'-'+end+'/'+total}:{})
+   });
+   opened.body.pipe(res);return true;
   }
   const review=/^\/api\/supply\/applications\/([^/]+)\/review$/.exec(path);
   if(review&&req.method==='POST'){

@@ -12,3 +12,11 @@ body[data-supply-page]>header .site-language-bar{background:transparent;padding:
 #all-applications-section label{display:flex;gap:.35rem;align-items:center;font-weight:normal;white-space:nowrap}
 #all-list .card{margin:.6rem 0}
 #all-list .card a{display:inline-block;margin-top:.4rem}
+
+.intro-capture{border:1px solid #d7e3db;background:#f9fbfa;border-radius:10px;padding:16px;margin:14px 0}
+.intro-capture h3{margin:0 0 8px;font-size:1.05rem}
+.intro-capture video{width:100%;max-width:520px;border-radius:8px;background:#000;margin:8px 0;display:block}
+.intro-capture .actions{display:flex;gap:10px;flex-wrap:wrap;margin:8px 0}
+.intro-capture progress{width:100%;max-width:520px;height:10px}
+.intro-capture small{display:block;color:#496454;margin-top:6px}
+.intro-capture .error{color:#a4161a;font-weight:600}

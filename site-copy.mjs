@@ -2215,4 +2215,47 @@ export const siteCopy = {
     "ar": "الشؤون القانونية والخصوصية",
     "es": "Aviso legal y privacidad"
   }
+,
+  "Your introduction video": {
+    "en": "Your introduction video",
+    "ar": "فيديو التعريف الخاص بك",
+    "fr": "Votre vidéo de présentation",
+    "es": "Tu vídeo de presentación"
+  },
+  "Choose video": {
+    "en": "Choose video",
+    "ar": "اختيار فيديو",
+    "fr": "Choisir une vidéo",
+    "es": "Elegir vídeo"
+  },
+  "Record with camera": {
+    "en": "Record with camera",
+    "ar": "التسجيل بالكاميرا",
+    "fr": "Enregistrer avec la caméra",
+    "es": "Grabar con la cámara"
+  },
+  "Stop recording": {
+    "en": "Stop recording",
+    "ar": "إيقاف التسجيل",
+    "fr": "Arrêter l’enregistrement",
+    "es": "Detener la grabación"
+  },
+  "Upload video": {
+    "en": "Upload video",
+    "ar": "رفع الفيديو",
+    "fr": "Téléverser la vidéo",
+    "es": "Subir vídeo"
+  },
+  "Save your profile once to add a video.": {
+    "en": "Save your profile once to add a video.",
+    "ar": "احفظ ملفك مرة واحدة لإضافة فيديو.",
+    "fr": "Enregistrez votre profil une fois pour ajouter une vidéo.",
+    "es": "Guarda tu perfil una vez para añadir un vídeo."
+  },
+  "Up to 3 minutes and 120 MB. Upload a file, or record here if your device allows it. Your video is reviewed before it appears on your profile.": {
+    "en": "Up to 3 minutes and 120 MB. Upload a file, or record here if your device allows it. Your video is reviewed before it appears on your profile.",
+    "ar": "حتى 3 دقائق و120 ميغابايت. ارفع ملفاً، أو سجّل هنا إذا كان جهازك يدعم ذلك. تتم مراجعة الفيديو قبل ظهوره في ملفك.",
+    "fr": "Jusqu’à 3 minutes et 120 Mo. Téléversez un fichier ou enregistrez ici si votre appareil le permet. Votre vidéo est vérifiée avant d’apparaître sur votre profil.",
+    "es": "Hasta 3 minutos y 120 MB. Sube un archivo o graba aquí si tu dispositivo lo permite. Tu vídeo se revisa antes de aparecer en tu perfil."
+  }
 };

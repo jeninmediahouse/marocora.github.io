@@ -11,6 +11,7 @@ import {createProductionLearning} from './learning.mjs';
 import {createTurnstileVerifier} from './turnstile.mjs';
 import {createSpacesStore} from '../storage/spaces.mjs';
 import {createVideoStore} from '../storage/video.mjs';
+import {sweepIntroSources} from '../supply/intro.mjs';
 import {cloudmersiveScanner} from '../block1/uploads.mjs';
 import {instantRoutes} from '../block1/instant-http.mjs';
 import {publicPages,privatePages,adminPages,browserAssets,productionAliases,websitePath,loginLocation} from './site.mjs';
@@ -23,6 +24,11 @@ export async function startProductionServer({env=process.env,auth,storage,scanne
  const policy=(live,hashes=[])=>`default-src 'self'; script-src 'self' https://challenges.cloudflare.com ${hashes.join(' ')}; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self' ${publicService} https://challenges.cloudflare.com ${live?live+' '+live.replace(/^wss:/,'https:')+' https://*.livekit.cloud wss://*.livekit.cloud':''}; media-src 'self' blob:; worker-src 'self' blob:; frame-src https://challenges.cloudflare.com; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'self' ${publicService}`;
  auth??=createProductionSupabase(env);await auth.checkReady();storage??=createSpacesStore(env);scanner??=cloudmersiveScanner({env});
  let video=null;try{video=createVideoStore(env);}catch{video=null;}
+ if(video){
+  const sweep=()=>sweepIntroSources({store:video,serviceRpc:(name,args)=>auth.supplyServiceRpc(name,args),logger:console})
+   .then(r=>{if(r.removed)console.log('SUPPLY_INTRO_SWEEP removed='+r.removed);}).catch(()=>{});
+  const timer=setInterval(sweep,6*60*60*1000);timer.unref();
+ }
  if(storage.kind!=='spaces'||scanner.mockOnly===true)fail('PRODUCTION_ADAPTER_REQUIRED',503);
  learning??=createProductionLearning({auth,env});
  const humanCheck=turnstile===undefined?createTurnstileVerifier(env):turnstile;
