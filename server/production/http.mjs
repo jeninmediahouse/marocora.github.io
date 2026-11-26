@@ -11,7 +11,8 @@ import {createProductionLearning} from './learning.mjs';
 import {createTurnstileVerifier} from './turnstile.mjs';
 import {createSpacesStore} from '../storage/spaces.mjs';
 import {createVideoStore} from '../storage/video.mjs';
-import {sweepIntroSources} from '../supply/intro.mjs';
+import {introPage} from '../supply/public-intro.mjs';
+import {sweepIntroSources, parseRange} from '../supply/intro.mjs';
 import {cloudmersiveScanner} from '../block1/uploads.mjs';
 import {instantRoutes} from '../block1/instant-http.mjs';
 import {publicPages,privatePages,adminPages,browserAssets,productionAliases,websitePath,loginLocation} from './site.mjs';
@@ -24,6 +25,7 @@ export async function startProductionServer({env=process.env,auth,storage,scanne
  const policy=(live,hashes=[])=>`default-src 'self'; script-src 'self' https://challenges.cloudflare.com ${hashes.join(' ')}; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self' ${publicService} https://challenges.cloudflare.com ${live?live+' '+live.replace(/^wss:/,'https:')+' https://*.livekit.cloud wss://*.livekit.cloud':''}; media-src 'self' blob:; worker-src 'self' blob:; frame-src https://challenges.cloudflare.com; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'self' ${publicService}`;
  auth??=createProductionSupabase(env);await auth.checkReady();storage??=createSpacesStore(env);scanner??=cloudmersiveScanner({env});
  let video=null;try{video=createVideoStore(env);}catch{video=null;}
+ const publicIntro=typeof auth.supplyPublicIntro==='function'?id=>auth.supplyPublicIntro(id):async()=>null;
  if(video){
   const sweep=()=>sweepIntroSources({store:video,serviceRpc:(name,args)=>auth.supplyServiceRpc(name,args),logger:console})
    .then(r=>{if(r.removed)console.log('SUPPLY_INTRO_SWEEP removed='+r.removed);}).catch(()=>{});
@@ -84,7 +86,31 @@ export async function startProductionServer({env=process.env,auth,storage,scanne
    }
    if(url.pathname==='/api/supply/profiles'&&req.method==='GET'){
     const id=url.searchParams.get('id');if(id&&!/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(id))fail('SUPPLY_INVALID_PROFILE',400);
-    return json(res,200,await auth.supplyPublic(id));
+    const rows=await auth.supplyPublic(id);
+    const withVideo=await Promise.all((rows||[]).map(async row=>({...row,hasVideo:Boolean(await publicIntro(row.id))})));
+    return json(res,200,withVideo);
+   }
+   const publicVideo=/^\/api\/intro\/([0-9a-f-]{36})\/video$/i.exec(url.pathname);
+   if(publicVideo&&req.method==='GET'){
+    if(!video)fail('NOT_FOUND',404);
+    const videoId=await publicIntro(publicVideo[1]);
+    if(!videoId)fail('NOT_FOUND',404);
+    const key='intro/'+publicVideo[1]+'/'+videoId+'/playback.mp4';
+    const meta=await video.head(key);if(!meta)fail('NOT_FOUND',404);
+    const range=parseRange(req.headers.range,meta.bytes);if(!range)return fail('SUPPLY_RANGE_INVALID',416);
+    const opened=await video.openRange(key,range.status===206?range.start:undefined,range.status===206?range.end:undefined);
+    res.writeHead(range.status,{'Content-Type':'video/mp4','Content-Length':String(opened.bytes),'X-Content-Type-Options':'nosniff','Content-Disposition':'inline','Accept-Ranges':'bytes','Cache-Control':'public, max-age=3600',...(range.status===206?{'Content-Range':'bytes '+range.start+'-'+range.end+'/'+meta.bytes}:{})});
+    opened.body.pipe(res);return true;
+   }
+   const introRoute=/^\/intro\/([0-9a-f-]{36})$/i.exec(url.pathname);
+   if(introRoute&&req.method==='GET'){
+    const rows=await auth.supplyPublic(introRoute[1]);
+    const profile=(rows||[])[0];
+    const videoId=profile?await publicIntro(profile.id):null;
+    if(!profile||!videoId)fail('NOT_FOUND',404);
+    const html=introPage({id:profile.id,displayName:profile.profile?.displayName,type:profile.type});
+    res.writeHead(200,{'Content-Type':'text/html; charset=utf-8','Cache-Control':'public, max-age=300','X-Content-Type-Options':'nosniff'});
+    res.end(html);return true;
    }
    if(url.pathname==='/api/supply/register-config'&&req.method==='GET'){
     return json(res,200,humanCheck?{humanCheck:'turnstile',siteKey:humanCheck.siteKey,action:'supply-register'}:{humanCheck:'unavailable'});

@@ -55,13 +55,13 @@
     "supply-register.mjs": "154f5eed31683fcd1a60c5b822085a041d6af5594fc39df0b9fd622bb505f967",
     "supply-dashboard.mjs": "77eb66c2d0b6cc83c04020d70b553b94a593a7cd5e2be96ede5ddc8930a0dbff",
     "supply-review.mjs": "d89a80792771f79b19df343bea4b828cdfe6b9dd4a8da579aacf082e24d3e3d5",
-    "supply-profile.mjs": "69bb6c940fdd8b31961d15d8d44ae1a2f9d8bcd0e2e1ab2f3f3dba8bb631b0d7",
+    "supply-profile.mjs": "2802e1776a44d9a19af268ad80234b9254ff06d3062adf2686b001226026fddd",
     "professionals.html": "c68eb167272ef4f3c51adf1fbaadad233787bb7fd0f66918e91e7aaee72b262d",
     "production-login.mjs": "ab2f1cc1182ef17f8901f37955c3be2ffd57e952c229c451f4bb6ece8eefc5c7",
     "site-extra-copy.mjs": "02004bd74eaf43c473ad3a44d4b003bb31776b60e6e799112610b69e88f13824",
     "supply-client.mjs": "50ecbe09a72fb4d349fc6639971326c18adce044ec33af270aba94681f4e481d",
     "supply-copy.mjs": "87ea3cf9b04881a8af3c6ac8bebcce62443cbb8c4f4ff7f6f67d5f4680b07395",
-    "supply.css": "f35ad12d95cffe852e42f9245ca6939376c4d57b340da50826fb3e8d56f8a7d8"
+    "supply.css": "d02bd829ca97fcd11b2fdc7acfc8525ef0e37ddc305033ec3991efc12695fe20"
   },
   "sharedLocaleSource": {
     "commit": "346be721e626a6dfab425985213490dc7e3d6d3e",
@@ -111,11 +111,12 @@
   "previousSourceFingerprintsForIntroVideo": {
     "supply-dashboard.html": "46583ed8f4b145ea9b7546ff6c66d5b2559c8898f4ea3328d6adac2800468d16",
     "supply-dashboard.mjs": "6898dd71dd7cf33eb4a13ea5c596c868b5fc5362a708ff187f6c38b80846a2e0",
-    "supply.css": "21d782e657ca4a57f938c894920a5b560baba227970c1a1334cd506a6b82d01c",
+    "supply.css": "f35ad12d95cffe852e42f9245ca6939376c4d57b340da50826fb3e8d56f8a7d8",
     "supply-review.mjs": "ebb83db4bb95c66fb38f2e84697d73b0743be753de7d40c31d575beaa467f2eb",
     "supply-client.mjs": "096ffeb14ce6e1bacb1e284d5ee95176c6fee7e893a2ee68fe6c41d209b53874",
     "production-login.mjs": "e9a4b7622ec0fcd92e03272e5bb2b1b7dcf5b9998c2f18ade27c45faf9450668",
-    "supply-review.html": "0c9475f3665e322cb19bc955bfecb29fb0241cfbc1420bc02272b3597d8c2478"
+    "supply-review.html": "0c9475f3665e322cb19bc955bfecb29fb0241cfbc1420bc02272b3597d8c2478",
+    "supply-profile.mjs": "69bb6c940fdd8b31961d15d8d44ae1a2f9d8bcd0e2e1ab2f3f3dba8bb631b0d7"
   },
   "introVideoSourceFingerprintNote": "Intentional refresh across the video steps: dashboard capture and required note, review player and approval block, shared error messages and styles. No rollback overlay payload, server route or database object changed."
 }

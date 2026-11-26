@@ -24,3 +24,5 @@ body[data-supply-page]>header .site-language-bar{background:transparent;padding:
 .intro-capture .required-note{display:block;color:#a4161a;font-weight:700;margin-top:6px}
 
 .link-button{background:none;border:0;color:inherit;font:inherit;text-decoration:underline;cursor:pointer;padding:0}
+
+.intro-watch{display:inline-block;margin:10px 0 4px;background:#12644f;color:#fff;padding:12px 18px;border-radius:7px;text-decoration:none;font-weight:700}

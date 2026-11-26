@@ -4,6 +4,7 @@ import {Readable} from 'node:stream';
 import {writeFile} from 'node:fs/promises';
 import {join} from 'node:path';
 import {readFileSync, existsSync} from 'node:fs';
+import {introPage} from '../server/supply/public-intro.mjs';
 import {sniff, withinLimits, durationAllowed, parseRange, createIntroService, sweepIntroSources, MAX_DURATION_SECONDS} from '../server/supply/intro.mjs';
 
 const APP = '0b0e1c9d-61e2-49f0-9bb5-d1b6e6fb3cbc';
@@ -218,4 +219,31 @@ test('the production constructor works without injected helpers', () => {
   });
   assert.equal(typeof instance.upload, 'function');
   assert.equal(typeof instance.status, 'function');
+});
+
+test('the public page escapes names and embeds only our own stream', () => {
+  const html = introPage({id: APP, displayName: '<img src=x onerror=alert(1)>', type: 'teacher'});
+  assert.ok(!html.includes('<img src=x'));
+  assert.ok(html.includes('&lt;img src=x'));
+  assert.ok(html.includes('/api/intro/' + APP + '/video'));
+  assert.ok(html.includes('/supply-profile.html?id=' + APP));
+  assert.ok(!/youtube|vimeo|iframe/i.test(html), 'no third-party embed');
+});
+
+test('public playback is gated on the public-intro function and range support', () => {
+  const server = readFileSync('server/production/http.mjs', 'utf8');
+  assert.match(server, /supplyPublicIntro/);
+  assert.match(server, /\\\/api\\\/intro/);
+  assert.match(server, /introPage/);
+  const sql = readFileSync('supabase/migrations/202611260004_supply_public_intro.sql', 'utf8');
+  for (const clause of ["status = 'approved'", "reviewed_revision = a.revision", "publicationConsent", "status = 'ready'", 'learning_review_exclusions'])
+    assert.ok(sql.includes(clause), `missing ${clause}`);
+  assert.match(sql, /GRANT EXECUTE ON FUNCTION public\.supply_public_intro\(uuid\) TO service_role/);
+});
+
+test('the public profile offers the watch button only when a video exists', () => {
+  const source = readFileSync('supply-profile.mjs', 'utf8');
+  assert.match(source, /row\.hasVideo/);
+  assert.match(source, /Watch introduction video/);
+  assert.match(source, /'\/intro\/'\+encodeURIComponent\(row\.id\)/);
 });
