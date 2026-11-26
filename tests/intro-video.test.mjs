@@ -206,3 +206,16 @@ test('the review screen plays the video and blocks approval until it is ready', 
   const client = readFileSync('supply-client.mjs', 'utf8');
   assert.match(client, /SUPPLY_INTRO_VIDEO_REQUIRED/);
 });
+
+test('the production constructor works without injected helpers', () => {
+  const calls = {put: [], remove: []};
+  const instance = createIntroService({
+    env: {},
+    store: fakeStore(calls),
+    rpc: async () => null,
+    serviceRpc: async () => ({}),
+    logger: {warn() {}},
+  });
+  assert.equal(typeof instance.upload, 'function');
+  assert.equal(typeof instance.status, 'function');
+});

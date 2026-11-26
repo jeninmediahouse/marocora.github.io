@@ -81,9 +81,11 @@ function run(command, args, timeout) {
   });
 }
 
-export function createIntroService({env, store, rpc, serviceRpc, logger = console, workRoot = tmpdir(), probeFile = probe, transcodeFile = transcode}) {
+export function createIntroService({env, store, rpc, serviceRpc, logger = console, workRoot = tmpdir(), probeFile, transcodeFile}) {
   const ffmpeg = env.FFMPEG_PATH || '/usr/bin/ffmpeg';
   const ffprobe = env.FFPROBE_PATH || '/usr/bin/ffprobe';
+  const runProbe = probeFile || probe;
+  const runTranscode = transcodeFile || transcode;
   const rate = new Map();
 
   const allowed = actor => {
@@ -151,7 +153,7 @@ export function createIntroService({env, store, rpc, serviceRpc, logger = consol
         const format = sniff(head);
         if (!format) fail('SUPPLY_INTRO_FORMAT_INVALID', 422);
         const contentType = format === 'mp4' ? 'video/mp4' : 'video/webm';
-        const {duration, hasAudio} = await probeFile(source);
+        const {duration, hasAudio} = await runProbe(source);
         if (duration !== null && !durationAllowed(duration)) fail('SUPPLY_INTRO_TOO_LONG', 422);
         if (duration === null) fail('SUPPLY_INTRO_UNREADABLE', 422);
 
@@ -161,7 +163,7 @@ export function createIntroService({env, store, rpc, serviceRpc, logger = consol
         const sourceKey = `${SOURCE_PREFIX}${applicationId}/${videoId}/source.${extensionFor(format, contentType)}`;
         await store.putStream(sourceKey, source, size, contentType);
 
-        const job = transcodeFile(source, dir)
+        const job = runTranscode(source, dir)
           .then(async ({playback, poster}) => {
             const playbackKey = `${VIDEO_PREFIX}${applicationId}/${videoId}/playback.mp4`;
             const posterKey = `${VIDEO_PREFIX}${applicationId}/${videoId}/poster.jpg`;
