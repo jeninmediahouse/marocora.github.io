@@ -2,9 +2,9 @@
 Description=Check the Marocora website every five minutes
 
 [Timer]
-OnBootSec=2min
-OnUnitActiveSec=5min
+OnCalendar=*:0/5
 AccuracySec=30s
+Persistent=false
 Unit=marocora-site-uptime.service
 
 [Install]

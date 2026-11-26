@@ -21,5 +21,5 @@ test('site uptime unit is hardened and scheduled',()=>{
  for(const line of ['ProtectSystem=strict','ProtectHome=true','NoNewPrivileges=true','User=root'])
   assert.ok(service.includes(line),line);
  assert.match(service,/ExecStart=\/usr\/bin\/python3 \/opt\/marocora-uptime\/check-site\.py/);
- assert.match(timer,/OnUnitActiveSec=5min/);
+ assert.match(timer,/OnCalendar=\*:0\/5/);
 });
