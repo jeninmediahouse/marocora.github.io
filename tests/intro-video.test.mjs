@@ -227,6 +227,7 @@ test('the public page escapes names and embeds only our own stream', () => {
   assert.ok(html.includes('&lt;img src=x'));
   assert.ok(html.includes('/api/intro/' + APP + '/video'));
   assert.ok(html.includes('/supply-profile.html?id=' + APP));
+  assert.match(html, /Language teacher/);
   assert.ok(!/youtube|vimeo|iframe/i.test(html), 'no third-party embed');
 });
 

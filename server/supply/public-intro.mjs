@@ -1,11 +1,12 @@
 // Public introduction-video page. Server-rendered, no third-party embeds, no
 // cookies, so the privacy policy stays accurate.
 
+const LABELS = {teacher: 'Language teacher', translator: 'Translator / agency', transport: 'Transportation company'};
 const escape = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'}[c]));
 
 export function introPage({id, displayName, type}) {
   const name = escape(displayName || 'Marocora partner');
-  const kind = escape(type || '');
+  const kind = escape(LABELS[type] || '');
   return `<!doctype html>
 <html lang="en" dir="ltr">
 <head>
