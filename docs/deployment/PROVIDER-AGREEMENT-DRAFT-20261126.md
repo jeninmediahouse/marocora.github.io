@@ -1,207 +1,199 @@
-# Marocora Provider Agreement — v1 draft (26 November 2026)
+# Marocora Provider Agreement — v2 draft (26 November 2026)
 
 **DRAFT FOR LEGAL REVIEW. Not in force, not published, not linked from the site.**
-Prepared to match what Marocora actually does on the date above. Your lawyer
-should mark it up; nothing here should be published until they approve it.
+Revised to the **marketplace model**: Marocora contracts with the client, collects
+payment, and pays the provider their share. Supersedes the venue-model draft.
 
 ---
 
 ## Provider Agreement
 
-**Version 1.0 — effective [date to be set on publication]**
+**Version 2.0 — effective [date to be set on publication]**
 
-### 1. Parties and scope
+### 1. Parties
 
-This agreement is between you ("you", "the provider") and **Jenin Realty LLC**, a North Carolina limited liability company (Secretary of State ID 3074883), 5540 Centerview Dr, Raleigh, NC 27606, United States ("Marocora", "we", "us"), which operates the website marocora.com and the services offered through it (the "platform").
+This agreement is between you ("you", "the provider") and **Jenin Realty LLC**, a North Carolina limited liability company (SOSID 3074883), 5540 Centerview Dr, Raleigh, NC 27606, United States ("Marocora", "we", "us"), which operates marocora.com (the "platform").
 
-By creating a provider account and accepting this agreement, you join the platform as an independent provider of services. Depending on what you offer, those services may include teaching, tutoring, translation, interpretation, language services, transportation, or other professional services listed through the platform (your "services").
+### 2. The model in one clause
 
-### 2. Independent provider status
+Marocora offers services to clients **as the contracting party**. When a client books, the client contracts with Marocora for the delivery of the service, pays Marocora, and Marocora engages you to perform the service as an **independent contractor**. You do not contract with the client, you do not invoice the client, and you do not collect money from the client.
 
-You are an independent provider. You are not an employee, worker, agent, partner, joint venturer or representative of Marocora, and nothing in this agreement creates an employment or agency relationship.
+You are not an employee, worker, agent or partner of Marocora. You choose whether to accept each booking, control how you perform the service, and may work elsewhere, including for competitors. This agreement is not exclusive.
 
-You decide how, when and where you perform your services, subject to the service description you publish, any booking you accept, and the standards in this agreement. You provide your own equipment, materials and insurance, and you are free to work for others, including competitors of Marocora. This agreement is not exclusive.
+### 3. Eligibility and account
 
-Creating an account does not guarantee bookings, clients, assignments, visibility or any level of income.
+- You must be at least 18 and legally entitled to provide the services you offer.
+- Your information must be true, complete and current.
+- One account per person or business; accounts may not be sold or shared.
+- You must complete identity and eligibility verification, including any licence, certification, insurance or tax information we request, before you can receive bookings or payouts.
 
-### 3. Eligibility and your account
+### 4. Your services
 
-- You must be at least 18 years old and legally able to provide the services you offer.
-- Information you give us must be true, accurate, complete and kept current.
-- You are responsible for activity under your account and for keeping your password confidential.
-- One account per person or business. Accounts may not be sold, transferred or shared.
-- We may require verification of identity, qualifications, licences or eligibility, and may decline or remove a listing if verification is not satisfied.
+- **Qualification.** You may offer only services you are qualified and legally permitted to perform. You obtain and maintain any licence, permit, registration or insurance your services or local law require.
+- **Standard.** You perform services competently, safely and professionally, in line with the booking description, our published service standards and applicable law.
+- **Availability.** You keep availability accurate and honour bookings you accept. If you cannot perform, you tell us immediately so we can rearrange or refund the client.
+- **No substitution** without our written agreement and the client's consent.
+- **Conduct.** No discrimination, harassment, fraud, misrepresentation, abuse or unlawful conduct.
 
-### 4. Your obligations as a provider
+### 5. Bookings
 
-- **Qualifications and legality.** You may advertise and provide only services you are qualified and legally permitted to provide. Where a licence, certification, permit, registration or insurance is required in your jurisdiction, you are responsible for obtaining and maintaining it and for complying with its conditions.
-- **Accurate listing.** Your profile, rates, availability and descriptions must be accurate and must not overstate your experience, qualifications or the services you can perform.
-- **Professional conduct.** You will provide your services professionally, competently and safely, treat clients respectfully, and not engage in discrimination, harassment, fraud, misrepresentation, abuse or unlawful conduct.
-- **Availability and bookings.** You will keep your availability current and honour bookings you accept. If you cannot perform a booking, you will tell the client promptly and, where a fee has been paid to you directly, refund it as agreed with the client.
-- **Insurance.** Where your services or the law require insurance, you will maintain appropriate cover.
-- **Tax and legal responsibilities.** You are responsible for your own tax registration, reporting and payment, and for any other legal obligation arising from your services and income.
+- Bookings are confirmed through the platform. A booking exists only when the platform confirms it.
+- You must accept or decline within the response window shown to you. Repeated late declines or no-shows may affect your visibility or your access.
+- Cancellations, rescheduling, late arrival, no-shows and refunds follow our published **Booking, Cancellation and Refund Policy**, which forms part of this agreement once published.
+- If the service is not delivered as booked, we may cancel, refund the client, and recover the amount from your next payouts.
 
-### 5. Introduction video (teachers)
+### 6. Prices, fees and payment
 
-Teachers must publish a short introduction video before a profile can be approved.
+- You set your rate. Marocora adds its service fee and presents a single price to the client. The client pays Marocora, not you.
+- **Commission:** Marocora retains **[commission % — commercial term to be set]** of the client price. The remainder is your earnings.
+- **Payouts:** we pay your earnings **[payout cycle — to be set, e.g. weekly, 7 days after service completion]** to the payout account you register, once verification is complete and the balance exceeds **[minimum — to be set]**.
+- **Deductions:** we may deduct refunds, chargebacks, reversals, cancellation penalties, taxes we are required to withhold, and amounts owed to us under this agreement.
+- **Set-off:** we may set off amounts you owe us against amounts we owe you.
+- **Payment provider:** payments and payouts are processed by our payment service providers, who may perform their own identity checks on you.
 
-- You may record a video through the platform or upload one.
-- You must confirm at upload that the video is of you and that you have the right to share it.
-- Your video is reviewed before publication. We may decline or remove a video that is misleading, unlawful, or unsuitable for the platform.
-- You grant us permission to store, convert (for example, to a standard playback format) and display the video on the platform while your profile is published.
-- Replacing a video deletes the previous file. Withdrawing your application or closing your account deletes the video and its stored files, subject to short technical retention described in the Privacy Policy.
-- The video is personal data and is handled as described in the Privacy Policy.
+### 7. No off-platform dealing
 
-### 6. Content licence
+Because Marocora contracts with the client and carries the booking, you must not:
 
-You keep ownership of the content you provide (profile text, images, video, links). You grant us a non-exclusive, worldwide, royalty-free licence to host, reproduce, format, translate and display that content on the platform, and to use it to promote your profile within the platform, for as long as your profile is published.
+- ask a client to pay you directly, in cash or otherwise;
+- move a booking, or a repeat booking with the same client, outside the platform;
+- direct a client to contact you outside the platform for the purpose of avoiding fees.
 
-You confirm that you own or are authorised to use everything you upload, and that publishing it does not infringe anyone else's rights.
+This restriction applies while you are on the platform and for **12 months** after your last booking, in relation to clients you first met through Marocora.
 
-### 7. Marocora's role: introductions, not the service itself
+### 8. Refunds, chargebacks and disputes
 
-Marocora is an introductions platform. We publish profiles of independent providers and let clients contact them. We do not provide your services, do not employ you, and are not a party to any agreement between you and a client.
+- Requests for refunds and complaints are handled by Marocora with the client under the published policy.
+- If a refund, chargeback or reversal relates to your service, the corresponding amount may be withheld, adjusted or recovered from your earnings.
+- You will be told the reason and may respond before a final deduction, except where a payment provider has already reversed the transaction.
+- You may not negotiate a settlement with a client that binds Marocora.
 
-You and the client agree the scope, price, timing and any cancellation terms of the work directly. You are solely responsible for the services you provide and for any advice, deliverable or act that forms part of them.
+### 9. Taxes and legal obligations
 
-A published profile means we reviewed the information supplied. It is not a guarantee of quality, outcome, safety or continued availability, and it is not an endorsement of any particular claim you make.
+You are responsible for your own tax registration, reporting and payment on your earnings, and for any licence, insurance or other legal obligation connected with your services. We may collect, report or withhold information or amounts where the law or a payment provider requires it. We may ask for tax identification details before paying you.
 
-### 8. Payments and payouts
+### 10. Introduction video (teachers)
 
-**Payments, bookings and payouts are not enabled on the platform on the date of this version.** Clients arrange and pay you directly.
+Teachers must publish an introduction video before a profile can be approved.
 
-If we introduce payment processing, booking flows or payouts, they will be governed by separate **Payment and Payout Terms**, which you will be asked to accept before they apply to you. Nothing in this agreement obliges Marocora to collect, hold or remit money on your behalf, and no fee is charged to you for listing at present.
+- You record it through the platform or upload it.
+- You confirm at upload that the video is of you and that you have the right to share it.
+- It is reviewed before publication; we may decline or remove a video.
+- You license us to store, convert and display it while your profile is published.
+- Replacing a video deletes the previous file; withdrawal or account closure deletes the video and its stored files, subject to short technical retention in the Privacy Policy.
 
-If we later introduce listing or service fees, we will give you notice before they apply, and you may stop using the platform if you do not accept them.
+### 11. Content licence
 
-### 9. Client data and confidentiality
+You keep ownership of your profile text, images and video. You grant us a non-exclusive, worldwide, royalty-free licence to host, reproduce, format, translate and display that content on the platform and in platform marketing, for as long as your profile is published. You confirm you own or are authorised to use what you upload.
 
-In the course of an enquiry or booking you may receive personal data about a client (for example a name, phone number, address or details about the work).
+### 12. Client data
 
-- You may use that data only to respond to the enquiry and deliver the service requested.
-- You must keep it confidential and secure, and must not use it for marketing, share it with others, or add it to your own mailing lists without the client's consent.
-- You must comply with the data-protection law that applies to you, and tell us promptly if you become aware of a breach affecting client data.
-- Marocora is the controller of data collected through the platform, as described in the Privacy Policy. You are responsible for data you hold after a client contacts you directly.
+Clients' names, contact details and booking information are Marocora's data, shared with you only to deliver the booked service.
 
-### 10. Platform rules
+- You act on our instructions and use the data only for that booking.
+- You keep it confidential and secure, do not add clients to your own marketing lists, and do not share it with third parties without our written permission.
+- You apply appropriate technical and organisational safeguards and tell us without delay if you become aware of a breach.
+- You delete or return client data when the booking is complete or on request, except where law requires retention.
+- Where data-protection law treats you as a processor or sub-processor, you accept that role for the data we share.
 
-You agree not to:
+### 13. Reviews and ratings
 
-- post false, misleading, discriminatory or infringing content;
-- impersonate anyone, or misrepresent your identity, qualifications or affiliation;
-- advertise services you are not permitted to provide;
-- solicit clients using contact details obtained through the platform for unlawful or unsolicited marketing;
-- attempt to access accounts, data or systems you are not authorised to access;
-- probe, bypass or interfere with security measures, rate limits or the sign-up bot check;
-- upload malware or unlawful material;
-- interfere with other users' use of the platform.
+Clients may rate and review the service. You must not manipulate reviews, offer incentives for positive reviews, or pressure clients to change or remove honest feedback. Reviews may be moderated under our policy.
 
-### 11. Reviews and feedback
+### 14. Suspension, delisting and termination
 
-Where clients can leave reviews, you agree not to manipulate them (for example by posting reviews yourself, paying for reviews, or pressuring clients to remove honest feedback). We may remove reviews that breach our rules.
+We may restrict, suspend, delist or terminate your account where:
 
-### 12. Suspension and termination
+- you breach this agreement, the policies or the law;
+- your listing or conduct is misleading, unsafe or harmful;
+- your verification fails or cannot be completed;
+- required by a payment provider, regulator or court;
+- continued listing would expose clients or Marocora to risk.
 
-You may stop using the platform at any time and may withdraw an application from your dashboard. Withdrawal removes your listing and, for teachers, your introduction video.
+Except where immediate action is required by law or to prevent harm, we give **written reasons** and reasonable notice, and you may respond or appeal through the contact address. Confirmed bookings already paid for are completed or refunded. We pay earnings for services already performed, less permitted deductions. Clauses that by nature survive termination continue to apply.
 
-We may restrict, suspend or terminate an account where:
+You may stop offering services at any time and close your account after completing confirmed bookings.
 
-- you breach this agreement or applicable law;
-- your listing is misleading, unsafe or no longer accurate;
-- continuing would create a risk for clients, other providers or the platform;
-- we are required to do so by law.
+### 15. Changes
 
-Except where immediate action is required by law or to prevent harm, we will give you **written reasons** and reasonable notice before a termination takes effect, and you may respond or appeal through the contact address in clause 18. On termination we will tell you what data you can retrieve. Obligations that by their nature survive termination — including confidentiality, content licences already exercised, disclaimers and liability limits — continue to apply.
+We may update this agreement. The version and date change on publication, and material changes take effect after at least **15 days' notice** by email or platform notice. If you do not accept a change, you may close your account before it applies. Continuing after the effective date means acceptance.
 
-### 13. Changes to this agreement
+### 16. Visibility
 
-We may update this agreement. The version and date on the published page will change, and for material changes we will give at least **15 days' notice** by email or a notice on the platform before they take effect. If you do not accept a change, you may withdraw before it applies. Continuing to use the platform after the effective date means you accept the updated agreement.
+Where profiles are ordered or filtered, the main factors are category and services, profile completeness, verification status, availability, response and completion history, and rating. We do not currently sell ranking positions; if we introduce paid placement we will label it in the interface.
 
-### 14. Visibility and ranking
+### 17. Liability
 
-Where profiles are ordered or filtered (for example in search or a directory), the main factors are: the category and services you offer, how complete and current your profile is, verification status, your stated availability, and how recently you have responded to enquiries. We do not currently sell ranking positions. If we introduce paid placement, we will say so clearly in the interface.
+The platform is provided as it is. To the extent permitted by law we do not warrant uninterrupted availability or a particular number of bookings.
 
-### 15. Disclaimers and liability
+To the extent permitted by law, we are not liable for indirect or consequential loss or loss of profit, and our total liability to you is limited to the greater of the amounts you earned through the platform in the twelve months before the claim, or **USD 100**.
 
-The platform is provided as it is. To the extent permitted by law, we do not warrant uninterrupted availability, freedom from errors, or that any client will contact you or accept your services.
+Nothing limits liability for fraud, death or personal injury caused by negligence, or anything that cannot lawfully be limited. You remain responsible to Marocora for the services you perform; Marocora's liability to clients is governed by the client terms.
 
-To the extent permitted by law, we are not liable for indirect or consequential loss, loss of profit or business, or for the acts and omissions of clients or other providers. Where liability cannot be excluded, our total liability arising from your use of the platform is limited to the greater of the amounts you paid to Marocora in the twelve months before the claim, or **USD 100**.
+### 18. Indemnity
 
-Nothing in this agreement limits liability for fraud, for death or personal injury caused by negligence, or for anything that cannot lawfully be limited.
+You indemnify us against claims, losses and reasonable costs arising from your services, your content, your breach of this agreement, or your breach of the law — including claims by clients about the service you performed.
 
-### 16. Indemnity
+### 19. Insurance
 
-You agree to indemnify us against claims, losses and reasonable costs arising from the services you provide, the content you publish, or your breach of this agreement or applicable law.
+Where your services or the law require insurance (for example transport), you maintain appropriate cover and provide evidence on request.
 
-### 17. Governing law and disputes
+### 20. Governing law and disputes
 
-This agreement is governed by the laws of the State of North Carolina, United States, and the courts of Wake County, North Carolina have jurisdiction. If you are a consumer in your own country, mandatory consumer-protection law there continues to apply and may give you the right to bring proceedings locally.
+North Carolina law governs, and the courts of Wake County, North Carolina have jurisdiction. If mandatory consumer or employment law in your country gives you stronger rights, those rights prevail.
 
-Before formal proceedings, write to us at the address in clause 18 so we can try to resolve the matter within 30 days.
+Before proceedings, write to us at the contact address so we can try to resolve the matter within 30 days.
 
-### 18. Contact and notices
+### 21. Contact and notices
 
-Jenin Realty LLC, 5540 Centerview Dr, Raleigh, NC 27606, United States.
-Email: tareq@jeninmediahouse.com
+Jenin Realty LLC, 5540 Centerview Dr, Raleigh, NC 27606, United States · tareq@jeninmediahouse.com. Notices to you go to your account email.
 
-Notices to you may be sent to the email address on your account. Keep it current.
+### 22. General
 
-### 19. General
+This agreement, with the Terms of Service, Privacy Policy and the published policies it references, is the entire agreement on this subject. Unenforceable provisions are severed. No waiver by delay. You may not assign without our consent; we may assign to a successor.
 
-This agreement, together with the Terms of Service and Privacy Policy, is the entire agreement between us on this subject. If a provision is found unenforceable, the rest remains in effect. A delay in enforcing a provision is not a waiver. You may not assign this agreement without our written consent; we may assign it to a successor of the business.
+### 23. Electronic acceptance
 
-### 20. Electronic acceptance
-
-You accept this agreement by ticking the box on the provider sign-up page and creating an account. We record the version you accepted, the date and time, and a cryptographic hash of the text you were shown, so that the version you agreed to can be identified later.
+You accept by ticking the box at provider sign-up. We record the version, the date and time, and a SHA-256 hash of the text shown, so the accepted version can be identified later.
 
 ---
 
-## Sign-up acceptance (exact wording to publish)
+## Sign-up acceptance (wording to publish)
 
 Checkbox label:
 
-> **I have read and agree to the Marocora Provider Agreement, the Terms of Service and the Privacy Policy. I understand that I am joining as an independent provider, not as an employee of Marocora, and that Marocora introduces clients to me but is not a party to our agreement.**
+> **I have read and agree to the Marocora Provider Agreement, the Terms of Service and the Privacy Policy. I understand that Marocora contracts with clients, collects payment and pays me my share, and that I am an independent provider, not an employee.**
 
-Supporting line under the checkbox:
+Supporting line:
 
-> Version 1.0 · effective [date]. Marocora does not currently process payments, bookings or payouts; if that changes you will be asked to accept separate Payment and Payout Terms first.
+> Version 2.0 · effective [date]. Bookings and payments are not enabled yet. When they are, the Booking, Cancellation and Refund Policy and the Payment and Payout Terms will apply and you will be asked to accept them.
 
-Button: **Create provider account** (unchanged).
-
-Recorded on acceptance:
-
-| Field | Value |
-| --- | --- |
-| Account | authenticated user id |
-| Agreement version | `provider-agreement/1.0` |
-| Terms version | current published version |
-| Privacy version | current published version |
-| Accepted at | UTC timestamp |
-| Text hash | SHA-256 of the exact rendered text |
-| Consent to video terms | separate checkbox at video upload (already implemented) |
-
-Acceptance is refused unless the box is ticked; the record is written server-side, not trusted from the browser.
+Recorded server-side: user id · agreement version · policy versions · UTC timestamp · SHA-256 of the rendered text.
 
 ---
 
-## Notes for the lawyer — what changed from your draft, and why
+## Commercial terms still to be decided before publication
 
-| Your draft | This draft | Reason |
+| Term | Recommendation | Owner decision |
 | --- | --- | --- |
-| Payments presented as live: "Customers pay through Marocora", fees, remittances, chargebacks, anti-circumvention | Clause 8 states payments, bookings and payouts are **not enabled**, clients pay providers directly, and Payment & Payout Terms will come separately | The platform cannot take payments today; the published Terms and Privacy Policy already say so. A provider signing a promise that money will be collected cannot be performed. |
-| Referred to "Provider Terms", "Payment and Payout Terms", "Cancellation and Refund Policy" | Only documents that exist are named: Provider Agreement, Terms of Service, Privacy Policy. Payment terms are explicitly future | Providers were being asked to agree to documents they could not read. |
-| "Marocora" as the contracting party | Jenin Realty LLC named, with address and SOSID | Clarity of counterparty, matching the legal notice. |
-| No governing law, forum or notice clause | North Carolina law, Wake County courts, consumer carve-out, notice address | Matches the published Terms. |
-| No content licence | Clause 6 | Needed to display profile text, photos and video. |
-| No data-protection or confidentiality obligations | Clause 9 | Providers receive client names, phones and addresses. This was the largest gap. |
-| Termination at will, no reasons | Clause 12: reasons, notice where possible, appeal route | Platform-to-business expectations (EU P2B) and basic fairness. |
-| No amendment procedure | Clause 13: 15 days' notice for material changes | Same. |
-| No ranking disclosure | Clause 14 | P2B requires disclosure of main ranking parameters. |
-| No non-exclusivity statement | Clause 2 | Prevents an implied exclusivity reading. |
-| No insurance obligation | Clause 4 | Transport and licensed work. |
-| No video-specific terms | Clause 5 | New feature; consent, licence, deletion. |
+| Commission | 15–20% of the client price | |
+| Payout timing | 7 days after service completion, weekly batch | |
+| Minimum payout | 100 MAD equivalent | |
+| Cancellation windows | Free until 24h before; 50% inside 24h; no-show 100% to provider | |
+| Response window for bookings | 24 hours | |
+| Refund authority | Marocora decides, provider may respond | |
 
-Two points where **your judgement is required**, not mine:
+## What else this model forces us to change
 
-1. **Liability cap.** USD 100 (matching the public Terms) may be low for a US contract with business users, but high caps are uninsurable at this stage. Confirm the number and whether it should differ for providers versus clients.
-2. **Forum for Moroccan providers.** A North Carolina forum is defensible but inconvenient for a Moroccan teacher. Consider whether to offer an alternative dispute step (mediation, or Moroccan courts for local providers) before litigation.
+1. **Published Terms of Service (live now) are wrong.** They state that Marocora is not a party and clients contract directly. They must be rewritten to the marketplace model before bookings open, and should be softened now so the site does not describe a business you do not run.
+2. **A client-facing Booking, Cancellation and Refund Policy is required.** None exists.
+3. **Payment and Payout Terms are required** before money moves.
+4. **Payment provider.** Collecting and splitting funds needs a marketplace-capable PSP with KYC and payouts (Stripe Connect, Mangopay, Adyen for Platforms). Confirm with an accountant whether this structure creates any money-transmission or licensing obligation in your jurisdiction.
+5. **Tax.** Platform fee VAT, provider payouts, withholding and reporting. Accountant's scope, not mine.
+6. **Worker classification.** The more Marocora sets prices, schedules and conduct, the more a provider may look like an employee in Morocco or the EU. Keep genuine autonomy — providers set rates, accept or decline bookings — and have the lawyer review this specifically.
+7. **Privacy policy** must add payment data and the PSP as a processor once selected.
+8. **Consumer law.** Distance selling, cancellation rights and redress for clients need to be reflected in the client terms.
+
+## Notes on the previous draft
+
+The v1 draft assumed introductions-only, because that is what the previously published Terms said. It is superseded. The two questions for the lawyer remain relevant: the liability cap (USD 100) and whether a Moroccan forum should be offered to Moroccan providers.
