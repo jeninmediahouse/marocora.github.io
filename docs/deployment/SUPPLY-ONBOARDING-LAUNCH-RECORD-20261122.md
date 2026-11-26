@@ -1,6 +1,24 @@
 # Marocora — Supply Onboarding Launch Record
 
-## Live state, 25 November 2026, 23:40 UTC (current)
+## Live state, 26 November 2026 (current)
+
+Production is `/srv/marocora/releases/supabase-83a3769.discovery-20261126-r1`,
+source `83a376944dfda7d807ba8e26cd4784607f0c68cc`, PM2 registration
+`marocora-supply-83a3769` online on 4195; `pm2 save` performed. Published files
+123; guarded suite 442/442.
+
+This release adds `robots.txt`, a ten-entry `sitemap.xml` limited to indexable
+pages, and a read-only onboarding pulse on the admin applications screen
+(`Total · Pending · Approved · Rejected · New this week`) computed from rows the
+page already loads. Verified live: both crawl files return 200, private pages
+still 302, `/api/auth/me` still 401, and the pulse renders
+`Total 1 · Pending 0 · Approved 1 · Rejected 0 · New this week 1`.
+
+Applicant email notifications were wired and verified earlier the same day
+(submission and rejection delivered by real sends; test application deleted).
+See `HANDOFF-SUPPLY-NOTIFICATION-WIRING-20261126.md`.
+
+## Previous live state, 25 November 2026, 23:40 UTC
 
 Production is `/srv/marocora/releases/supabase-5628ab3.legal-20261125-r1`,
 source `5628ab31d48807dea9ec0b34669e65856911a064`, PM2 registration
