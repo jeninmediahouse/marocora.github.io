@@ -60,6 +60,12 @@ Applicants therefore received no email on submission, approval or rejection.
 - Approval shares the same code path and copy table, and is expected to behave
   identically; it will be proven by the next genuine approval.
 
+- **Reviewer notification:** delivered on a real submission
+  (`New Marocora application: …`, reference `17441a8c…`, revision 1) with a
+  direct review-queue link and no applicant address in the body. The review
+  queue and pulse showed the application immediately; the test application was
+  then deleted and the table returned to one row.
+
 ### Two defects found during the live test
 
 1. The production wiring constructs supply routes without a `fetcher`, and the

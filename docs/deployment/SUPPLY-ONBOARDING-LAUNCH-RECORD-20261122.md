@@ -1,6 +1,20 @@
 # Marocora — Supply Onboarding Launch Record
 
-## Live state, 26 November 2026 (current)
+## Live state, 26 November 2026, 14:30 UTC (current)
+
+Production is `/srv/marocora/releases/supabase-af0391d.reviewer-mail-20261126-r1`,
+source `af0391d929228ff4cc3ee67a65989630a9493626`, PM2
+`marocora-supply-af0391d` on 4195; `pm2 save` performed. Published files 123;
+guarded suite 447/447.
+
+Adds a reviewer notification on each submitted application (name, type,
+reference, direct queue link; no applicant address inside the mail), verified by
+a real send. Website uptime monitoring runs every five minutes via
+`marocora-site-uptime.timer` with an external ping; the database freshness check
+ran automatically overnight (05:18) and the 03:10 backup produced snapshot
+`2026-11-26T031003Z`.
+
+## Previous live state, 26 November 2026, 13:00 UTC
 
 Production is `/srv/marocora/releases/supabase-83a3769.discovery-20261126-r1`,
 source `83a376944dfda7d807ba8e26cd4784607f0c68cc`, PM2 registration
