@@ -1,0 +1,21 @@
+User-agent: *
+Allow: /
+
+# Private, transactional and administrative areas
+Disallow: /api/
+Disallow: /production-login.html
+Disallow: /reset-password.html
+Disallow: /verify-email.html
+Disallow: /supply-dashboard.html
+Disallow: /supply-review.html
+Disallow: /supply-profile.html
+Disallow: /application.html
+Disallow: /staff-review.html
+Disallow: /vendor-review.html
+Disallow: /service-review.html
+Disallow: /launch-report.html
+Disallow: /learning-room.html
+Disallow: /learn/account.html
+Disallow: /learn/schedule.html
+
+Sitemap: https://marocora.com/sitemap.xml

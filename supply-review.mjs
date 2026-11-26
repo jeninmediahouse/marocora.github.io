@@ -6,12 +6,19 @@ const status=document.createElement('select'),type=document.createElement('selec
 const allStatus=node('option','All statuses');allStatus.value='';status.append(allStatus);for(const [value,text] of Object.entries(statusNames)){const option=node('option',text);option.value=value;status.append(option);}
 const allType=node('option','All types');allType.value='';type.append(allType);for(const [value,text] of Object.entries(typeNames)){const option=node('option',text);option.value=value;type.append(option);}
 search.type='search';search.placeholder='Search name or email';refreshAll.type='button';
-const panel=node('section',undefined,'panel'),heading=node('h2','All applications'),signedIn=node('p',undefined,'muted'),controls=node('div',undefined,'actions'),allList=node('div');
+const panel=node('section',undefined,'panel'),heading=node('h2','All applications'),signedIn=node('p',undefined,'muted'),pulse=node('p',undefined,'muted'),controls=node('div',undefined,'actions'),allList=node('div');
 controls.append(wrap('Status',status),wrap('Type',type),wrap('Search',search),refreshAll);
-panel.append(heading,signedIn,controls,allList);allHost.append(panel);
+panel.append(heading,signedIn,pulse,controls,allList);allHost.append(panel);
+function updatePulse(){
+ const week=Date.now()-7*24*60*60*1000;
+ const count=value=>allRows.filter(row=>row.status===value).length;
+ const fresh=allRows.filter(row=>{const at=Date.parse(row.createdAt||'');return Number.isFinite(at)&&at>=week;}).length;
+ pulse.textContent=`Total ${allRows.length} · Pending ${count('pending_review')} · Approved ${count('approved')} · Rejected ${count('rejected')} · New this week ${fresh}`;
+}
 function renderAll(email=''){
  currentEmail=email||'';
  signedIn.textContent=currentEmail?'Signed in as '+currentEmail:'';
+ updatePulse();
  const needle=search.value.trim().toLowerCase();
  const rows=allRows.filter(row=>(!status.value||row.status===status.value)&&(!type.value||row.type===type.value)&&(!needle||String(row.displayName||'').toLowerCase().includes(needle)||String(row.ownerEmail||'').toLowerCase().includes(needle)));
  allList.replaceChildren();
