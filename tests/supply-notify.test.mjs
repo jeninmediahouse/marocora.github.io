@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
-import {eventId, createSupplyNotifier} from '../server/supply-notify.mjs';
+import {eventId, createSupplyNotifier, createSupplyReviewerNotifier} from '../server/supply-notify.mjs';
 
 const APP = '0b0e1c9d-61e2-49f0-9bb5-d1b6e6fb3cbc';
 const quiet = {warn() {}};
@@ -87,4 +87,43 @@ test('the server rpc allowlist admits the decision email lookup', () => {
   assert.ok(allowlist, 'supplyRpc allowlist not found');
   assert.ok(allowlist[1].includes("'supply_application_email'"), 'decision email lookup is not allowed');
   assert.ok(!allowlist[1].includes("'supply_anything_else'"), 'unexpected rpc admitted');
+});
+
+test('the reviewer notifier addresses the review mailbox with a review link', async () => {
+  const calls = [];
+  const notifyReviewer = createSupplyReviewerNotifier({
+    env: {SUPPLY_RESEND_API_KEY: 'k'.repeat(20), SUPPLY_REVIEW_EMAIL: 'reviews@example.com'},
+    fetcher: async (url, options) => {
+      calls.push(options);
+      return new Response(JSON.stringify({id: '44444444-4444-4444-8444-444444444444'}), {
+        status: 200, headers: {'content-type': 'application/json'},
+      });
+    },
+    logger: quiet,
+  });
+  const result = await notifyReviewer({applicationId: APP, displayName: 'Test Name', type: 'teacher', revision: 2});
+  assert.equal(result.state, 'sent');
+  const body = JSON.parse(calls[0].body);
+  assert.equal(body.to[0], 'reviews@example.com');
+  assert.match(body.subject, /New Marocora application/);
+  assert.ok(body.text.includes('supply-review.html#application-' + APP));
+  assert.ok(!body.text.includes('@'), 'reviewer email must not leak applicant addresses');
+});
+
+test('the reviewer notifier defaults to the admin mailbox and refuses junk', async () => {
+  const seen = [];
+  const notifyReviewer = createSupplyReviewerNotifier({
+    env: {SUPPLY_RESEND_API_KEY: 'k'.repeat(20)},
+    fetcher: async (url, options) => {
+      seen.push(JSON.parse(options.body).to[0]);
+      return new Response(JSON.stringify({id: '55555555-5555-4555-8555-555555555555'}), {
+        status: 200, headers: {'content-type': 'application/json'},
+      });
+    },
+    logger: quiet,
+  });
+  await notifyReviewer({applicationId: APP, displayName: 'A', type: 'translator', revision: 1});
+  assert.equal(seen[0], 'admin@marocora.com');
+  assert.equal((await notifyReviewer({applicationId: 'nope', displayName: 'A', type: 'translator', revision: 1})).state, 'invalid');
+  assert.equal((await notifyReviewer({applicationId: APP, displayName: '<script>', type: 'translator', revision: 1})).state, 'sent');
 });

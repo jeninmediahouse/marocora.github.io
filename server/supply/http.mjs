@@ -1,12 +1,13 @@
 import {uuid} from '../quote/contracts.mjs';
 import {validateUpload} from '../block1/uploads.mjs';
 import {encryptPayout} from './payout.mjs';
-import {createSupplyNotifier} from '../supply-notify.mjs';
+import {createSupplyNotifier, createSupplyReviewerNotifier} from '../supply-notify.mjs';
 const fail=(code,status=400)=>{throw Object.assign(Error(code),{status});};
 const record=(p,keys)=>{if(!p||Object.getPrototypeOf(p)!==Object.prototype||Object.keys(p).some(k=>!keys.includes(k)))fail('SUPPLY_INVALID_INPUT');return p;};
 export function supplyRoutes({auth,storage,scanner,env,fetcher,logger}){
  const rpc=(session,name,args={})=>auth.supplyRpc(session,name,args);
  const notify=createSupplyNotifier({env,fetcher,logger});
+ const notifyReviewer=createSupplyReviewerNotifier({env,fetcher,logger});
  const log=logger??console;
  return async({req,url,session,input,body,json,res})=>{
   if(!url.pathname.startsWith('/api/supply/'))return false;
@@ -17,6 +18,7 @@ export function supplyRoutes({auth,storage,scanner,env,fetcher,logger}){
    const saved=await rpc(session,'supply_save_application',{p_type:p.type,p_profile:p.profile,p_id:p.id?uuid(p.id):null,p_revision:p.revision??0});
    // Never block or fail the submission on mail; the dashboard remains authoritative.
    void notify({kind:'submitted',application:{id:saved?.id,email:session.email},revision:saved?.revision});
+   void notifyReviewer({applicationId:saved?.id,displayName:saved?.profile?.displayName,type:saved?.type,revision:saved?.revision});
    json(res,200,saved);return true;
   }
   if(path==='/api/supply/admin'&&req.method==='GET'){json(res,200,{admin:await rpc(session,'supply_admin_access')});return true;}
