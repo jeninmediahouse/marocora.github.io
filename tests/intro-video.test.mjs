@@ -247,3 +247,10 @@ test('the public profile offers the watch button only when a video exists', () =
   assert.match(source, /Watch introduction video/);
   assert.match(source, /'\/intro\/'\+encodeURIComponent\(row\.id\)/);
 });
+
+test('the public intro lookup uses the service key its grant requires', () => {
+  const source = readFileSync('server/production/supabase.mjs', 'utf8');
+  const line = source.split('\n').find(l => l.includes('supplyPublicIntro'));
+  assert.ok(line, 'supplyPublicIntro missing');
+  assert.match(line, /config\.service/, 'must call as service_role, matching the SQL grant');
+});

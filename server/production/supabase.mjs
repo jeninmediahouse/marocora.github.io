@@ -28,7 +28,7 @@ export function createProductionSupabase(env,{fetcher=fetch}={}){
    const {data,error}=await client(session.bearer).rpc(name,args);if(error)supplyError(error);return data;
   },
   async supplyPublic(id=null){const {data,error}=await auth.rpc('supply_public_profiles',{p_id:id});if(error)supplyError(error);return data;},
-  async supplyPublicIntro(id){const {data,error}=await auth.rpc('supply_public_intro',{p_id:id});if(error)supplyError(error);return data;},
+  async supplyPublicIntro(id){const {data,error}=await client(undefined,config.service).rpc('supply_public_intro',{p_id:id});if(error)supplyError(error);return data;},
   async supplyServiceRpc(name,args){
    if(!['supply_save_payout','supply_record_credential','supply_intro_ready','supply_intro_failed'].includes(name))fail('SUPPLY_RPC_DENIED',403);
    const {data,error}=await client(undefined,config.service).rpc(name,args);if(error)supplyError(error);return data;
