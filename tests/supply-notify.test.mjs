@@ -38,6 +38,25 @@ test('a submission sends one message with the expected idempotency key', async (
   assert.ok(!JSON.stringify(body).includes('password'));
 });
 
+test('the default transport uses global fetch when no fetcher is injected', async () => {
+  const original = globalThis.fetch;
+  let called = 0;
+  globalThis.fetch = async () => {
+    called++;
+    return new Response(JSON.stringify({id: '33333333-3333-4333-8333-333333333333'}), {
+      status: 200, headers: {'content-type': 'application/json'},
+    });
+  };
+  try {
+    const notify = createSupplyNotifier({env: {SUPPLY_RESEND_API_KEY: 'k'.repeat(20)}, logger: quiet});
+    const result = await notify({kind: 'submitted', application: {id: APP, email: 'a@b.co'}, revision: 1});
+    assert.equal(result.state, 'sent');
+    assert.equal(called, 1);
+  } finally {
+    globalThis.fetch = original;
+  }
+});
+
 test('transport failures are reported, never thrown', async () => {
   const notify = createSupplyNotifier({
     env: {SUPPLY_RESEND_API_KEY: 'k'.repeat(20)},

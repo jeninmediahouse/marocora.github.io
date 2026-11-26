@@ -23,7 +23,7 @@ export function eventId(applicationId, kind, revision) {
   return `${hex.slice(0, 8)}-${hex.slice(8, 12)}-${hex.slice(12, 16)}-${hex.slice(16, 20)}-${hex.slice(20)}`;
 }
 
-export function createSupplyNotifier({env = process.env, fetcher, logger = console} = {}) {
+export function createSupplyNotifier({env = process.env, fetcher = fetch, logger = console} = {}) {
   const apiKey = typeof env.SUPPLY_RESEND_API_KEY === 'string' ? env.SUPPLY_RESEND_API_KEY.trim() : '';
   let send = null;
   if (apiKey) {
