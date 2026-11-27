@@ -1,6 +1,21 @@
 # Marocora — Supply Onboarding Launch Record
 
-## Live state, 26 November 2026, 20:45 UTC (current)
+## Live state, 27 November 2026 (current)
+
+Production is `/srv/marocora/releases/supabase-55f6216.identity-20261127-r1`,
+source `55f621697d32a7405a5bdfc990c13575ffc5f566`, PM2 `marocora-supply-55f6216`
+on 4195; `pm2 save` performed. Published files 123; guarded suite 472/472.
+
+Corporate identity directive applied: the legal pages, homepage, contact page,
+footers and legacy workspace now name **Jenin Global Enterprises LLC** (North
+Carolina, United States), trading as Marocora, with 5540 Centerview Dr, Unit 200,
+Raleigh, NC 27606 as the published address. No Casablanca address remains in
+served pages (the `Africa/Casablanca` timezone identifier is unchanged). A guard
+test fails the build if Jenin Realty, the former SOSID, or Jenin Media House
+reappear. The registration number is intentionally omitted pending the owner's
+confirmation.
+
+## Previous live state, 26 November 2026, 20:45 UTC
 
 Production is `/srv/marocora/releases/supabase-9639494.video-consent-20261126-r1`,
 source `963949491f4598ef172bc2d41550b0f0d97499bf`, PM2 `marocora-supply-9639494`
