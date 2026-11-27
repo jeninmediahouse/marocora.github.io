@@ -252,11 +252,11 @@ export const siteCopy = {
     "ar": "منطقة تقديم الخدمة",
     "es": "Zona de servicio"
   },
-  "Example: Casablanca, Rabat, all Morocco, or online nationwide": {
-    "en": "Example: Casablanca, Rabat, all Morocco, or online nationwide",
-    "fr": "Exemple : Casablanca, Rabat, tout le Maroc ou en ligne",
-    "ar": "مثلاً: الدار البيضاء أو الرباط أو كل المغرب أو عبر الإنترنت",
-    "es": "Ejemplo: Casablanca, Rabat, todo Marruecos o en línea"
+  "Example: Rabat, Salé, all Morocco, or online nationwide": {
+    "en": "Example: Rabat, Salé, all Morocco, or online nationwide",
+    "fr": "Exemple : Rabat, Salé, tout le Maroc ou en ligne",
+    "ar": "مثلاً: الرباط أو سلا أو كل المغرب أو عبر الإنترنت",
+    "es": "Ejemplo: Rabat, Salé, todo Marruecos o en línea"
   },
   "Typical Rate or Pricing (Optional)": {
     "en": "Typical Rate or Pricing (Optional)",
@@ -2278,5 +2278,23 @@ export const siteCopy = {
     "ar": "أؤكد أن هذا الفيديو يخصّني وأن لي الحق في مشاركته.",
     "fr": "Je confirme que cette vidéo est bien la mienne et que j’ai le droit de la partager.",
     "es": "Confirmo que este vídeo es mío y que tengo derecho a compartirlo."
+  },
+  "Raleigh, North Carolina": {
+    "en": "Raleigh, North Carolina",
+    "ar": "رالي، كارولينا الشمالية",
+    "fr": "Raleigh, Caroline du Nord",
+    "es": "Raleigh, Carolina del Norte"
+  },
+  "5540 Centerview Dr, Unit 200": {
+    "en": "5540 Centerview Dr, Unit 200",
+    "ar": "5540 Centerview Dr, Unit 200",
+    "fr": "5540 Centerview Dr, Unit 200",
+    "es": "5540 Centerview Dr, Unit 200"
+  },
+  "Raleigh, NC 27606": {
+    "en": "Raleigh, NC 27606",
+    "ar": "Raleigh, NC 27606",
+    "fr": "Raleigh, NC 27606",
+    "es": "Raleigh, NC 27606"
   }
 };
