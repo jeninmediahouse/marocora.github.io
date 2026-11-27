@@ -138,6 +138,37 @@ introRecord.onclick=async()=>{
 };
 introStop.onclick=()=>{if(introRecorder&&introRecorder.state!=='inactive')introRecorder.stop();};
 const originalEditor=editor;
-editor=function(t){originalEditor(t);void introLoad();};
+editor=function(t){originalEditor(t);void introLoad();updateRatePreview();};
 
 void mountSignOut();
+
+// —— Commission preview: what the customer pays and what the provider receives. ——
+import {commissionRate, splitGross, nextTier, formatMinor} from './pricing.mjs';
+let ratePreview=null;
+function ensureRatePreview(){
+ if(ratePreview)return ratePreview;
+ const anchor=document.querySelector('#hourly-rate');
+ if(!anchor)return null;
+ ratePreview=node('p',undefined,'muted rate-preview');
+ anchor.closest('.two').insertAdjacentElement('afterend',ratePreview);
+ return ratePreview;
+}
+function updateRatePreview(){
+ const el=ensureRatePreview();if(!el)return;
+ const teacher=type.value==='teacher';
+ const amount=Number(form.elements.namedItem('hourlyRate')?.value);
+ const currency=form.elements.namedItem('teacherCurrency')?.value||'MAD';
+ if(!teacher||!(amount>0)){el.textContent='';el.hidden=true;return;}
+ el.hidden=false;
+ const grossMinor=Math.round(amount*100);
+ const rate=commissionRate('teacher',0);
+ const split=splitGross(grossMinor,rate);
+ const next=nextTier(0);
+ el.textContent='Customer pays '+formatMinor(split.grossMinor,currency)+'. Marocora keeps '+formatMinor(split.commissionMinor,currency)+' ('+Math.round(rate*100)+'%); you receive '+formatMinor(split.netMinor,currency)+'.'+(
+  next?' After '+next.fromHours+' completed paid hours your share rises to '+Math.round((1-next.rate)*100)+'%.':''
+ );
+}
+form.elements.namedItem('hourlyRate')?.addEventListener('input',updateRatePreview);
+form.elements.namedItem('teacherCurrency')?.addEventListener('change',updateRatePreview);
+type.addEventListener('change',updateRatePreview);
+updateRatePreview();

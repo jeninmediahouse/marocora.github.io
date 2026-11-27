@@ -53,7 +53,7 @@
     "supply-review.html": "60e29890cec9df6ce44f66c52967eec05511704f2309fdcc6b11ae0a619d4f50",
     "supply-profile.html": "f47b87b0fafdf8239148c98d9ff15b045a22298683d392cd1d91edf353983292",
     "supply-register.mjs": "154f5eed31683fcd1a60c5b822085a041d6af5594fc39df0b9fd622bb505f967",
-    "supply-dashboard.mjs": "23e91df5b9576ac5aaacc0ee2ebe99b347b9185f91edb6baab19b68110182918",
+    "supply-dashboard.mjs": "92a50596acd23195d3e2d0471372d5195b7e7dee29b4024a00fee77100766927",
     "supply-review.mjs": "d89a80792771f79b19df343bea4b828cdfe6b9dd4a8da579aacf082e24d3e3d5",
     "supply-profile.mjs": "2802e1776a44d9a19af268ad80234b9254ff06d3062adf2686b001226026fddd",
     "professionals.html": "c063c803f399c381e502a08ca66de590d50a506677e8a07801d1fcd165d7903e",
@@ -110,7 +110,7 @@
   "adminPulseSourceFingerprintNote": "Intentional refresh: the admin \"All applications\" panel now renders a read-only onboarding pulse from rows it already loads. No rollback overlay payload, unit, server route or database object changed.",
   "previousSourceFingerprintsForIntroVideo": {
     "supply-dashboard.html": "4417ca90a4947be7353e629f2c60780d7f334345c2bdc1e85780ed3123079873",
-    "supply-dashboard.mjs": "77eb66c2d0b6cc83c04020d70b553b94a593a7cd5e2be96ede5ddc8930a0dbff",
+    "supply-dashboard.mjs": "23e91df5b9576ac5aaacc0ee2ebe99b347b9185f91edb6baab19b68110182918",
     "supply.css": "d02bd829ca97fcd11b2fdc7acfc8525ef0e37ddc305033ec3991efc12695fe20",
     "supply-review.mjs": "ebb83db4bb95c66fb38f2e84697d73b0743be753de7d40c31d575beaa467f2eb",
     "supply-client.mjs": "096ffeb14ce6e1bacb1e284d5ee95176c6fee7e893a2ee68fe6c41d209b53874",
