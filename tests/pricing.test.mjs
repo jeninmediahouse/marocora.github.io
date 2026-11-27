@@ -2,6 +2,7 @@ import test from 'node:test';
 import {readFileSync} from 'node:fs';
 import assert from 'node:assert/strict';
 import {teachingRate, commissionRate, priceFromNet, splitGross, nextTier, TEACHING_TIERS} from '../pricing.mjs';
+import {browserAssets} from '../server/production/site.mjs';
 
 test('teaching commission falls through the published tiers', () => {
   assert.equal(teachingRate(0), 0.30);
@@ -70,4 +71,8 @@ test('the dashboard preview uses the shared engine and states the split', () => 
   assert.match(source, /splitGross\(/);
   assert.match(source, /Marocora keeps/);
   assert.match(source, /you receive/);
+});
+
+test('the pricing module is published to browsers', () => {
+  assert.ok(browserAssets.has('pricing.mjs'), 'pricing.mjs must be served to the dashboard');
 });
