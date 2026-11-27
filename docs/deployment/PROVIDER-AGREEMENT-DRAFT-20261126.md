@@ -12,7 +12,7 @@ payment, and pays the provider their share. Supersedes the venue-model draft.
 
 ### 1. Parties
 
-This agreement is between you ("you", "the provider") and **Jenin Realty LLC**, a North Carolina limited liability company (SOSID 3074883), 5540 Centerview Dr, Raleigh, NC 27606, United States ("Marocora", "we", "us"), which operates marocora.com (the "platform").
+This agreement is between you ("you", "the provider") and **Jenin Global Enterprises LLC**, a North Carolina limited liability company, United States ("Marocora", "we", "us"), which operates marocora.com (the "platform").
 
 ### 2. The model in one clause
 
@@ -140,13 +140,13 @@ Where your services or the law require insurance (for example transport), you ma
 
 ### 20. Governing law and disputes
 
-North Carolina law governs, and the courts of Wake County, North Carolina have jurisdiction. If mandatory consumer or employment law in your country gives you stronger rights, those rights prevail.
+North Carolina law governs, and the courts of Wake County, North Carolina have jurisdiction (proposed; subject to final legal approval). If mandatory consumer or employment law in your country gives you stronger rights, those rights prevail.
 
 Before proceedings, write to us at the contact address so we can try to resolve the matter within 30 days.
 
 ### 21. Contact and notices
 
-Jenin Realty LLC, 5540 Centerview Dr, Raleigh, NC 27606, United States · tareq@jeninmediahouse.com. Notices to you go to your account email.
+Jenin Global Enterprises LLC, 5540 Centerview Dr, Raleigh, NC 27606, United States · tareq@jeninmediahouse.com. Notices to you go to your account email.
 
 ### 22. General
 
@@ -193,6 +193,14 @@ Recorded server-side: user id · agreement version · policy versions · UTC tim
 6. **Worker classification.** The more Marocora sets prices, schedules and conduct, the more a provider may look like an employee in Morocco or the EU. Keep genuine autonomy — providers set rates, accept or decline bookings — and have the lawyer review this specifically.
 7. **Privacy policy** must add payment data and the PSP as a processor once selected.
 8. **Consumer law.** Distance selling, cancellation rights and redress for clients need to be reflected in the client terms.
+
+## Corporate identity directive — 27 November 2026
+
+The contracting entity is **Jenin Global Enterprises LLC** (North Carolina,
+United States), trading as Marocora. All references to Jenin Realty LLC, Jenin
+Media House or any Moroccan contracting entity are superseded. Registration
+details (SOSID, registered address, formation date) are pending confirmation and
+must be inserted in the published documents before paid bookings open.
 
 ## Notes on the previous draft
 

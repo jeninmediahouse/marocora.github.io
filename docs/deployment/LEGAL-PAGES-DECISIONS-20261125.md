@@ -12,13 +12,13 @@ Published file count 121 (116 + `legal.html`, `privacy.html`, `terms.html`,
 
 | Field | Value |
 | --- | --- |
-| Legal name | Jenin Realty LLC |
+| Legal name | **Jenin Global Enterprises LLC** (superseded Jenin Realty LLC on 27 November 2026) |
 | Jurisdiction | North Carolina, United States |
-| Secretary of State ID | 3074883 |
+| Secretary of State ID | pending confirmation |
 | Formed | 10 June 2025 (filing C202516101246) |
-| Status | **Active**, confirmed by the owner on 25 November 2026 |
+| Status | Active status to be confirmed for the new entity |
 | Registered agent | Tareq Abushikha |
-| Registered address | 5540 Centerview Dr, Raleigh, NC 27606 |
+| Registered address | pending confirmation |
 | Managers | Tanya Abushikha, Tareq Abushikha |
 | Contact for legal and privacy | tareq@jeninmediahouse.com |
 
@@ -81,3 +81,15 @@ They are excluded from the four-language coverage test for that reason.
 - **Cross-border invoicing.** With a US entity and Moroccan professionals,
   invoicing, VAT and any future payouts need an accountant's view before payments
   launch.
+
+## Superseding directive — 27 November 2026
+
+The owner directed that **Jenin Global Enterprises LLC** is the sole contracting
+entity for Marocora, superseding Jenin Realty LLC, Jenin Media House and any
+Moroccan entity. Published legal pages were updated on 27 November 2026: the
+entity name was replaced, and the old entity's SOSID, formation date, registered
+address, agent and manager rows were removed rather than carried across, because
+they belong to the former company. New registration details must be supplied
+before the legal notice is complete.
+
+North Carolina, United States remains the proposed governing jurisdiction.

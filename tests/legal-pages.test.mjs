@@ -4,7 +4,7 @@ import {readFileSync, existsSync} from 'node:fs';
 import {publicPages, browserAssets} from '../server/production/site.mjs';
 
 const PAGES = ['legal.html', 'privacy.html', 'terms.html', 'imprint.html'];
-const FACTS = ['Jenin Realty LLC', '3074883', '5540 Centerview Dr', 'Raleigh', 'tareq@jeninmediahouse.com'];
+const FACTS = ['Jenin Global Enterprises LLC', 'North Carolina', 'tareq@jeninmediahouse.com'];
 const LINKED_FROM = ['index.html', 'contact.html', 'learn/index.html'];
 
 test('legal pages exist, are publishable, and their stylesheet is served', () => {
@@ -61,4 +61,13 @@ test('legal pages are linked from the public pages', () => {
   const hub = readFileSync('legal.html', 'utf8');
   for (const page of ['privacy.html', 'terms.html', 'imprint.html'])
     assert.ok(hub.includes(page), `hub does not link ${page}`);
+});
+
+test('obsolete corporate identities never appear on published legal pages', () => {
+  const forbidden = ['Jenin Realty', '3074883', 'Jenin Media House', '5540 Centerview'];
+  for (const page of PAGES) {
+    const source = readFileSync(page, 'utf8');
+    for (const token of forbidden) assert.ok(!source.includes(token), `${page}: obsolete identity ${token}`);
+    assert.ok(source.includes('Jenin Global Enterprises LLC'), `${page}: missing current entity`);
+  }
 });
