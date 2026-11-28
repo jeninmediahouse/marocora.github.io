@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import {readFileSync, statSync, existsSync} from 'node:fs';
 import {browserAssets} from '../server/production/site.mjs';
 import {siteCopy} from '../site-copy.mjs';
+import {homeCopy} from '../home-copy.mjs';
 
 test('the hero image is present, published and used by the homepage', () => {
   assert.ok(existsSync('hero-global.jpg'), 'hero image missing');
@@ -41,4 +42,20 @@ test('contact details stay readable in both directions', () => {
   assert.match(home, /<span class="addr" dir="ltr">/);
   assert.match(home, /<span dir="ltr"><span aria-hidden="true">✉️<\/span>/);
   assert.doesNotMatch(home, /<span class="addr">/, 'address must be isolated from RTL flow');
+});
+
+test('every paragraph of the founder letter is published and translated', () => {
+  const home = readFileSync('index.html', 'utf8');
+  assert.match(home, /Tareq Naser, Founder of Marocora/);
+  const block = home.slice(home.indexOf('<div class="about-text">'), home.indexOf('<figure class="about-media">'));
+  const paragraphs = [...block.matchAll(/<p[^>]*>([\s\S]*?)<\/p>/g)]
+    .map(m => m[1].replace(/\s+/g, ' ').trim())
+    .filter(Boolean)
+    .filter(text => text !== 'Tareq Naser, Founder of Marocora');
+  assert.equal(paragraphs.length, 11, 'the letter should have eleven paragraphs');
+  for (const text of paragraphs) {
+    for (const lang of ['en', 'ar', 'fr', 'es']) {
+      assert.ok(homeCopy[text]?.[lang]?.trim(), `missing ${lang} for: ${text.slice(0, 48)}…`);
+    }
+  }
 });

@@ -1,5 +1,77 @@
 // Authored visitor-interface translations.
 export const homeCopy = {
+  "After more than 35 years in America, I moved to Morocco and found myself struggling with surprisingly simple things. A softer mattress. A comfortable couch. Gluten-free places. A service provider I could rely on. Sometimes I knew exactly what I needed and had no idea where to find it, who to ask, or whom to trust.": {
+    "en": "After more than 35 years in America, I moved to Morocco and found myself struggling with surprisingly simple things. A softer mattress. A comfortable couch. Gluten-free places. A service provider I could rely on. Sometimes I knew exactly what I needed and had no idea where to find it, who to ask, or whom to trust.",
+    "fr": "Après plus de 35 ans aux États-Unis, je me suis installé au Maroc et je me suis retrouvé en difficulté pour des choses étonnamment simples. Un matelas plus moelleux. Un canapé confortable. Des adresses sans gluten. Un prestataire sur qui compter. Parfois je savais exactement ce dont j’avais besoin, sans savoir où le trouver, à qui le demander, ni à qui faire confiance.",
+    "ar": "بعد أكثر من 35 عاماً في أمريكا، انتقلت إلى المغرب ووجدت نفسي أتعثر في أمور بسيطة بشكل مفاجئ. مرتبة أنعم. أريكة مريحة. أماكن تقدم طعاماً خالياً من الغلوتين. مزوّد خدمة أستطيع الاعتماد عليه. أحياناً كنت أعرف بالضبط ما أحتاج، لكن لم تكن لديّ أدنى فكرة عن مكانه، أو من أسأل، أو بمن أثق.",
+    "es": "Después de más de 35 años en Estados Unidos, me mudé a Marruecos y me encontré con dificultades por cosas sorprendentemente simples. Un colchón más blando. Un sofá cómodo. Lugares sin gluten. Un proveedor de servicios fiable. A veces sabía exactamente lo que necesitaba y no tenía idea de dónde encontrarlo, a quién preguntar ni en quién confiar."
+  },
+  "The problem was rarely that these things didn't exist. They usually did. The problem was finding them.": {
+    "en": "The problem was rarely that these things didn't exist. They usually did. The problem was finding them.",
+    "fr": "Le problème venait rarement de leur absence : ces choses existaient, le plus souvent. Le problème, c’était de les trouver.",
+    "ar": "نادراً ما كانت المشكلة أن هذه الأشياء غير موجودة. كانت موجودة في الغالب. المشكلة كانت في العثور عليها.",
+    "es": "Rara vez el problema era que esas cosas no existieran. Casi siempre existían. El problema era encontrarlas."
+  },
+  "That experience gave me the original idea for Marocora: one place where newcomers, residents and travellers could find services and useful local knowledge without spending days searching or depending on word of mouth.": {
+    "en": "That experience gave me the original idea for Marocora: one place where newcomers, residents and travellers could find services and useful local knowledge without spending days searching or depending on word of mouth.",
+    "fr": "Cette expérience m’a donné l’idée initiale de Marocora : un seul endroit où les nouveaux arrivants, les résidents et les voyageurs pourraient trouver des services et des informations locales utiles sans passer des jours à chercher ni dépendre du bouche-à-oreille.",
+    "ar": "هذه التجربة أعطتني الفكرة الأولى لماروكورا: مكان واحد يجد فيه القادمون الجدد والمقيمون والمسافرون خدمات ومعرفة محلية مفيدة دون قضاء أيام في البحث أو الاعتماد الكامل على كلام الناس.",
+    "es": "Esa experiencia me dio la idea original de Marocora: un solo lugar donde recién llegados, residentes y viajeros pudieran encontrar servicios e información local útil sin pasar días buscando ni depender del boca a boca."
+  },
+  "Somewhere along the way, it became much bigger than that.": {
+    "en": "Somewhere along the way, it became much bigger than that.",
+    "fr": "En chemin, le projet est devenu bien plus vaste que cela.",
+    "ar": "وفي الطريق، أصبح الأمر أكبر بكثير من ذلك.",
+    "es": "En el camino, se volvió mucho más grande que eso."
+  },
+  "Today Marocora is a global platform where teachers, translators, language professionals and other skilled people offer their knowledge to clients anywhere. A teacher in Morocco can teach a student in America; a translator in the United States can work with a customer in Europe.": {
+    "en": "Today Marocora is a global platform where teachers, translators, language professionals and other skilled people offer their knowledge to clients anywhere. A teacher in Morocco can teach a student in America; a translator in the United States can work with a customer in Europe.",
+    "fr": "Aujourd’hui, Marocora est une plateforme mondiale où des enseignants, des traducteurs, des professionnels des langues et d’autres spécialistes proposent leur savoir à des clients partout dans le monde. Un enseignant au Maroc peut donner cours à un élève aux États-Unis ; un traducteur aux États-Unis peut travailler avec un client en Europe.",
+    "ar": "اليوم ماروكورا منصة عالمية يعرض فيها المدرّسون والمترجمون ومتخصصو اللغات وغيرهم من أصحاب المهارات معرفتهم على عملاء في أي مكان. مدرّس في المغرب يمكنه تعليم طالب في أمريكا؛ ومترجم في الولايات المتحدة يمكنه العمل مع عميل في أوروبا.",
+    "es": "Hoy Marocora es una plataforma global donde profesores, traductores, profesionales de idiomas y otras personas cualificadas ofrecen su conocimiento a clientes en cualquier lugar. Un profesor en Marruecos puede enseñar a un estudiante en Estados Unidos; un traductor en Estados Unidos puede trabajar con un cliente en Europa."
+  },
+  "Part of it will always remain rooted in Morocco, because some things can only be local: transportation, sworn translation, anything that depends on being where you are.": {
+    "en": "Part of it will always remain rooted in Morocco, because some things can only be local: transportation, sworn translation, anything that depends on being where you are.",
+    "fr": "Une partie restera toujours ancrée au Maroc, parce que certaines choses ne peuvent être que locales : le transport, la traduction assermentée, tout ce qui dépend du lieu où l’on se trouve.",
+    "ar": "سيبقى جزء منه متجذراً في المغرب دائماً، لأن بعض الأشياء لا يمكن أن تكون إلا محلية: النقل، والترجمة المحلّفة، وكل ما يعتمد على وجودك في المكان نفسه.",
+    "es": "Una parte seguirá siempre arraigada en Marruecos, porque algunas cosas solo pueden ser locales: el transporte, la traducción jurada, todo lo que depende de estar donde uno está."
+  },
+  "So Marocora has become two ideas under one roof: a global marketplace for knowledge and professional services, and a trusted local resource for what can only be found where you actually are.": {
+    "en": "So Marocora has become two ideas under one roof: a global marketplace for knowledge and professional services, and a trusted local resource for what can only be found where you actually are.",
+    "fr": "Marocora est donc devenue deux idées sous un même toit : une place de marché mondiale du savoir et des services professionnels, et une ressource locale de confiance pour ce qui ne se trouve que là où l’on est vraiment.",
+    "ar": "وهكذا أصبحت ماروكورا فكرتين تحت سقف واحد: سوق عالمية للمعرفة والخدمات المهنية، ومصدر محلي موثوق لما لا يمكن إيجاده إلا حيث تكون فعلاً.",
+    "es": "Así, Marocora se ha convertido en dos ideas bajo un mismo techo: un mercado global de conocimiento y servicios profesionales, y un recurso local de confianza para lo que solo se encuentra donde uno está de verdad."
+  },
+  "My previous life prepared me for this more than I expected. Thirty-five years across technology, transportation, real estate, business and customer service became the toolkit for building it.": {
+    "en": "My previous life prepared me for this more than I expected. Thirty-five years across technology, transportation, real estate, business and customer service became the toolkit for building it.",
+    "fr": "Ma vie d’avant m’a préparé à cela plus que je ne l’imaginais. Trente-cinq ans entre technologie, transport, immobilier, commerce et service client sont devenus la boîte à outils de ce projet.",
+    "ar": "حياتي السابقة أعدّتني لهذا أكثر مما توقعت. خمسة وثلاثون عاماً بين التقنية والنقل والعقار والأعمال وخدمة العملاء أصبحت عدّة بناء هذه المنصة.",
+    "es": "Mi vida anterior me preparó para esto más de lo que esperaba. Treinta y cinco años entre tecnología, transporte, inmobiliaria, negocios y atención al cliente se convirtieron en las herramientas para construirlo."
+  },
+  "But mostly it comes from something simpler: knowing what it feels like to arrive somewhere new, need something, and have no idea where to start.": {
+    "en": "But mostly it comes from something simpler: knowing what it feels like to arrive somewhere new, need something, and have no idea where to start.",
+    "fr": "Mais cela vient surtout de plus simple : savoir ce que l’on ressent en arrivant dans un lieu nouveau, en ayant besoin de quelque chose et aucune idée par où commencer.",
+    "ar": "لكنه في الأساس يأتي من شيء أبسط: معرفة شعور من يصل إلى مكان جديد، ويحتاج شيئاً، ولا يعرف من أين يبدأ.",
+    "es": "Pero sobre todo viene de algo más simple: saber lo que se siente al llegar a un lugar nuevo, necesitar algo y no tener idea de por dónde empezar."
+  },
+  "We want to make that search easier — whether it's around the corner in Casablanca or halfway around the world.": {
+    "en": "We want to make that search easier — whether it's around the corner in Casablanca or halfway around the world.",
+    "fr": "Nous voulons rendre cette recherche plus facile — que ce soit au coin de la rue à Casablanca ou à l’autre bout du monde.",
+    "ar": "نريد أن نجعل هذا البحث أسهل — سواء كان على بعد بناية في الدار البيضاء أو في الطرف الآخر من العالم.",
+    "es": "Queremos facilitar esa búsqueda, ya sea a la vuelta de la esquina en Casablanca o al otro lado del mundo."
+  },
+  "And yes, it began with a softer mattress and a more comfortable couch.": {
+    "en": "And yes, it began with a softer mattress and a more comfortable couch.",
+    "fr": "Et oui, tout a commencé par un matelas plus moelleux et un canapé plus confortable.",
+    "ar": "ونعم، بدأ كل شيء بمرتبة أنعم وأريكة أكثر راحة.",
+    "es": "Y sí, todo empezó con un colchón más blando y un sofá más cómodo."
+  },
+  "Tareq Naser, Founder of Marocora": {
+    "en": "Tareq Naser, Founder of Marocora",
+    "fr": "Tareq Naser, fondateur de Marocora",
+    "ar": "طارق ناصر، مؤسس ماروكورا",
+    "es": "Tareq Naser, fundador de Marocora"
+  },
   "Sign in": {"en":"Sign in","fr":"Se connecter","ar":"تسجيل الدخول","es":"Iniciar sesión"},
   "Home": {
     "en": "Home",
@@ -66,12 +138,6 @@ export const homeCopy = {
     "fr": "À propos de Marocora",
     "ar": "نبذة عن ماروكورا",
     "es": "Acerca de Marocora"
-  },
-  "Marocora is a Morocco-based services platform connecting individuals, businesses, and international clients with trusted professionals across Morocco.": {
-    "en": "Marocora is a Morocco-based services platform connecting individuals, businesses, and international clients with trusted professionals across Morocco.",
-    "fr": "Marocora est une plateforme de services basée au Maroc qui met en relation particuliers, entreprises et clients internationaux avec des professionnels de confiance dans tout le pays.",
-    "ar": "ماروكورا منصة خدمات مقرها المغرب تربط الأفراد والشركات والعملاء الدوليين بمهنيين موثوقين في أنحاء المغرب.",
-    "es": "Marocora es una plataforma de servicios con sede en Marruecos que conecta a particulares, empresas y clientes internacionales con profesionales de confianza en todo el país."
   },
   "Arabic": {
     "en": "Arabic",

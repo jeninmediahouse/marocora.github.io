@@ -80,7 +80,7 @@ for(const form of document.forms){
   event.preventDefault();if(busy)return;if(!validateForm(form)){statusKey='checkFields';return;}
   busy=true;const buttons=[...form.querySelectorAll('[type=submit]')];buttons.forEach(n=>n.disabled=true);form.setAttribute('aria-busy','true');show('sending');
   try{const result=await verification.submitVerifiedIntake(intakeKind[page],new FormData(form),form);if(!result.pending)location.assign(localURL(destinations[page]));else{statusKey='';status.hidden=true;}}
-  catch(error){if(error.verificationPending){statusKey='';status.hidden=true;}else show('uncertain');}finally{busy=false;buttons.forEach(n=>n.disabled=false);form.removeAttribute('aria-busy');}
+  catch(error){if(error.verificationPending)show('verifyFirst');else show('uncertain');}finally{busy=false;buttons.forEach(n=>n.disabled=false);form.removeAttribute('aria-busy');}
  });
 }
 render();observer=new MutationObserver(()=>{observer.disconnect();translate(document.documentElement);watch();});watch();
