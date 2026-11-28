@@ -104,3 +104,29 @@ test('historical rollback professional page remains sealed without the new live-
  assert.equal(manifest.professionalSourceForOverlay.commit,'803648b24b4e5aad2987ec197ff292ef66d0c7dc');assert.notEqual(archived,read('professionals.html'));
  assert.doesNotMatch(overlay,/supply-directory\.mjs|id="published-partners"|\/api\/supply\/profiles/);
 });
+
+function scopedDom(){
+ const listeners=[];
+ const doc={createElement:tag=>new Element(tag,doc),createDocumentFragment:()=>new Element('#fragment',doc),
+  addEventListener:(name,fn)=>listeners.push([name,fn]),removeEventListener:()=>{}};
+ const root=new Element('ul',doc),status=new Element('p',doc),section=new Element('section',doc);
+ section.hidden=true;
+ return {root,status,section,doc,listeners};
+}
+
+test('a profile is only listed under its own category',async()=>{
+ const d=scopedDom();
+ const translator={id:'20000000-0000-4000-8000-000000000002',type:'translator',profile:{displayName:'Translator Only',bio:'Arabic and French documents.'}};
+ await mountDirectory({root:d.root,status:d.status,section:d.section,service:'Translation & Language Services',fetcher:async()=>response([row(),translator])});
+ assert.equal(d.section.hidden,false);
+ assert.equal(d.root.children.length,1);
+ assert.match(d.root.textContent,/Translator Only/);
+ assert.doesNotMatch(d.root.textContent,/Synthetic Teacher/);
+});
+
+test('nothing is listed until a category is chosen or a search is typed',async()=>{
+ const d=scopedDom();
+ await mountDirectory({root:d.root,status:d.status,section:d.section,fetcher:async()=>response([row()])});
+ assert.equal(d.section.hidden,true);
+ assert.equal(d.root.children.length,0);
+});
