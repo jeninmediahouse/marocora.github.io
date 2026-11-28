@@ -449,7 +449,7 @@ html[dir=rtl] .hero-content{padding:72px 8% 72px 6%}
 
 .about-layout {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: space-between;
     gap: 70px;
 }
@@ -464,6 +464,32 @@ html[dir=rtl] .hero-content{padding:72px 8% 72px 6%}
     line-height: 1.8;
     color: #374151;
     margin: 0;
+}
+
+.about-media {
+    flex: 0 1 520px;
+    margin: 0;
+}
+
+.about-media img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 14px;
+    box-shadow: 0 18px 40px rgba(11, 28, 20, 0.16);
+}
+
+.teaching-media {
+    max-width: 1000px;
+    margin: 0 auto 34px;
+}
+
+.teaching-media img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 14px;
+    box-shadow: 0 18px 40px rgba(11, 28, 20, 0.12);
 }
 
 
@@ -602,6 +628,10 @@ a.brand{color:#fff;text-decoration:none;display:inline-block}a.brand:focus-visib
 </p>
         </div>
 
+        <figure class="about-media">
+            <img src="online-lesson.jpg" alt="A student wearing headphones talking to a teacher during an online lesson" width="1400" height="933" loading="lazy">
+        </figure>
+
         
 </section>
 
@@ -615,6 +645,10 @@ a.brand{color:#fff;text-decoration:none;display:inline-block}a.brand:focus-visib
     Discover trusted professionals and independent service providers across Morocco. Marocora brings local expertise together in one place for expatriates, residents, businesses, and international clients.
 </p>
     <p class="network-trust">Every profile is reviewed before publication.</p>
+
+    <figure class="teaching-media">
+        <img src="language-class.jpg" alt="An online language teacher explaining a grammar point to a laptop camera" width="1400" height="787" loading="lazy">
+    </figure>
 
     <div class="teaching-pathways">
         <div class="network-category">

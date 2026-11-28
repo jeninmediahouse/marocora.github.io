@@ -21,3 +21,16 @@ test('the new hero copy is translated into all four languages', () => {
       assert.ok(siteCopy[phrase]?.[lang]?.trim(), `${phrase} missing ${lang}`);
   }
 });
+
+test('the section photographs are present, published and used', () => {
+  const home = readFileSync('index.html', 'utf8');
+  for (const [file, width] of [['online-lesson.jpg', 1400], ['language-class.jpg', 1400]]) {
+    assert.ok(existsSync(file), `${file} missing`);
+    assert.ok(statSync(file).size > 60 * 1024, `${file} suspiciously small`);
+    assert.ok(browserAssets.has(file), `${file} not on the browser allowlist`);
+    assert.match(home, new RegExp(file.replace('.', '\\.')));
+  }
+  assert.match(home, /<figure class="about-media">/);
+  assert.match(home, /<figure class="teaching-media">/);
+  assert.match(home, /alt="[^"]{20,}"/);
+});
