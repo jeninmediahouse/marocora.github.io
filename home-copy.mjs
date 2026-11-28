@@ -1,5 +1,23 @@
 // Authored visitor-interface translations.
 export const homeCopy = {
+  "Marocora is operated by Jenin Global Enterprises LLC": {
+    "en": "Marocora is operated by Jenin Global Enterprises LLC",
+    "fr": "Marocora est exploitée par Jenin Global Enterprises LLC",
+    "ar": "تُدار ماروكورا من قبل شركة Jenin Global Enterprises LLC",
+    "es": "Marocora está gestionada por Jenin Global Enterprises LLC"
+  },
+  "Morocco Operations: Jenin Media House SARLAU": {
+    "en": "Morocco Operations: Jenin Media House SARLAU",
+    "fr": "Opérations au Maroc : Jenin Media House SARLAU",
+    "ar": "عمليات المغرب: Jenin Media House SARLAU",
+    "es": "Operaciones en Marruecos: Jenin Media House SARLAU"
+  },
+  "© 2026 Marocora. All rights reserved.": {
+    "en": "© 2026 Marocora. All rights reserved.",
+    "fr": "© 2026 Marocora. Tous droits réservés.",
+    "ar": "© 2026 ماروكورا. جميع الحقوق محفوظة.",
+    "es": "© 2026 Marocora. Todos los derechos reservados."
+  },
   "After more than 35 years in America, I moved to Morocco and found myself struggling with surprisingly simple things. A softer mattress. A comfortable couch. Gluten-free places. A service provider I could rely on. Sometimes I knew exactly what I needed and had no idea where to find it, who to ask, or whom to trust.": {
     "en": "After more than 35 years in America, I moved to Morocco and found myself struggling with surprisingly simple things. A softer mattress. A comfortable couch. Gluten-free places. A service provider I could rely on. Sometimes I knew exactly what I needed and had no idea where to find it, who to ask, or whom to trust.",
     "fr": "Après plus de 35 ans aux États-Unis, je me suis installé au Maroc et je me suis retrouvé en difficulté pour des choses étonnamment simples. Un matelas plus moelleux. Un canapé confortable. Des adresses sans gluten. Un prestataire sur qui compter. Parfois je savais exactement ce dont j’avais besoin, sans savoir où le trouver, à qui le demander, ni à qui faire confiance.",

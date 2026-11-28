@@ -373,27 +373,12 @@ html[dir=rtl] .hero-content{padding:72px 8% 72px 6%}
         }
 .contact-layout {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-start;
     align-items: flex-start;
-    gap: 70px;
 }
 
 .contact-info {
-    flex: 1;
-    max-width: 520px;
-}
-
-.contact-address {
-    flex: 1;
-    max-width: 520px;
-    text-align: right;
-}
-html[dir=rtl] .contact-address {
-    text-align: left;
-}
-
-.contact-address p {
-    margin: 0;
+    max-width: 640px;
 }
 
 .network-trust {
@@ -417,6 +402,57 @@ html[dir=rtl] .contact-address {
 .contact-info a:hover {
     color: white;
     text-decoration: underline;
+}
+
+.contact-info p {
+    margin: 0 0 1.05em;
+    unicode-bidi: plaintext;
+}
+
+.contact-email {
+    font-size: 21px;
+    font-weight: 700;
+    margin: 0 0 30px;
+}
+
+.contact-email a {
+    color: #ffffff;
+    text-decoration: none;
+}
+
+.contact-email a:hover {
+    text-decoration: underline;
+}
+
+.contact-entity {
+    font-weight: 600;
+    color: #e5e7eb;
+    margin-bottom: 0.15em;
+}
+
+.contact-address {
+    color: #c9d1d9;
+    line-height: 1.65;
+}
+
+.contact-copyright {
+    margin: 34px 0 0;
+    padding-top: 22px;
+    border-top: 1px solid rgba(255, 255, 255, 0.14);
+    color: #9ca3af;
+    font-size: 14px;
+}
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+    border: 0;
 }
 
 
@@ -591,7 +627,6 @@ html[dir=rtl] .contact-address {
     .hero-media { min-height: 280px; flex: 0 0 280px; }
     html[dir=rtl] .hero { flex-direction: column; }
     html[dir=rtl] .hero-content { padding: 48px 8%; }
-    .contact-address { text-align: start; }
     .about-media { flex: 0 0 auto; width: 100%; max-width: 520px; position: static; }
     .about-text { max-width: none; }
     .teaching-media img { border-radius: 10px; }
@@ -765,27 +800,24 @@ a.brand{color:#fff;text-decoration:none;display:inline-block}a.brand:focus-visib
     <div class="contact-layout">
 
         <div class="contact-info">
-            <h2>Contact Us</h2>
+            <h2 class="sr-only">Contact Marocora</h2>
 
-            <p>
-                <span dir="ltr"><span aria-hidden="true">✉️</span> <a href="mailto:admin@marocora.com">
-    admin@marocora.com
-                </a></span>
-            </p>
-      </div>
+            <p class="contact-email"><a href="mailto:admin@marocora.com">admin@marocora.com</a></p>
 
-        <div class="contact-address">
-            <p><span class="addr" dir="ltr"><span aria-hidden="true">📍</span> 5540 Centerview Dr, Unit 200<br>Raleigh, NC 27606<br>United States</span></p>
+            <p class="contact-entity">Marocora is operated by Jenin Global Enterprises LLC</p>
+            <p class="contact-address">5540 Centerview Drive, Suite 200, Mailbox 357<br>Raleigh, NC 27606, USA</p>
+
+            <p class="contact-entity">Morocco Operations: Jenin Media House SARLAU</p>
+            <p class="contact-address">03 Lotissement ONA 1, Étage 2<br>Deroua, Berrechid, Morocco</p>
+
+            <p class="contact-copyright">© 2026 Marocora. All rights reserved.</p>
         </div>
-
-
-      
 
     </div>
 </section>
 
 <footer>
-  © 2026 Marocora. All Rights Reserved. | Raleigh, North Carolina<span aria-hidden="true"> · </span><a href="legal.html">Legal &amp; privacy</a>
+  <a href="legal.html">Legal &amp; privacy</a>
 </footer>
 
 </body>

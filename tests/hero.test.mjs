@@ -36,12 +36,17 @@ test('the section photographs are present, published and used', () => {
   assert.match(home, /alt="[^"]{20,}"/);
 });
 
-test('contact details stay readable in both directions', () => {
+test('the contact block carries the operator, both addresses and the copyright', () => {
   const home = readFileSync('index.html', 'utf8');
-  assert.match(home, /<div class="contact-address">/);
-  assert.match(home, /<span class="addr" dir="ltr">/);
-  assert.match(home, /<span dir="ltr"><span aria-hidden="true">✉️<\/span>/);
-  assert.doesNotMatch(home, /<span class="addr">/, 'address must be isolated from RTL flow');
+  assert.match(home, /class="contact-email"><a href="mailto:admin@marocora\.com"/);
+  assert.match(home, /Marocora is operated by Jenin Global Enterprises LLC/);
+  assert.match(home, /5540 Centerview Drive, Suite 200, Mailbox 357/);
+  assert.match(home, /Raleigh, NC 27606, USA/);
+  assert.match(home, /Morocco Operations: Jenin Media House SARLAU/);
+  assert.match(home, /03 Lotissement ONA 1, Étage 2/);
+  assert.match(home, /Deroua, Berrechid, Morocco/);
+  assert.match(home, /© 2026 Marocora\. All rights reserved\./);
+  assert.match(home, /unicode-bidi: plaintext/, 'addresses must keep their own direction inside RTL');
 });
 
 test('every paragraph of the founder letter is published and translated', () => {
