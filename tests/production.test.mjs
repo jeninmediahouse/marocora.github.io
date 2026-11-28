@@ -15,7 +15,6 @@ import {startProductionServer} from '../server/production/http.mjs';
 import {publicPages,privatePages} from '../server/production/site.mjs';
 import {createProductionLearning} from '../server/production/learning.mjs';
 import {createLiveKitAdapter} from '../server/livekit-adapter.mjs';
-import {createRoomStore} from '../server/learning-room-store.mjs';
 import {openLocalDatabase,L} from '../server/block1/database.mjs';
 const credentials={SPACES_KEY:'SYNTHETIC_KEY',SPACES_SECRET:'SYNTHETIC_SECRET',SPACES_BUCKET:'synthetic-private-bucket',SPACES_REGION:'ams3'};
 const hash=bytes=>createHash('sha256').update(bytes).digest('hex');
@@ -141,10 +140,10 @@ test('Managed learning revalidates database party/membership on join and reaps r
  const now=Date.now(),context={actor:student,bookingId:id,studentId:student,teacherId:teacher,role:'student',status:'confirmed',teacherActive:true,member:true,deliveryMode:'online',startsAt:new Date(now).toISOString(),endsAt:new Date(now+45*60000).toISOString()};
  const auth={authenticate:async token=>({actor:student,bearer:token}),roomContext:async session=>{if(!available||session.actor!==student)throw Error('ROOM_NOT_AVAILABLE');return context;}};
  const env={LEARNING_VIDEO_ENABLED:'true',LEARNING_VIDEO_MODE:'live',LIVEKIT_URL:'wss://synthetic.livekit.cloud',LIVEKIT_API_KEY:'SYNTHETIC_KEY',LIVEKIT_API_SECRET:'SYNTHETIC_SECRET_NOT_REAL_0123456789'};
- const store=createRoomStore(),adapter=createLiveKitAdapter(env,{roomClient:{createRoom:async()=>({maxParticipants:2}),removeParticipant:async(...args)=>calls.push(args)}}),rooms=createProductionLearning({auth,env,adapter,intervalMs:0,store});
+ const adapter=createLiveKitAdapter(env,{roomClient:{createRoom:async()=>({maxParticipants:2}),removeParticipant:async(...args)=>calls.push(args)}}),rooms=createProductionLearning({auth,env,adapter,intervalMs:0});
  try{const session={actor:student,bearer},token=await rooms.issue(session,{bookingId:id});const claims=await new TokenVerifier(env.LIVEKIT_API_KEY,env.LIVEKIT_API_SECRET).verify(token.token);assert.deepEqual(claims.video.canPublishSources,['camera','microphone']);
   await rooms.connect(session,{bookingId:id,token:token.token});available=false;await rooms.reap();assert.equal(calls.length,1);await assert.rejects(rooms.heartbeat(session,{connectionId:token.connectionId}));
- }finally{await rooms.close();store.close();}
+ }finally{await rooms.close();}
 });
 test('Production migration compiles locally, gates real allowlists/bookings with RLS and revokes mock payments',{timeout:60000},()=>{
  const dir=mkdtempSync(join(tmpdir(),'marocora-production-sql-'));let db;
