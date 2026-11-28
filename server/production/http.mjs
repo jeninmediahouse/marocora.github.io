@@ -15,6 +15,8 @@ import {introPage} from '../supply/public-intro.mjs';
 import {sweepIntroSources, sweepOrphanVideos, parseRange} from '../supply/intro.mjs';
 import {cloudmersiveScanner} from '../block1/uploads.mjs';
 import {instantRoutes} from '../block1/instant-http.mjs';
+import {countUploadedDocument} from '../quote/document-count.mjs';
+import {calculatePrice} from '../quote/instant-pricing.mjs';
 import {publicPages,privatePages,adminPages,browserAssets,productionAliases,websitePath,loginLocation} from './site.mjs';
 const root=fileURLToPath(new URL('../../',import.meta.url)),cookieName='__Host-marocora_session';
 const fail=(code,status=400)=>{throw Object.assign(Error(code),{status});};
@@ -113,6 +115,29 @@ export async function startProductionServer({env=process.env,auth,storage,scanne
     const html=introPage({id:profile.id,displayName:profile.profile?.displayName,type:profile.type});
     res.writeHead(200,{'Content-Type':'text/html; charset=utf-8','Cache-Control':'public, max-age=300','X-Content-Type-Options':'nosniff'});
     res.end(html);return true;
+   }
+   if(url.pathname==='/api/quote/estimate'&&req.method==='POST'){
+    const ip=config.trustProxy?req.headers['x-real-ip']||req.socket.remoteAddress:req.socket.remoteAddress,now=Date.now();
+    for(const [key,value] of rates)if(value.until<=now)rates.delete(key);
+    const key='quote-estimate:'+ip,rate=rates.get(key)||{count:0,until:now+60000};
+    if(rate.count>=20||rates.size>=5000)fail('QUOTE_RATE_LIMIT',429);rate.count++;rates.set(key,rate);
+    if(heavyRequests>=2)fail('QUOTE_BUSY',429);heavyRequests++;
+    try{
+     const category=url.searchParams.get('category')||'';
+     const filename=(url.searchParams.get('filename')||'').slice(0,180);
+     if(!['normal','technical','legal','medical','sworn'].includes(category))fail('QUOTE_CATEGORY_INVALID',400);
+     // Sworn translation is priced per page, which needs a human look at the document.
+     if(category==='sworn')return json(res,200,{manualQuote:true,reason:'SWORN_PER_PAGE',category});
+     const bytes=await body(10_000_000);
+     if(!bytes.length)fail('QUOTE_FILE_REQUIRED',400);
+     const counted=await countUploadedDocument(bytes,filename||'document');
+     if(counted.manualReview)return json(res,200,{manualQuote:true,reason:counted.reason||'SCANNED_DOCUMENT',category});
+     const price=calculatePrice({category,wordCount:counted.words,firstOrder:false});
+     return json(res,200,{manualQuote:false,category,words:counted.words,
+      billableWords:price.billableWords,rate:price.rate,currency:price.currency,
+      subtotal:price.subtotalMinor/100,vat:price.vatMinor/100,total:price.total,
+      deposit:price.depositMinor/100,balance:price.balanceMinor/100});
+    }finally{heavyRequests--;}
    }
    if(url.pathname==='/api/supply/register-config'&&req.method==='GET'){
     return json(res,200,humanCheck?{humanCheck:'turnstile',siteKey:humanCheck.siteKey,action:'supply-register'}:{humanCheck:'unavailable'});

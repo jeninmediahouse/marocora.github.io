@@ -8,7 +8,7 @@ export const publicPages=new Set([
  'teacher-apply.html','lesson-request.html','lesson-thank-you.html','translators.html',
  'translator-sample.html','translator-tanya-naser.html','translator-tareq-naser.html',
  'translator-apply.html','translator-application-thank-you.html','translation-request.html',
- 'translation-thank-you.html','verify-email.html','learn/index.html',
+ 'translation-thank-you.html','translation-quote.html','verify-email.html','learn/index.html',
  'legal.html','privacy.html','terms.html','imprint.html'
 ]);
 export const privatePages=new Set([
@@ -23,7 +23,7 @@ export const browserAssets=new Set([
  'supply-copy.mjs','supply-dashboard.mjs','supply-review.mjs','supply-register.mjs','supply-profile.mjs','supply-client.mjs','supply.css',
  'production-login.mjs','learning-room.mjs','learning-room.css','home-language.mjs','legal.css','pricing.mjs',
  'site-language.mjs','site-language.css','site-services.mjs','site-copy.mjs','home-copy.mjs',
- 'site-ui-copy.mjs','site-extra-copy.mjs','translation-copy.mjs','translation-service.mjs',
+ 'site-ui-copy.mjs','site-extra-copy.mjs','translation-copy.mjs','translation-service.mjs','translation-quote.mjs','translation-quote-prefill.mjs',
  'translation-service.css','translation-validation.mjs','service-verification.mjs',
  'service-account.mjs','application.mjs','vendor-review.mjs','service-review.mjs',
  'launch-report.mjs','launch-report.css','vendor-workflow.css','receipt.css',

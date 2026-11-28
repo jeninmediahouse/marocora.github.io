@@ -164,3 +164,30 @@ test('Production migration compiles locally, gates real allowlists/bookings with
   assert.throws(()=>db.sql(readFileSync('supabase/migrations/202611170004_production_runtime.sql','utf8')));assert.equal(db.sql('select count(*) from production_learning_bookings'),'1');
  }finally{db?.stop();rmSync(dir,{recursive:true,force:true});}
 });
+
+test('the public estimate counts a text document, prices it and stores nothing',async t=>{
+ const f=supabaseFixture(),spaces=memorySpaces();
+ const app=await startProductionServer({env:f.env,auth:f.auth,storage:spaces.store,scanner:{available:true},handleSignals:false,log:()=>{}});
+ t.after(()=>app.close());const port=app.server.address().port;
+ const words=('word '.repeat(1000)).trim();
+ const estimate=await localRequest(port,'/api/quote/estimate?category=normal&filename=sample.txt',{method:'POST',
+  headers:{'Content-Type':'application/octet-stream','Origin':'https://app.example.invalid'},body:words});
+ assert.equal(estimate.status,200);
+ const price=estimate.json();
+ assert.equal(price.manualQuote,false);
+ assert.equal(price.words,1000);
+ assert.equal(price.billableWords,980);
+ assert.equal(price.subtotal,686);
+ assert.equal(price.vat,137.2);
+ assert.equal(price.total,823.2);
+ assert.equal(spaces.objects.size,0,'an estimate must never store the file');
+ const scan=await localRequest(port,'/api/quote/estimate?category=normal&filename=scan.pdf',{method:'POST',
+  headers:{'Content-Type':'application/octet-stream','Origin':'https://app.example.invalid'},body:readFileSync('tests/fixtures/instant-v3/image-only-scan.pdf')});
+ assert.equal(scan.status,200);assert.equal(scan.json().manualQuote,true);
+ const sworn=await localRequest(port,'/api/quote/estimate?category=sworn&filename=a.pdf',{method:'POST',
+  headers:{'Content-Type':'application/octet-stream','Origin':'https://app.example.invalid'},body:Buffer.from('x')});
+ assert.equal(sworn.json().manualQuote,true);assert.equal(sworn.json().reason,'SWORN_PER_PAGE');
+ const bad=await localRequest(port,'/api/quote/estimate?category=poetry&filename=a.txt',{method:'POST',
+  headers:{'Content-Type':'application/octet-stream','Origin':'https://app.example.invalid'},body:'x'});
+ assert.equal(bad.status,400);
+});

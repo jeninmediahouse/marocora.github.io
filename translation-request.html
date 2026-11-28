@@ -128,6 +128,7 @@
     </style>
 <link rel="stylesheet" href="site-language.css?v=20260928-site1">
 <script type="module" src="site-language.mjs?v=20260929-translation1"></script>
+<script type="module" src="translation-quote-prefill.mjs"></script>
 <link rel="stylesheet" href="translation-service.css?v=20260929-translation1">
 </head>
 
@@ -150,6 +151,7 @@
             Get a translation quote for your document
             through the Marocora Professional Network.
         </p>
+        <p><a href="translation-quote.html"><strong>See the price first →</strong></a> Upload a document for an instant quote.</p>
 
     </div>
 
@@ -276,7 +278,7 @@
 
             </div>
 
-            <div class="form-group" ><label for="document-type">Document Type / Content Format</label><input id="document-type" name="document-type" type="text" placeholder="Example: contract, article, website or presentation" maxlength="200"></div><div class="form-group" ><label for="word-count">Approximate Word Count</label><input id="word-count" name="word-count" type="number" min="1" step="1"></div><div class="form-group">
+            <div class="form-group" ><label for="document-type">Document Type / Content Format</label><input id="document-type" name="document-type" type="text" placeholder="Example: contract, article, website or presentation" maxlength="200"></div><input type="hidden" name="quoted-total" id="quoted-total"><input type="hidden" name="quoted-category" id="quoted-category"><div class="form-group" ><label for="word-count">Approximate Word Count</label><input id="word-count" name="word-count" type="number" min="1" step="1"></div><div class="form-group">
 
                 <label for="document-pages">Approximate Number of Pages</label>
 
