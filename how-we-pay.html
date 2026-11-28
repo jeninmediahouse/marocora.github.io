@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="en" translate="no">
+<head>
+<meta name="google" content="notranslate">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>How We Pay | Marocora</title>
+<meta name="description" content="Exactly how provider earnings work on Marocora: the 70% to 80% teaching progression, the 70/30 split for other services, when you get paid, and what you are never charged for.">
+<link rel="stylesheet" href="site-language.css?v=20260928-site1">
+<script type="module" src="site-language.mjs?v=20261205-pay1"></script>
+<style>
+    :root{
+        --ink:#111827;
+        --body:#4b5563;
+        --muted:#6b7280;
+        --green:#168a55;
+        --red:#c1272d;
+        --dark:#0d2b23;
+        --band:#f3f4f6;
+        --paper:#f7f7f5;
+        --line:#e5e7eb;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+
+    body{
+        font-family:Arial, Helvetica, sans-serif;
+        color:#222;
+        line-height:1.6;
+        background:#ffffff;
+    }
+
+    /* ---------- Header (matches site) ---------- */
+    header{
+        background:var(--ink);
+        color:white;
+        padding:12px 8%;
+        display:flex;
+        justify-content:space-between;
+        align-items:center;
+        flex-wrap:wrap;
+        gap:12px;
+    }
+    .brand{
+        color:white;
+        font-size:28px;
+        font-weight:700;
+        letter-spacing:1px;
+        text-decoration:none;
+    }
+    nav{display:flex;align-items:center;gap:22px;flex-wrap:wrap}
+    nav a{
+        color:white;
+        text-decoration:none;
+        font-size:15px;
+        padding:4px 0;
+        border-bottom:2px solid transparent;
+    }
+    nav a:hover{color:#d1d5db}
+    nav a[aria-current="page"]{border-bottom-color:var(--red)}
+
+    /* ---------- Page hero ---------- */
+    .page-hero{
+        background:var(--dark);
+        color:#fff;
+        padding:64px 8% 68px;
+    }
+    .eyebrow{
+        display:inline-block;
+        font-size:13px;
+        letter-spacing:.14em;
+        text-transform:uppercase;
+        color:#9fe0bd;
+        margin-bottom:14px;
+        font-weight:700;
+    }
+    .page-hero h1{
+        font-size:clamp(34px,5vw,52px);
+        line-height:1.1;
+        margin-bottom:18px;
+        font-weight:700;
+    }
+    .page-hero .lede{
+        font-size:19px;
+        line-height:1.7;
+        color:#e8eeeb;
+        max-width:640px;
+    }
+    .updated{
+        margin-top:26px;
+        font-size:14px;
+        color:#a7b8b0;
+    }
+
+    /* ---------- Generic section ---------- */
+    section{padding:72px 8%}
+    section h2{
+        font-size:34px;
+        line-height:1.2;
+        color:var(--ink);
+        margin-bottom:18px;
+    }
+    section h2::after{
+        content:"";
+        display:block;
+        width:90px;
+        height:4px;
+        margin-top:12px;
+        background:linear-gradient(90deg,var(--red) 0%,var(--red) 42%,#fff 42%,#fff 58%,var(--green) 58%,var(--green) 100%);
+    }
+    .band{background:var(--band)}
+    .paper{background:var(--paper)}
+    .section-lede{
+        max-width:760px;
+        font-size:18px;
+        color:var(--body);
+        margin-bottom:34px;
+    }
+    .section-lede p + p{margin-top:14px}
+
+    /* ---------- Summary cards ---------- */
+    .cards{
+        display:grid;
+        grid-template-columns:repeat(3,minmax(0,1fr));
+        gap:24px;
+        margin-top:38px;
+    }
+    .card{
+        background:#fff;
+        border-top:4px solid var(--red);
+        border-radius:10px;
+        padding:28px;
+        box-shadow:0 8px 24px rgba(17,24,39,.08);
+    }
+    .card.green{border-top-color:var(--green)}
+    .card .label{
+        font-size:13px;
+        text-transform:uppercase;
+        letter-spacing:.1em;
+        font-weight:700;
+        color:var(--muted);
+        margin-bottom:10px;
+    }
+    .card .figure{
+        font-size:34px;
+        font-weight:700;
+        color:var(--ink);
+        line-height:1.2;
+        margin-bottom:10px;
+    }
+    .card p{color:var(--body);font-size:16px}
+
+    /* ---------- Ladder ---------- */
+    .ladder{
+        display:grid;
+        grid-template-columns:repeat(3,minmax(0,1fr));
+        gap:16px;
+        margin:34px 0 10px;
+    }
+    .step{
+        position:relative;
+        background:#fff;
+        border:1px solid var(--line);
+        border-radius:10px;
+        padding:24px;
+    }
+    .step .hours{
+        font-size:13px;
+        text-transform:uppercase;
+        letter-spacing:.08em;
+        font-weight:700;
+        color:var(--muted);
+        margin-bottom:8px;
+    }
+    .step .share{
+        font-size:32px;
+        font-weight:700;
+        color:var(--red);
+        line-height:1.15;
+        margin-bottom:8px;
+    }
+    .step.end .share{color:var(--green)}
+    .step p{font-size:15px;color:var(--body)}
+    .ladder-note{
+        font-size:15px;
+        color:var(--muted);
+        margin-bottom:34px;
+    }
+
+    /* ---------- Tables ---------- */
+    .table-wrap{overflow-x:auto;margin:8px 0 22px;border-radius:10px;box-shadow:0 8px 24px rgba(17,24,39,.07)}
+    table{
+        width:100%;
+        border-collapse:collapse;
+        background:#fff;
+        min-width:560px;
+        font-size:16px;
+    }
+    thead th{
+        background:var(--ink);
+        color:#fff;
+        text-align:left;
+        padding:16px 20px;
+        font-size:14px;
+        letter-spacing:.04em;
+        text-transform:uppercase;
+        font-weight:700;
+    }
+    thead th.num, tbody td.num{text-align:right}
+    tbody td{
+        padding:16px 20px;
+        border-top:1px solid var(--line);
+        color:var(--body);
+        vertical-align:top;
+    }
+    tbody tr:nth-child(even) td{background:#fafafa}
+    tbody td strong{color:var(--ink)}
+    tbody td.num{white-space:nowrap}
+    .pill{
+        display:inline-block;
+        padding:2px 10px;
+        border-radius:999px;
+        font-size:13px;
+        font-weight:700;
+        background:#e8f5ee;
+        color:#0f6b42;
+    }
+    .pill.neutral{background:#eef0f3;color:#374151}
+
+    /* ---------- Two column ---------- */
+    .split{
+        display:grid;
+        grid-template-columns:1.1fr .9fr;
+        gap:32px;
+        align-items:start;
+    }
+    .panel{
+        background:#fff;
+        border-radius:10px;
+        padding:30px;
+        box-shadow:0 8px 24px rgba(17,24,39,.07);
+    }
+    .panel h3{font-size:20px;color:var(--ink);margin-bottom:14px}
+    .panel ul{list-style:none}
+    .panel li{
+        position:relative;
+        padding-left:26px;
+        margin-bottom:12px;
+        color:var(--body);
+        font-size:16px;
+    }
+    .panel li::before{
+        content:"";
+        position:absolute;
+        left:0;
+        top:9px;
+        width:9px;
+        height:9px;
+        border-radius:2px;
+        background:var(--green);
+    }
+    .panel.no li::before{background:var(--red)}
+
+    /* ---------- Timeline ---------- */
+    .timeline{
+        display:grid;
+        grid-template-columns:repeat(3,minmax(0,1fr));
+        gap:24px;
+        margin-top:34px;
+    }
+    .tl-item{
+        background:#fff;
+        border-radius:10px;
+        padding:26px;
+        box-shadow:0 8px 24px rgba(17,24,39,.07);
+        border-left:4px solid var(--green);
+    }
+    .tl-item .n{
+        display:inline-flex;
+        align-items:center;
+        justify-content:center;
+        width:30px;
+        height:30px;
+        border-radius:50%;
+        background:var(--dark);
+        color:#fff;
+        font-weight:700;
+        font-size:15px;
+        margin-bottom:14px;
+    }
+    .tl-item h3{font-size:18px;color:var(--ink);margin-bottom:8px}
+    .tl-item p{font-size:15px;color:var(--body)}
+
+    .notice{
+        margin-top:30px;
+        background:#fff;
+        border-left:4px solid #c9a227;
+        border-radius:0 10px 10px 0;
+        padding:22px 26px;
+        color:#4b3d12;
+        font-size:16px;
+        box-shadow:0 8px 24px rgba(17,24,39,.06);
+    }
+    .notice strong{color:#111827}
+
+    /* ---------- FAQ ---------- */
+    details{
+        background:#fff;
+        border-radius:8px;
+        padding:20px 24px;
+        margin-bottom:12px;
+        box-shadow:0 4px 14px rgba(17,24,39,.06);
+    }
+    details summary{
+        cursor:pointer;
+        font-weight:700;
+        color:var(--ink);
+        font-size:17px;
+        list-style:none;
+        display:flex;
+        justify-content:space-between;
+        gap:16px;
+        align-items:flex-start;
+    }
+    details summary::-webkit-details-marker{display:none}
+    details summary::after{
+        content:"+";
+        color:var(--red);
+        font-size:22px;
+        line-height:1;
+        flex:0 0 auto;
+    }
+    details[open] summary::after{content:"\2013"}
+    details p{margin-top:14px;color:var(--body);font-size:16px}
+    details p + p{margin-top:10px}
+
+    /* ---------- CTA ---------- */
+    .cta{background:var(--dark);color:#fff;text-align:center}
+    .cta h2{color:#fff}
+    .cta h2::after{margin-left:auto;margin-right:auto}
+    .cta p{color:#dfe8e4;font-size:18px;max-width:640px;margin:20px auto 30px}
+    .buttons{display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
+    .btn{
+        display:inline-block;
+        padding:14px 26px;
+        border-radius:6px;
+        text-decoration:none;
+        font-weight:700;
+        font-size:16px;
+    }
+    .btn.primary{background:var(--red);color:#fff}
+    .btn.primary:hover{background:#a81f24}
+    .btn.secondary{color:#fff;border:1px solid rgba(255,255,255,.55)}
+    .btn.secondary:hover{border-color:#fff}
+
+    /* ---------- Contact / footer ---------- */
+    .contact{background:var(--ink);color:#fff}
+    .contact h2{color:#fff}
+    .contact-layout{display:flex;justify-content:flex-start}
+    .contact-info{max-width:640px}
+    .contact-email{font-size:21px;font-weight:700;margin:0 0 26px}
+    .contact-email a{color:#fff;text-decoration:none}
+    .contact-email a:hover{text-decoration:underline}
+    .contact-entity{font-weight:600;color:#e5e7eb;margin-bottom:.15em}
+    .contact-address{color:#c9d1d9;line-height:1.65;margin-bottom:1.05em}
+    .contact-copyright{
+        margin:30px 0 0;
+        padding-top:20px;
+        border-top:1px solid rgba(255,255,255,.14);
+        color:#9ca3af;
+        font-size:14px;
+    }
+    footer{background:#080d17;color:#9ca3af;text-align:center;padding:25px;font-size:14px}
+    footer a{color:#b9e2d0;text-decoration:underline;text-underline-offset:3px}
+    footer a:hover{color:#fff}
+
+    html[dir="rtl"] thead th{text-align:right;letter-spacing:0}
+    html[dir="rtl"] thead th.num,html[dir="rtl"] tbody td.num{text-align:left}
+    html[dir="rtl"] .tl-item{border-left:0;border-right:4px solid var(--green)}
+    html[dir="rtl"] .notice{border-left:0;border-right:4px solid #c9a227;border-radius:10px 0 0 10px}
+    html[dir="rtl"] .panel li{padding-left:0;padding-right:26px}
+    html[dir="rtl"] .panel li::before{left:auto;right:0}
+    html[dir="rtl"] .eyebrow,html[dir="rtl"] .card .label,html[dir="rtl"] .step .hours{letter-spacing:0}
+    html[dir="rtl"] .figure,html[dir="rtl"] .share,html[dir="rtl"] td.num{direction:ltr;unicode-bidi:isolate}
+    html[dir="rtl"] section h2::after{margin-left:auto;margin-right:0}
+    html[dir="rtl"] .cta h2::after{margin-left:auto;margin-right:auto}
+    html[lang="ar"] body{font-family:"Segoe UI",Tahoma,"Noto Naskh Arabic","Geeza Pro",Arial,sans-serif;line-height:1.85}
+
+    @media (max-width:900px){
+        .cards,.ladder,.timeline{grid-template-columns:1fr}
+        .split{grid-template-columns:1fr}
+        section{padding:56px 7%}
+        .page-hero{padding:48px 7% 52px}
+        header{padding:14px 7%}
+        nav{gap:14px}
+        nav a{font-size:14px}
+        section h2{font-size:28px}
+    }
+</style>
+</head>
+
+<body>
+
+<header>
+    <a class="brand" href="index.html">Marocora</a>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="professionals.html">Professional Network</a>
+        <a href="how-we-pay.html" aria-current="page">How We Pay</a>
+        <a href="contact.html">Contact</a>
+    </nav>
+</header>
+
+<section class="page-hero">
+    <span class="eyebrow">For providers</span>
+    <h1>How We Pay</h1>
+    <p class="lede">
+        What you keep, what Marocora keeps, and when the money arrives.
+        No listing fees, no subscriptions, and no numbers buried in small print.
+    </p>
+    <p class="updated">Last updated: November 2026</p>
+</section>
+
+<section id="summary">
+    <h2>The short version</h2>
+    <p class="section-lede">
+        Marocora earns only when you earn. There is nothing to pay to join,
+        nothing to pay to stay listed, and nothing taken until a client has
+        actually booked and completed a service with you.
+    </p>
+
+    <div class="cards">
+        <div class="card green">
+            <div class="label">Teachers</div>
+            <div class="figure">70% → 80%</div>
+            <p>Start at 70% of every completed teaching hour. Reach 80% and keep it permanently.</p>
+        </div>
+        <div class="card">
+            <div class="label">All other services</div>
+            <div class="figure">70 / 30</div>
+            <p>Translation, interpreting, transportation and every other service category. You keep 70%.</p>
+        </div>
+        <div class="card">
+            <div class="label">To join</div>
+            <div class="figure">Free</div>
+            <p>No listing fee, no subscription, no charge to create or update your profile.</p>
+        </div>
+    </div>
+</section>
+
+<section id="teaching" class="band">
+    <h2>Teaching: 70% at the start, 80% once you are established</h2>
+    <div class="section-lede">
+        <p>Teaching sits at the top of the Marocora scale. You begin at 70% of
+        every completed teaching hour, and your share rises in steps as you
+        complete more hours. At 400 completed teaching hours you reach 80%,
+        and that 80% is permanent — it does not drop back.</p>
+        <p>Only completed teaching hours count toward your progression.</p>
+    </div>
+
+    <div class="ladder">
+        <div class="step">
+            <div class="hours">First 20 completed hours</div>
+            <div class="share">70%</div>
+            <p>You keep 70% of what the client pays for each completed hour.</p>
+        </div>
+        <div class="step">
+            <div class="hours">Hours 21 – 399</div>
+            <div class="share">70% → 80%</div>
+            <p>Your share increases at fixed milestones as your completed hours accumulate.</p>
+        </div>
+        <div class="step end">
+            <div class="hours">400 completed hours and beyond</div>
+            <div class="share">80%</div>
+            <p>You keep 80% for good, on every completed teaching hour after that.</p>
+        </div>
+    </div>
+    <p class="ladder-note">Already completed hours are never recalculated downward.</p>
+
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th scope="col">Completed teaching hours</th>
+                    <th scope="col" class="num">You keep</th>
+                    <th scope="col" class="num">Marocora keeps</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>First 20 hours</strong></td>
+                    <td class="num">70%</td>
+                    <td class="num">30%</td>
+                </tr>
+                <tr>
+                    <td><strong>Hours 21 – 399</strong><br><span class="pill neutral">graduated</span> share rises at fixed milestones</td>
+                    <td class="num">70% → 80%</td>
+                    <td class="num">30% → 20%</td>
+                </tr>
+                <tr>
+                    <td><strong>400 hours and beyond</strong><br><span class="pill">permanent</span></td>
+                    <td class="num">80%</td>
+                    <td class="num">20%</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <p class="section-lede" style="margin-bottom:0">
+        The exact milestone table — the hour marks at which your share increases
+        and by how much — is published in your provider account and on this page
+        before customer bookings open.
+    </p>
+</section>
+
+<section id="services">
+    <h2>Other services: a straightforward 70/30 split</h2>
+    <p class="section-lede">
+        Translation, interpreting, transportation and every other professional
+        category on Marocora work on one flat split, from your first job onward.
+        There are no tiers, no probation period and no hidden deductions.
+    </p>
+
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th scope="col">Category</th>
+                    <th scope="col" class="num">You keep</th>
+                    <th scope="col" class="num">Marocora keeps</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Teaching and tutoring</strong></td>
+                    <td class="num">70% → 80%</td>
+                    <td class="num">30% → 20%</td>
+                </tr>
+                <tr>
+                    <td><strong>Translation and interpreting</strong></td>
+                    <td class="num">70%</td>
+                    <td class="num">30%</td>
+                </tr>
+                <tr>
+                    <td><strong>Transportation and local services</strong></td>
+                    <td class="num">70%</td>
+                    <td class="num">30%</td>
+                </tr>
+                <tr>
+                    <td><strong>All other professional services</strong></td>
+                    <td class="num">70%</td>
+                    <td class="num">30%</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <p class="section-lede" style="margin-bottom:0">
+        You set the price of your own service. Marocora's share is taken from
+        the amount the client pays, not added on top of it — so the price a
+        client sees is the price they pay.
+    </p>
+</section>
+
+<section id="fees" class="band">
+    <h2>What the Marocora share covers</h2>
+    <p class="section-lede">
+        The 20% or 30% is not a listing fee. It is what keeps the marketplace
+        running and brings clients to your profile.
+    </p>
+
+    <div class="split">
+        <div class="panel">
+            <h3>Included in Marocora's share</h3>
+            <ul>
+                <li>Processing client payments and handling the transaction</li>
+                <li>Managing bookings, requests and scheduling</li>
+                <li>Reviewing provider profiles before they are published</li>
+                <li>Client support when something goes wrong</li>
+                <li>Hosting, maintenance and ongoing development of the platform</li>
+                <li>Bringing new clients to the marketplace</li>
+            </ul>
+        </div>
+        <div class="panel no">
+            <h3>What you are never charged for</h3>
+            <ul>
+                <li>Creating your profile</li>
+                <li>Being listed or remaining listed</li>
+                <li>Updating your experience, services or rates</li>
+                <li>Receiving a booking request</li>
+                <li>Monthly or annual subscription</li>
+                <li>Anything at all before a service is completed</li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+<section id="timing" class="paper">
+    <h2>When and how you get paid</h2>
+    <p class="section-lede">
+        Earnings become payable once the booked service has actually been
+        completed — not when it is booked, and not before the client has
+        received what they paid for.
+    </p>
+
+    <div class="timeline">
+        <div class="tl-item">
+            <span class="n">1</span>
+            <h3>The service is completed</h3>
+            <p>A lesson finishes, a translation is delivered, a trip is made.</p>
+        </div>
+        <div class="tl-item">
+            <span class="n">2</span>
+            <h3>Your earnings are recorded</h3>
+            <p>The amount, the split and the completed hours appear in your account.</p>
+        </div>
+        <div class="tl-item">
+            <span class="n">3</span>
+            <h3>The payout is sent</h3>
+            <p>Paid out on the schedule confirmed with you before bookings open.</p>
+        </div>
+    </div>
+
+    <div class="notice">
+        <strong>Still being finalized.</strong> The payout schedule (how often
+        payouts are sent) and the available payout methods are being completed
+        together with the platform's payment system. Both will be published on
+        this page, and confirmed with every provider by email, before customer
+        bookings open. Nothing here will change for work you have already
+        completed.
+    </div>
+</section>
+
+<section id="faq" class="band">
+    <h2>Questions providers ask</h2>
+    <p class="section-lede">
+        If something is missing here, email us and it will be added.
+    </p>
+
+    <details open>
+        <summary>Do I set my own prices?</summary>
+        <p>Yes. You decide what your lesson, translation, trip or service costs.
+        Marocora's share is taken from that price, so the client pays exactly
+        what you quoted.</p>
+    </details>
+
+    <details>
+        <summary>What counts as a completed teaching hour?</summary>
+        <p>An hour of teaching that has actually taken place and been delivered
+        through Marocora. Only completed hours move you up the progression
+        toward 80%.</p>
+    </details>
+
+    <details>
+        <summary>If I teach and also translate, which split applies?</summary>
+        <p>Each service is paid under its own category. Teaching follows the
+        70% → 80% progression, and translation or any other service is paid at
+        70/30. One does not affect the other.</p>
+    </details>
+
+    <details>
+        <summary>Can my percentage go down later?</summary>
+        <p>No. Once you reach 80% at 400 completed teaching hours, you keep 80%
+        permanently. Changes to the published terms would apply only to
+        providers joining afterwards, and would be posted here and emailed to
+        you first.</p>
+    </details>
+
+    <details>
+        <summary>What happens if a client cancels or asks for a refund?</summary>
+        <p>The cancellation and refund rules will be published with the booking
+        terms before bookings open. Where work has already been delivered, the
+        provider is paid for it.</p>
+    </details>
+
+    <details>
+        <summary>Who handles taxes?</summary>
+        <p>Each provider is responsible for reporting their own earnings.
+        Marocora keeps a record of completed services and amounts on the
+        platform so you have a clear history to work from.</p>
+    </details>
+
+    <details>
+        <summary>Is there a minimum amount I have to earn before I get paid?</summary>
+        <p>The final payout terms, including any minimum threshold, will be
+        published here before customer bookings open. If a minimum is set, it
+        will be low enough that normal activity clears it quickly.</p>
+    </details>
+</section>
+
+<section class="cta">
+    <h2>Join the network</h2>
+    <p>
+        Provider onboarding is open now. Create your profile, add your
+        experience, qualifications, services and rates, and be among the first
+        professionals clients find when bookings open.
+    </p>
+    <div class="buttons">
+        <a class="btn primary" href="teacher-apply.html">Apply to Teach →</a>
+        <a class="btn secondary" href="professionals.html">Join as a Professional →</a>
+    </div>
+</section>
+
+<section class="contact" id="contact">
+    <div class="contact-layout">
+        <div class="contact-info">
+            <h2 class="sr-only" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">Contact Marocora</h2>
+
+            <p class="contact-email"><a href="mailto:admin@marocora.com">admin@marocora.com</a></p>
+
+            <p class="contact-entity">Marocora is operated by Jenin Global Enterprises LLC</p>
+            <p class="contact-address">5540 Centerview Drive, Suite 200, Mailbox 357<br>Raleigh, NC 27606, USA</p>
+
+            <p class="contact-entity">Morocco Operations: Jenin Media House SARLAU</p>
+            <p class="contact-address">03 Lotissement ONA 1, Étage 2<br>Deroua, Berrechid, Morocco</p>
+
+            <p class="contact-copyright">© 2026 Marocora. All rights reserved.</p>
+        </div>
+    </div>
+</section>
+
+<footer>
+    <a href="legal.html">Legal &amp; privacy</a>
+</footer>
+
+</body>
+</html>

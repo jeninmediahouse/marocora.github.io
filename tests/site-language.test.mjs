@@ -6,7 +6,8 @@ import {homeCopy} from '../home-copy.mjs';
 import {extraCopy} from '../site-extra-copy.mjs';
 import {siteUI} from '../site-ui-copy.mjs';
 import {translationCopy} from '../translation-copy.mjs';
-const copy={...homeCopy,...siteCopy,...extraCopy,...translationCopy};
+import {payCopy} from '../pay-copy.mjs';
+const copy={...homeCopy,...siteCopy,...extraCopy,...translationCopy,...payCopy};
 const decode=s=>s.replace(/&amp;/g,'&').replace(/&quot;/g,'"').replace(/&#39;|&apos;/g,"'").replace(/&nbsp;/g,' ').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/\s+/g,' ').trim();
 const excluded=new Set(['index.html','teacher-apply.html','staff-review.html','verify-email.html','service-review.html','vendor-review.html','application.html','launch-report.html']);
 test('all authored visitor text, page titles and form hints have four language versions',()=>{
