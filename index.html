@@ -383,6 +383,24 @@ html[dir=rtl] .hero-content{padding:72px 8% 72px 6%}
     max-width: 520px;
 }
 
+.contact-address {
+    flex: 1;
+    max-width: 520px;
+    text-align: right;
+}
+html[dir=rtl] .contact-address {
+    text-align: left;
+}
+
+.contact-address p {
+    margin: 0;
+}
+
+.network-trust {
+    text-align: center;
+    margin: 0 0 26px;
+}
+
         .contact h2 {
             color: white;
         }
@@ -560,6 +578,7 @@ html[dir=rtl] .hero-content{padding:72px 8% 72px 6%}
     .hero-media { min-height: 280px; flex: 0 0 280px; }
     html[dir=rtl] .hero { flex-direction: column; }
     html[dir=rtl] .hero-content { padding: 48px 8%; }
+    .contact-address { text-align: start; }
     .about-media { flex: 0 0 auto; width: 100%; max-width: 520px; }
     .about-text { max-width: none; }
     .teaching-media img { border-radius: 10px; }
@@ -706,13 +725,15 @@ a.brand{color:#fff;text-decoration:none;display:inline-block}a.brand:focus-visib
             <h2>Contact Us</h2>
 
             <p>
-                <span aria-hidden="true">✉️</span> <a href="mailto:admin@marocora.com">
+                <span dir="ltr"><span aria-hidden="true">✉️</span> <a href="mailto:admin@marocora.com">
     admin@marocora.com
-                </a>
+                </a></span>
             </p>
-
-            <p><span aria-hidden="true">📍</span> <span class="addr">5540 Centerview Dr, Unit 200<br>Raleigh, NC 27606<br>United States</span></p>
       </div>
+
+        <div class="contact-address">
+            <p><span class="addr" dir="ltr"><span aria-hidden="true">📍</span> 5540 Centerview Dr, Unit 200<br>Raleigh, NC 27606<br>United States</span></p>
+        </div>
 
 
       

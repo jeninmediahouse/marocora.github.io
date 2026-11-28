@@ -34,3 +34,11 @@ test('the section photographs are present, published and used', () => {
   assert.match(home, /<figure class="teaching-media">/);
   assert.match(home, /alt="[^"]{20,}"/);
 });
+
+test('contact details stay readable in both directions', () => {
+  const home = readFileSync('index.html', 'utf8');
+  assert.match(home, /<div class="contact-address">/);
+  assert.match(home, /<span class="addr" dir="ltr">/);
+  assert.match(home, /<span dir="ltr"><span aria-hidden="true">✉️<\/span>/);
+  assert.doesNotMatch(home, /<span class="addr">/, 'address must be isolated from RTL flow');
+});
