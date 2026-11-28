@@ -2296,5 +2296,23 @@ export const siteCopy = {
     "ar": "Raleigh, NC 27606",
     "fr": "Raleigh, NC 27606",
     "es": "Raleigh, NC 27606"
+  },
+  "Local trust.": {
+    "en": "Local trust.",
+    "ar": "ثقة محلية.",
+    "fr": "Confiance locale.",
+    "es": "Confianza local."
+  },
+  "Global reach.": {
+    "en": "Global reach.",
+    "ar": "وصول عالمي.",
+    "fr": "Portée mondiale.",
+    "es": "Alcance global."
+  },
+  "Vetted professionals across Morocco for transport, translation and everyday services — and teachers and language specialists you can meet online from anywhere.": {
+    "en": "Vetted professionals across Morocco for transport, translation and everyday services — and teachers and language specialists you can meet online from anywhere.",
+    "ar": "مهنيون موثوقون في المغرب لخدمات النقل والترجمة والخدمات اليومية — ومدرّسون ومتخصصو لغات يمكنك لقاؤهم عبر الإنترنت من أي مكان.",
+    "fr": "Des professionnels vérifiés au Maroc pour le transport, la traduction et les services du quotidien — et des enseignants et spécialistes des langues à rencontrer en ligne, où que vous soyez.",
+    "es": "Profesionales verificados en Marruecos para transporte, traducción y servicios cotidianos — y profesores y especialistas en idiomas con los que puedes conectar en línea desde cualquier lugar."
   }
 };
