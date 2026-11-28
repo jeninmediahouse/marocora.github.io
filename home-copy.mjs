@@ -1,5 +1,173 @@
 // Authored visitor-interface translations.
 export const homeCopy = {
+  "See the price first →": {
+    "en": "See the price first →",
+    "fr": "Voir le prix d’abord →",
+    "ar": "اطّلع على السعر أولاً ←",
+    "es": "Ver el precio primero →"
+  },
+  "Upload a document for an instant quote.": {
+    "en": "Upload a document for an instant quote.",
+    "fr": "Téléversez un document pour un devis instantané.",
+    "ar": "ارفع مستنداً للحصول على عرض سعر فوري.",
+    "es": "Sube un documento para un presupuesto instantáneo."
+  },
+  "Instant Translation Quote | Marocora": {
+    "en": "Instant Translation Quote | Marocora",
+    "fr": "Devis de traduction instantané | Marocora",
+    "ar": "عرض سعر فوري للترجمة | ماروكورا",
+    "es": "Presupuesto de traducción instantáneo | Marocora"
+  },
+  "Request a translation": {
+    "en": "Request a translation",
+    "fr": "Demander une traduction",
+    "ar": "اطلب ترجمة",
+    "es": "Solicitar una traducción"
+  },
+  "Instant translation quote": {
+    "en": "Instant translation quote",
+    "fr": "Devis de traduction instantané",
+    "ar": "عرض سعر فوري للترجمة",
+    "es": "Presupuesto de traducción instantáneo"
+  },
+  "Upload your document and see the price immediately. The file is counted and discarded — nothing is stored, and nothing is charged.": {
+    "en": "Upload your document and see the price immediately. The file is counted and discarded — nothing is stored, and nothing is charged.",
+    "fr": "Téléversez votre document et voyez le prix immédiatement. Le fichier est compté puis supprimé — rien n’est conservé et rien n’est facturé.",
+    "ar": "ارفع مستندك واطّلع على السعر فوراً. يُحسب الملف ثم يُحذف — لا يُحفظ شيء ولا يُخصم أي مبلغ.",
+    "es": "Sube tu documento y consulta el precio de inmediato. El archivo se cuenta y se descarta: no se guarda nada y no se cobra nada."
+  },
+  "What kind of document is it?": {
+    "en": "What kind of document is it?",
+    "fr": "De quel type de document s’agit-il ?",
+    "ar": "ما نوع المستند؟",
+    "es": "¿Qué tipo de documento es?"
+  },
+  "General text — 0.70 MAD per word": {
+    "en": "General text — 0.70 MAD per word",
+    "fr": "Texte général — 0,70 MAD par mot",
+    "ar": "نص عام — 0.70 درهم لكل كلمة",
+    "es": "Texto general — 0,70 MAD por palabra"
+  },
+  "Technical — 0.95 MAD per word": {
+    "en": "Technical — 0.95 MAD per word",
+    "fr": "Technique — 0,95 MAD par mot",
+    "ar": "تقني — 0.95 درهم لكل كلمة",
+    "es": "Técnico — 0,95 MAD por palabra"
+  },
+  "Legal — 1.10 MAD per word": {
+    "en": "Legal — 1.10 MAD per word",
+    "fr": "Juridique — 1,10 MAD par mot",
+    "ar": "قانوني — 1.10 درهم لكل كلمة",
+    "es": "Jurídico — 1,10 MAD por palabra"
+  },
+  "Medical — 1.05 MAD per word": {
+    "en": "Medical — 1.05 MAD per word",
+    "fr": "Médical — 1,05 MAD par mot",
+    "ar": "طبي — 1.05 درهم لكل كلمة",
+    "es": "Médico — 1,05 MAD por palabra"
+  },
+  "Sworn translation — quoted per page": {
+    "en": "Sworn translation — quoted per page",
+    "fr": "Traduction assermentée — devis par page",
+    "ar": "ترجمة محلّفة — التسعير بالصفحة",
+    "es": "Traducción jurada — presupuesto por página"
+  },
+  "Your document": {
+    "en": "Your document",
+    "fr": "Votre document",
+    "ar": "مستندك",
+    "es": "Tu documento"
+  },
+  "Word, PDF or plain text, up to 10 MB. A scanned PDF cannot be counted automatically — you will be able to request a quote by email.": {
+    "en": "Word, PDF or plain text, up to 10 MB. A scanned PDF cannot be counted automatically — you will be able to request a quote by email.",
+    "fr": "Word, PDF ou texte brut, jusqu’à 10 Mo. Un PDF scanné ne peut pas être compté automatiquement — vous pourrez demander un devis par e-mail.",
+    "ar": "Word أو PDF أو نص عادي، حتى 10 ميغابايت. لا يمكن عدّ ملف PDF ممسوح ضوئياً تلقائياً — يمكنك طلب عرض سعر بالبريد الإلكتروني.",
+    "es": "Word, PDF o texto plano, hasta 10 MB. Un PDF escaneado no se puede contar automáticamente: podrás solicitar un presupuesto por correo."
+  },
+  "Total including 20% VAT": {
+    "en": "Total including 20% VAT",
+    "fr": "Total TVA 20 % incluse",
+    "ar": "الإجمالي شامل ضريبة القيمة المضافة 20%",
+    "es": "Total con IVA del 20 % incluido"
+  },
+  "Words counted": {
+    "en": "Words counted",
+    "fr": "Mots comptés",
+    "ar": "الكلمات المحسوبة",
+    "es": "Palabras contadas"
+  },
+  "Billable words (2% grace)": {
+    "en": "Billable words (2% grace)",
+    "fr": "Mots facturables (2 % de tolérance)",
+    "ar": "الكلمات الخاضعة للفوترة (2% سماح)",
+    "es": "Palabras facturables (2 % de margen)"
+  },
+  "Rate per word": {
+    "en": "Rate per word",
+    "fr": "Tarif par mot",
+    "ar": "السعر لكل كلمة",
+    "es": "Tarifa por palabra"
+  },
+  "Subtotal": {
+    "en": "Subtotal",
+    "fr": "Sous-total",
+    "ar": "المجموع الفرعي",
+    "es": "Subtotal"
+  },
+  "VAT 20%": {
+    "en": "VAT 20%",
+    "fr": "TVA 20 %",
+    "ar": "ضريبة القيمة المضافة 20%",
+    "es": "IVA 20 %"
+  },
+  "Total": {
+    "en": "Total",
+    "fr": "Total",
+    "ar": "الإجمالي",
+    "es": "Total"
+  },
+  "Request this translation →": {
+    "en": "Request this translation →",
+    "fr": "Demander cette traduction →",
+    "ar": "اطلب هذه الترجمة ←",
+    "es": "Solicitar esta traducción →"
+  },
+  "This document needs a person to look at it": {
+    "en": "This document needs a person to look at it",
+    "fr": "Ce document doit être examiné par une personne",
+    "ar": "هذا المستند يحتاج إلى مراجعة بشرية",
+    "es": "Este documento necesita que lo revise una persona"
+  },
+  "Scanned documents, images and sworn translations cannot be counted automatically.": {
+    "en": "Scanned documents, images and sworn translations cannot be counted automatically.",
+    "fr": "Les documents scannés, les images et les traductions assermentées ne peuvent pas être comptés automatiquement.",
+    "ar": "لا يمكن عدّ المستندات الممسوحة ضوئياً والصور والترجمات المحلّفة تلقائياً.",
+    "es": "Los documentos escaneados, las imágenes y las traducciones juradas no se pueden contar automáticamente."
+  },
+  "Send it to us and we will reply with a written quote.": {
+    "en": "Send it to us and we will reply with a written quote.",
+    "fr": "Envoyez-le-nous et nous vous répondrons par un devis écrit.",
+    "ar": "أرسله إلينا وسنرد بعرض سعر مكتوب.",
+    "es": "Envíanoslo y te responderemos con un presupuesto por escrito."
+  },
+  "Send it for a quote →": {
+    "en": "Send it for a quote →",
+    "fr": "L’envoyer pour un devis →",
+    "ar": "أرسله لطلب عرض سعر ←",
+    "es": "Enviarlo para presupuesto →"
+  },
+  "Prices in Moroccan dirham. A 150 MAD minimum applies to any translation.": {
+    "en": "Prices in Moroccan dirham. A 150 MAD minimum applies to any translation.",
+    "fr": "Prix en dirhams marocains. Un minimum de 150 MAD s’applique à toute traduction.",
+    "ar": "الأسعار بالدرهم المغربي. يُطبَّق حد أدنى 150 درهماً على أي ترجمة.",
+    "es": "Precios en dírhams marroquíes. Se aplica un mínimo de 150 MAD a cualquier traducción."
+  },
+  "Every request is reviewed by a person before work begins. Online payment is not available yet.": {
+    "en": "Every request is reviewed by a person before work begins. Online payment is not available yet.",
+    "fr": "Chaque demande est examinée par une personne avant le début du travail. Le paiement en ligne n’est pas encore disponible.",
+    "ar": "تُراجع كل طلب من قبل شخص قبل بدء العمل. الدفع الإلكتروني غير متاح بعد.",
+    "es": "Cada solicitud la revisa una persona antes de empezar el trabajo. El pago en línea aún no está disponible."
+  },
   "Marocora is operated by Jenin Global Enterprises LLC": {
     "en": "Marocora is operated by Jenin Global Enterprises LLC",
     "fr": "Marocora est exploitée par Jenin Global Enterprises LLC",
