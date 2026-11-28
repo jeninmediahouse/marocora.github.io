@@ -16,6 +16,7 @@ class Element{
  set textContent(v){this.value=v;this.children=[];}
  get textContent(){return this.value+this.children.map(n=>n.textContent).join(' ');}
  setAttribute(k,v){this.attributes[k]=v;}
+ querySelector(){return null;}
  append(...nodes){for(const node of nodes)if(node.tagName==='#fragment')this.children.push(...node.children);else this.children.push(node);}
  replaceChildren(...nodes){this.children=[];this.value='';this.append(...nodes);}
 }
@@ -129,4 +130,17 @@ test('nothing is listed until a category is chosen or a search is typed',async()
  await mountDirectory({root:d.root,status:d.status,section:d.section,fetcher:async()=>response([row()])});
  assert.equal(d.section.hidden,true);
  assert.equal(d.root.children.length,0);
+});
+
+test('typing a translation need reveals translators only',async()=>{
+ const d=scopedDom();
+ const translator={id:'30000000-0000-4000-8000-000000000003',type:'translator',profile:{displayName:'Typed Translator',bio:'Contracts and certificates.'}};
+ await mountDirectory({root:d.root,status:d.status,section:d.section,fetcher:async()=>response([row(),translator])});
+ assert.equal(d.section.hidden,true);
+ const onInput=d.listeners.find(([name])=>name==='input')[1];
+ onInput({target:{id:'service-search',value:'translation'}});
+ assert.equal(d.section.hidden,false);
+ assert.equal(d.root.children.length,1);
+ assert.match(d.root.textContent,/Typed Translator/);
+ assert.doesNotMatch(d.root.textContent,/Synthetic Teacher/);
 });

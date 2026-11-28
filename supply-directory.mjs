@@ -38,7 +38,7 @@ export async function mountDirectory({root,status,fetcher=fetch,section,service,
  doc.addEventListener('marocora:language',language);
  // Without a section this is a plain renderer; with one it only ever shows a
  // single category, or the profiles matching what the visitor typed.
- const scoped=Boolean(section),heading=section?.parentElement?.querySelector('h2')||null;
+ const scoped=Boolean(section),heading=section?.querySelector('h2')||null;
  let rows=[],type=typeForService(service),term='';
  const searching=()=>term.length>=2;
  const active=()=>Boolean(type)||searching();
@@ -78,8 +78,8 @@ export async function mountDirectory({root,status,fetcher=fetch,section,service,
   const fragment=doc.createDocumentFragment();
   for(const row of matches)fragment.append(card(row));
   root.replaceChildren(fragment);root.hidden=false;
-  if(heading)heading.textContent=type?copy(categories[type]):ui('search');
-  statusKey='Published partner profiles.';status.hidden=false;status.textContent=copy(statusKey);
+  if(heading)heading.textContent=copy('Published partner profiles.');
+  statusKey='';status.hidden=true;status.textContent='';
   if(section)section.hidden=false;
  }
  const onInput=event=>{
